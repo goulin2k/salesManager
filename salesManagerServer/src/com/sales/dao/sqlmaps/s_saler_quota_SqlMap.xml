@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_saler_quota">
+	<resultMap id="BaseResult" class="com.sales.model.K3SalerQuota">
+		<result column="quota_id" property="quotaId" jdbcType="INTEGER" />
+		<result column="quota_class" property="quotaClass" jdbcType="INTEGER" />
+		<result column="quota_type" property="quotaType" jdbcType="INTEGER" />
+		<result column="year" property="year" jdbcType="INTEGER" />
+		<result column="quarter" property="quarter" jdbcType="INTEGER" />
+		<result column="month" property="month" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="target" property="target" jdbcType="DOUBLE" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="query" resultMap="BaseResult" parameterClass="java.util.Map">
+		SELECT quota_id, quota_class, quota_type,YEAR, QUARTER, MONTH,
+		  q.user_id, target, description, u.user_name as user_name
+		FROM s_saler_quota q inner join s_user u on q.user_id = u.user_id
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="and" property="quotaClass">
+				quota_class = $quotaClass$
+		    </isNotEmpty>
+			<isNotEmpty prepend="and" property="quotaType">
+				quota_type = $quotaType$
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="year">
+				year = $year$
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="quarter">
+				quarter = $quarter$
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="month">
+				month = $month$
+		    </isNotEmpty>
+		    <isNotEmpty prepend="and" property="userId">
+				q.user_id = $userId$
+		    </isNotEmpty>
+		</dynamic>
+		ORDER BY YEAR, QUARTER, MONTH
+	</select>
+</sqlMap>

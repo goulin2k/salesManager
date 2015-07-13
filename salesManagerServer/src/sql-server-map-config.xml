@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+    
+<sqlMapConfig>
+    <settings useStatementNamespaces="true" lazyLoadingEnabled="true"
+		enhancementEnabled="true"/>
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_product_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_order_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_request_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_orfq_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_stock_bill_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_stock_bill_out_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_sale_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_out_stock_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_receive_bill_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_return_goods_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_sale_bill_status_SqlMap.xml" /> 
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_sale_bill_status_change_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_k3_entry_SqlMap.xml" /> 
+	 
+	<sqlMap resource="com/sales/dao/sqlmaps/t_saleProcess_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/t_order_statistics_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/t_recieveBill_statistics_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/t_poorder_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/t_receive_bill_msg_SqlMap.xml" />
+</sqlMapConfig>

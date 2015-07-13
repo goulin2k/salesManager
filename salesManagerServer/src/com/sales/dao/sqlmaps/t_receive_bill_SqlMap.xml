@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_receive_bill" >
+
+  <resultMap id="receiveBillResult" class="com.sales.model.TReceiveBill" > 
+    <result column="FBillID" property="fBillID" jdbcType="INTEGER" /> 
+    <result column="FBillStatus" property="fBillStatus" jdbcType="INTEGER" /> 
+    <result column="FNumber" property="fNumber" jdbcType="VARCHAR" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FFincDate" property="fFincDate" jdbcType="DATE" />
+    <result column="FItemClassID_DSPName" property="fItemClassID_DSPName" jdbcType="VARCHAR" />
+    <result column="customerNumber" property="customerNumber" jdbcType="INTEGER" /> 
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="departNumber" property="departNumber" jdbcType="VARCHAR" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="employeeNumber" property="employeeNumber" jdbcType="VARCHAR" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" /> 
+    <result column="currencyName" property="currencyName" jdbcType="VARCHAR" /> 
+    <result column="fAmountFor" property="fAmountFor" jdbcType="VARCHAR" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FBillID" property="receiveBillEntryList" select="t_receive_bill.getReceiveBillEntryListByReceiveBillId" />
+  </resultMap> 
+
+  <resultMap id="receiveBillEntryResult" class="com.sales.model.TReceiveBillEntry" > 
+    <result column="FClassID_SRC" property="fClassID_SRC" jdbcType="INTEGER" /> 
+    <result column="FClassID_SRC_FNDName" property="fClassID_SRC_FNDName" jdbcType="VARCHAR" />
+    <result column="FBillNo_SRC" property="fBillNo_SRC" jdbcType="VARCHAR" />
+    <result column="FEntryID_SRC" property="fEntryID_SRC" jdbcType="INTEGER" /> 
+    <result column="FEntryContractNo" property="fEntryContractNo" jdbcType="VARCHAR" /> 
+    <result column="FEntryOrderNo" property="fEntryOrderNo" jdbcType="INTEGER" /> 
+    <result column="FReceiveCyName" property="fReceiveCyName" jdbcType="VARCHAR" />
+    <result column="FReceiveAmountFor_3" property="fReceiveAmountFor_3" jdbcType="VARCHAR" /> 
+    <result column="FReceiveAmount_3" property="fReceiveAmount_3" jdbcType="VARCHAR" />  
+    <result column="FBackAmountFor_Relative" property="fBackAmountFor_Relative" jdbcType="VARCHAR" /> 
+    <result column="FSettleCyName" property="fSettleCyName" jdbcType="VARCHAR" />
+    <result column="FSettleQuantity" property="fSettleQuantity" jdbcType="VARCHAR" />
+    <result column="FSettleAmountFor_3" property="fSettleAmountFor_3" jdbcType="VARCHAR" />
+    <result column="FSettleAmount_3" property="fSettleAmount_3" jdbcType="VARCHAR" />
+    <result column="FDiscountFor_3" property="fDiscountFor_3" jdbcType="VARCHAR" /> 
+    <result column="FDiscount" property="fDiscount" jdbcType="VARCHAR" />  
+    <result column="FEntryAccountID_DSPName" property="fEntryAccountID_DSPName" jdbcType="VARCHAR" />  
+    <result column="FEntryID3" property="fEntryID3" jdbcType="INTEGER" /> 
+    <result column="productID" property="productID" jdbcType="INTEGER" /> 
+    <result column="productNumber" property="productNumber" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productModel" property="productModel" jdbcType="VARCHAR" /> 
+    <result column="FBase2" property="fBase2" jdbcType="INTEGER" /> 
+    <result column="measureUnitName" property="measureUnitName" jdbcType="VARCHAR" /> 
+    <result column="FQuantity" property="fQuantity" jdbcType="VARCHAR" />    
+    <result column="FID_SRC" property="fID_SRC" jdbcType="VARCHAR" />  
+    <result column="FTaxPrice" property="fTaxPrice" jdbcType="VARCHAR" /> 
+    <result column="Famount_SRC" property="famount_SRC" jdbcType="VARCHAR" />    
+    <result column="FRemainAmountEntry" property="fRemainAmountEntry" jdbcType="VARCHAR" />  
+  </resultMap> 
+ 
+  <select id="getReceiveBillById" resultMap="receiveBillResult" parameterClass="java.util.Map" > 
+	SELECT FBillID, 
+		t_rp_newreceivebill.FCheckStatus AS FBillStatus,
+		t_RP_NewReceiveBill.FNumber,	 
+		t_RP_NewReceiveBill.FDate,  
+		t_RP_NewReceiveBill.FFincDate,
+		t_ItemClass.FName AS FItemClassID_DSPName,   
+		t_Item.FItemID AS customerNumber,	 
+		t_Item.FName AS customerName,
+		t_Department.FNumber AS departNumber, t_Department.FName AS departName,   
+		t_Emp.FNumber AS employeeNumber,t_Emp.FName AS employeeName,  
+		t_Currency3.FName AS currencyName,   
+		t_RP_NewReceiveBill.FAmountFor,   
+		t_User1.FName AS checkerName  
+	FROM t_RP_NewReceiveBill  LEFT  JOIN t_ItemClass  ON t_RP_NewReceiveBill.FItemClassID=t_ItemClass.FItemClassID AND t_ItemClass.FItemClassID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Item  ON t_RP_NewReceiveBill.FCustomer=t_Item.FItemID AND t_Item.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_Currency3 ON t_RP_NewReceiveBill.FCurrencyID=t_Currency3.FCurrencyID AND t_Currency3.FCurrencyID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency4 ON t_RP_NewReceiveBill.FReceiveCyID=t_currency4.fcurrencyid AND t_currency4.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency5 ON t_RP_NewReceiveBill.FSettleCyID=t_currency5.fcurrencyid AND t_currency5.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_User t_User1 ON t_RP_NewReceiveBill.FChecker=t_User1.FUserID AND t_User1.FUserID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Department  ON t_RP_NewReceiveBill.FDepartment=t_Department.FItemID AND t_Department.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Emp  ON t_RP_NewReceiveBill.FEmployee=t_Emp.FItemID AND t_Emp.FItemID<![CDATA[<>]]>0   
+	WHERE FBillID = #receiveBillId:INTEGER# AND FBillType=1000
+	<isNotNull property="customerIds" prepend="and">
+	    t_Item.FItemID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getReceiveBillEntryListByReceiveBillId" resultMap="receiveBillEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT  t_rp_arbillofsh.FClassID_SRC,	ICClassType.FName_CHS AS FClassID_SRC_FNDName,  t_rp_arbillofsh.FBillNo_SRC, 
+		t_rp_arbillofsh.FEntryID_SRC, t_rp_arbillofsh.FContractNo AS FEntryContractNo,  
+		t_rp_arbillofsh.FOrderNo AS FEntryOrderNo, 
+		t_rp_ARBillOfSH.FReceiveCyName,
+		t_rp_ARBillOfSH.FReceiveAmountFor AS FReceiveAmountFor_3, 
+		t_rp_ARBillOfSH.FReceiveAmount AS FReceiveAmount_3,  		
+		t_rp_arbillofsh.FBackAmountFor_Relative,
+		t_rp_ARBillOfSH.FSettleCyName, 
+		t_rp_ARBillOfSH.FSettleQuantity,  
+		t_rp_ARBillOfSH.FSettleAmountFor AS FSettleAmountFor_3,  
+		t_rp_ARBillOfSH.FSettleAmount AS FSettleAmount_3,
+		t_rp_ARBillOfSH.FDiscountFor AS FDiscountFor_3,
+		t_rp_ARBillOfSH.FDiscount,   
+		t_Account1.FName AS FEntryAccountID_DSPName,  
+		t_rp_ARBillOfSH.FEntryID AS FEntryID3,
+		t_rp_ARBillOfSH.FItemId as productID,		
+		t_ICItem.FNumber AS productNumber, 
+		t_ICItem.FName AS productName,  
+		t_ICItem.FModel AS productModel,
+		t_rp_ARBillOfSH.funitid AS FBase2,  
+		t_Measureunit.FName AS measureUnitName, 
+		t_rp_ARBillOfSH.FQuantity,
+		t_rp_ARBillOfSH.FID_SRC,
+		t_rp_ARBillOfSH.FTaxPrice, 
+		t_rp_ARBillOfSH.Famount_SRC,
+		t_rp_arbillofsh.FRemainAmount AS FRemainAmountEntry		
+	FROM t_rp_ARBillOfSH  LEFT  JOIN ICClassType  ON ABS(t_rp_arbillofsh.FClassID_SRC)=ABS(ICClassType.FID) AND ICClassType.FID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Account t_Account1 ON t_rp_ARBillOfSH.FAccountID=t_Account1.FAccountID AND t_Account1.FAccountID<![CDATA[<>]]>0   
+		LEFT  JOIN t_ICItem  ON t_rp_ARBillOfSH.FItemID=t_ICItem.FItemID AND t_ICItem.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_AuxItem  ON t_rp_ARBillOfSH.FAuxPropID=t_AuxItem.FItemID AND t_AuxItem.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Measureunit  ON t_rp_ARBillOfSH.funitid=t_Measureunit.FItemID AND t_Measureunit.FItemID<![CDATA[<>]]>0   
+	WHERE t_rp_ARBillOfSH.FBillID = #receiveBillId:INTEGER#
+	order by FIndex
+  </select>
+  
+  <select id="getReceiveBillList" resultMap="receiveBillResult" parameterClass="com.sales.model.TReceiveBill" > 
+    SELECT TOP $pageSize$ FBillID, 
+		t_rp_newreceivebill.FCheckStatus AS FBillStatus,
+		t_RP_NewReceiveBill.FNumber,	 
+		t_RP_NewReceiveBill.FDate,  
+		t_RP_NewReceiveBill.FFincDate,
+		t_ItemClass.FName AS FItemClassID_DSPName,   
+		t_Item.FNumber AS customerNumber,	 
+		t_Item.FName AS customerName,
+		t_Department.FNumber AS departNumber, t_Department.FName AS departName,   
+		t_Emp.FNumber AS employeeNumber,t_Emp.FName AS employeeName,  
+		t_Currency3.FName AS currencyName,   
+		t_RP_NewReceiveBill.FAmountFor,   
+		t_User1.FName AS checkerName  
+	FROM t_RP_NewReceiveBill  LEFT  JOIN t_ItemClass  ON t_RP_NewReceiveBill.FItemClassID=t_ItemClass.FItemClassID AND t_ItemClass.FItemClassID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Item  ON t_RP_NewReceiveBill.FCustomer=t_Item.FItemID AND t_Item.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_Currency3 ON t_RP_NewReceiveBill.FCurrencyID=t_Currency3.FCurrencyID AND t_Currency3.FCurrencyID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency4 ON t_RP_NewReceiveBill.FReceiveCyID=t_currency4.fcurrencyid AND t_currency4.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency5 ON t_RP_NewReceiveBill.FSettleCyID=t_currency5.fcurrencyid AND t_currency5.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_User t_User1 ON t_RP_NewReceiveBill.FChecker=t_User1.FUserID AND t_User1.FUserID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Department  ON t_RP_NewReceiveBill.FDepartment=t_Department.FItemID AND t_Department.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Emp  ON t_RP_NewReceiveBill.FEmployee=t_Emp.FItemID AND t_Emp.FItemID<![CDATA[<>]]>0   
+	WHERE FBillType=1000 AND FBillID NOT IN
+      (SELECT TOP $startNumber$ FBillID
+		FROM t_RP_NewReceiveBill  LEFT  JOIN t_ItemClass  ON t_RP_NewReceiveBill.FItemClassID=t_ItemClass.FItemClassID AND t_ItemClass.FItemClassID<![CDATA[<>]]>0   
+			LEFT  JOIN t_Item  ON t_RP_NewReceiveBill.FCustomer=t_Item.FItemID AND t_Item.FItemID<![CDATA[<>]]>0   
+			LEFT  JOIN t_currency t_Currency3 ON t_RP_NewReceiveBill.FCurrencyID=t_Currency3.FCurrencyID AND t_Currency3.FCurrencyID<![CDATA[<>]]>0   
+			LEFT  JOIN t_currency t_currency4 ON t_RP_NewReceiveBill.FReceiveCyID=t_currency4.fcurrencyid AND t_currency4.fcurrencyid<![CDATA[<>]]>0   
+			LEFT  JOIN t_currency t_currency5 ON t_RP_NewReceiveBill.FSettleCyID=t_currency5.fcurrencyid AND t_currency5.fcurrencyid<![CDATA[<>]]>0   
+			LEFT  JOIN t_User t_User1 ON t_RP_NewReceiveBill.FChecker=t_User1.FUserID AND t_User1.FUserID<![CDATA[<>]]>0   
+			LEFT  JOIN t_Department  ON t_RP_NewReceiveBill.FDepartment=t_Department.FItemID AND t_Department.FItemID<![CDATA[<>]]>0   
+			LEFT  JOIN t_Emp  ON t_RP_NewReceiveBill.FEmployee=t_Emp.FItemID AND t_Emp.FItemID<![CDATA[<>]]>0   
+		WHERE FBillType=1000
+		<isNotNull property="customerNumber" prepend="and">
+		    customerNumber = #customerNumber#
+		</isNotNull> 
+		<isNotNull property="employeeNumber" prepend="and">
+		    t_Emp.FNumber = #employeeNumber#
+		</isNotNull> 
+		<isNotNull property="fBillStatus" prepend="and">
+		    t_rp_newreceivebill.FCheckStatus = #fBillStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    t_Item.FItemID in $customerIds$
+		</isNotNull>
+		order by t_RP_NewReceiveBill.FDate desc
+	   ) 
+		<isNotNull property="customerNumber" prepend="and">
+		    customerNumber = #customerNumber#
+		</isNotNull> 
+		<isNotNull property="employeeNumber" prepend="and">
+		    t_Emp.FNumber = #employeeNumber#
+		</isNotNull> 
+		<isNotNull property="fBillStatus" prepend="and">
+		    t_rp_newreceivebill.FCheckStatus = #fBillStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    t_Item.FItemID in $customerIds$
+		</isNotNull>
+	order by t_RP_NewReceiveBill.FDate desc
+  </select>
+
+  <select id="getReceiveBillCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TReceiveBill" > 
+    SELECT count(*)
+    FROM t_RP_NewReceiveBill  LEFT  JOIN t_ItemClass  ON t_RP_NewReceiveBill.FItemClassID=t_ItemClass.FItemClassID AND t_ItemClass.FItemClassID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Item  ON t_RP_NewReceiveBill.FCustomer=t_Item.FItemID AND t_Item.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_Currency3 ON t_RP_NewReceiveBill.FCurrencyID=t_Currency3.FCurrencyID AND t_Currency3.FCurrencyID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency4 ON t_RP_NewReceiveBill.FReceiveCyID=t_currency4.fcurrencyid AND t_currency4.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency5 ON t_RP_NewReceiveBill.FSettleCyID=t_currency5.fcurrencyid AND t_currency5.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_User t_User1 ON t_RP_NewReceiveBill.FChecker=t_User1.FUserID AND t_User1.FUserID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Department  ON t_RP_NewReceiveBill.FDepartment=t_Department.FItemID AND t_Department.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Emp  ON t_RP_NewReceiveBill.FEmployee=t_Emp.FItemID AND t_Emp.FItemID<![CDATA[<>]]>0   
+	WHERE FBillType=1000
+		<isNotNull property="customerNumber" prepend="and">
+		    t_Item.FItemID = #customerNumber#
+		</isNotNull> 
+		<isNotNull property="employeeNumber" prepend="and">
+		    t_Emp.FNumber = #employeeNumber#
+		</isNotNull> 
+		<isNotNull property="fBillStatus" prepend="and">
+		    t_rp_newreceivebill.FCheckStatus = #fBillStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    t_RP_NewReceiveBill.FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    t_Item.FItemID in $customerIds$
+		</isNotNull>
+  </select>
+ 
+  <select id="getReceiveBillAllList" resultMap="receiveBillResult" parameterClass="java.lang.String" > 
+	SELECT FBillID, 
+		t_rp_newreceivebill.FCheckStatus AS FBillStatus,
+		t_RP_NewReceiveBill.FNumber,	 
+		t_RP_NewReceiveBill.FDate,  
+		t_RP_NewReceiveBill.FFincDate,
+		t_ItemClass.FName AS FItemClassID_DSPName,   
+		t_Item.FNumber AS customerNumber,	 
+		t_Item.FName AS customerName,
+		t_Department.FNumber AS departNumber, t_Department.FName AS departName,   
+		t_Emp.FNumber AS employeeNumber,t_Emp.FName AS employeeName,  
+		t_Currency3.FName AS currencyName,   
+		t_RP_NewReceiveBill.FAmountFor,   
+		t_User1.FName AS checkerName  
+	FROM t_RP_NewReceiveBill  LEFT  JOIN t_ItemClass  ON t_RP_NewReceiveBill.FItemClassID=t_ItemClass.FItemClassID AND t_ItemClass.FItemClassID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Item  ON t_RP_NewReceiveBill.FCustomer=t_Item.FItemID AND t_Item.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_Currency3 ON t_RP_NewReceiveBill.FCurrencyID=t_Currency3.FCurrencyID AND t_Currency3.FCurrencyID<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency4 ON t_RP_NewReceiveBill.FReceiveCyID=t_currency4.fcurrencyid AND t_currency4.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_currency t_currency5 ON t_RP_NewReceiveBill.FSettleCyID=t_currency5.fcurrencyid AND t_currency5.fcurrencyid<![CDATA[<>]]>0   
+		LEFT  JOIN t_User t_User1 ON t_RP_NewReceiveBill.FChecker=t_User1.FUserID AND t_User1.FUserID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Department  ON t_RP_NewReceiveBill.FDepartment=t_Department.FItemID AND t_Department.FItemID<![CDATA[<>]]>0   
+		LEFT  JOIN t_Emp  ON t_RP_NewReceiveBill.FEmployee=t_Emp.FItemID AND t_Emp.FItemID<![CDATA[<>]]>0   
+	WHERE FBillID in $billIds$ AND FBillType=1000 
+  </select>
+  
+</sqlMap>

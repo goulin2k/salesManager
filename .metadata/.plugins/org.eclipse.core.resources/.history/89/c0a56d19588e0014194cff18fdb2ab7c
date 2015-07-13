@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package com.sales.action.app;
+
+import com.sales.action.BaseAction;
+import com.sales.service.SUserService;
+
+/**
+ * @author apple
+ *
+ */
+public class AppUserAction extends BaseAction {
+	private SUserService userService;
+	
+	public String login() {
+		return null;
+	}
+
+}

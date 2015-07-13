@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="salesManager"
+  id="myeclipse.1365156096922"
+  context-root="/salesManager"
+  j2ee-spec="5.0"
+  archive="salesManager.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

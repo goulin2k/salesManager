@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	
+    <bean id="userDao" class="com.sales.dao.impl.UserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	 
+	<bean id="projectDao" class="com.sales.dao.impl.SSalesProjectDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="activityDao" class="com.sales.dao.impl.SSalesActivityDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="assessDao" class="com.sales.dao.impl.SSalesAssessDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="newsDao" class="com.sales.dao.impl.SNewsDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="quotationDao" class="com.sales.dao.impl.SSalesQuotationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="quotationProductDao" class="com.sales.dao.impl.SSalesQuotationProductDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="quotationCodeDao" class="com.sales.dao.impl.SSalesQuotationCodeDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="enumerationDao" class="com.sales.dao.impl.SEnumerationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="productDao" class="com.sales.dao.impl.TProductDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="orderDao" class="com.sales.dao.impl.TOrderDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="requestDao" class="com.sales.dao.impl.TRequestDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="orfqDao" class="com.sales.dao.impl.TOrfqDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="sOrfqDao" class="com.sales.dao.impl.SOrfqDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+
+	<bean id="stockBillDao" class="com.sales.dao.impl.TStockBillDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="stockBillOutDao" class="com.sales.dao.impl.TStockBillOutDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="saleDao" class="com.sales.dao.impl.TSaleDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="outStockDao" class="com.sales.dao.impl.TOutStockDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="receiveBillDao" class="com.sales.dao.impl.TReceiveBillDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="returnGoodsDao" class="com.sales.dao.impl.TReturnGoodsDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="saleBillDao" class="com.sales.dao.impl.SaleBillDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="k3Dao" class="com.sales.dao.impl.TK3EntryDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	
+	<bean id="k3CustomerDao" class="com.sales.dao.impl.TK3CustomerDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+
+	<bean id="billStatusChangeDao" class="com.sales.dao.impl.TSaleBillStatusChangeDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+     
+	<bean id="sUserDao" class="com.sales.dao.impl.SUserDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="departmentDao" class="com.sales.dao.impl.SDepartmentDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerUserDao" class="com.sales.dao.impl.SCustomerUserDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerOwnerUserDao" class="com.sales.dao.impl.SCustomerOwnerUserDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="roleActionDao" class="com.sales.dao.impl.SRoleActionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="informationDao" class="com.sales.dao.impl.SInformationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="roleDao" class="com.sales.dao.impl.SRoleDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+    <bean id="actionDao" class="com.sales.dao.impl.SActionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="leaveDao" class="com.sales.dao.impl.SLeaveDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="overtimeCollectionDao" class="com.sales.dao.impl.SOvertimeCollectionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="overtimeDao" class="com.sales.dao.impl.SOvertimeDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="tripApplicationDao" class="com.sales.dao.impl.STripApplicationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="tripExpenseDao" class="com.sales.dao.impl.STripExpenseDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="expenseApplicationDao" class="com.sales.dao.impl.SExpenseApplicationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="expenseReimbursementDao" class="com.sales.dao.impl.SExpenseReimbursementDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="carRepairApplicationDao" class="com.sales.dao.impl.SCarRepairApplicationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="carRepairReimbursementDao" class="com.sales.dao.impl.SCarRepairReimbursementDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	<bean id="sModuleDao" class="com.sales.dao.impl.SModuleDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	<bean id="sUserModuleDao" class="com.sales.dao.impl.SUserModuleDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="logDao" class="com.sales.dao.impl.SLogDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="parameterDao" class="com.sales.dao.impl.SParameterDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="performancePlanDao" class="com.sales.dao.impl.SPerformancePlanDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="performanceItemDao" class="com.sales.dao.impl.SPerformanceItemDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="performanceSqlDao" class="com.sales.dao.impl.SPerformanceSqlDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="planItemDao" class="com.sales.dao.impl.SPlanItemDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="positionDao" class="com.sales.dao.impl.SPositionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	 
+	<bean id="userPerformancePlanDao" class="com.sales.dao.impl.SUserPerformancePlanDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>	
+	
+	<bean id="userPerformanceItemDao" class="com.sales.dao.impl.SUserPerformanceItemDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerDao" class="com.sales.dao.impl.TCustomerDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerLinkmanDao" class="com.sales.dao.impl.SCustomerLinkmanDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerEvaluationDao" class="com.sales.dao.impl.SCustomerEvaluationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerFinEvaluationDao" class="com.sales.dao.impl.SCustomerFinEvaluationDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerProjectDao" class="com.sales.dao.impl.SCustomerProjectDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="customerLevelDao" class="com.sales.dao.impl.SCustomerLevelDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+		
+	<bean id="tSaleProcessDAO" class="com.sales.dao.impl.TSaleProcessDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	<bean id="saleProcessDAO" class="com.sales.dao.impl.SaleProcessDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<bean id="k3OrderStatisticsDao" class="com.sales.dao.impl.K3OrderStatisticsDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	
+	<bean id="k3ICSaleStatisticsDao" class="com.sales.dao.impl.K3ICSaleStatisticsDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	
+	<bean id="k3RecieveBillStatisticsDao" class="com.sales.dao.impl.K3ReciveBillStatisticsDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	
+	<!-- 销售指标数据访问类  -->
+	<bean id="k3SalerQuotaDao" class="com.sales.dao.impl.K3SalerQuotaDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- 客户潜力产品数据访问类 -->
+	<bean id="customerPotentialProductDao" class="com.sales.dao.impl.SCustomerPotentialProductDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	
+	<!-- 客户潜力产品数据访问类 -->
+	<bean id="poOrderDAO" class="com.sales.dao.impl.TPOOrderDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+	
+	<!-- 新增销售收款单访问类 -->
+	<bean id="k3ReciveBilInfoDAO" class="com.sales.dao.impl.K3ReciveBilInfoDAOImpl">
+		<property name="sqlMapClient" ref="sqlServerMapClient" />
+	</bean>
+</beans>

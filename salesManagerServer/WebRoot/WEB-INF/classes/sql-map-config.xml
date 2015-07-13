@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+    
+<sqlMapConfig>
+    <settings useStatementNamespaces="true" lazyLoadingEnabled="true"
+		enhancementEnabled="true"/>
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/user_sqlmap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_activity_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_project_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_assess_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_news_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_quotation_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_quotation_code_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_sales_quotation_product_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_user_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_department_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_enumeration_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_leave_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_overtime_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_trip_application_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_trip_expense_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_expense_application_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_expense_reimbursement_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_car_repair_application_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_car_repair_reimbursement_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_module_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_user_module_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_log_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_parameter_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_performance_plan_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_performance_item_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_performance_sql_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_plan_item_SqlMap.xml" />
+    <sqlMap resource="com/sales/dao/sqlmaps/s_position_SqlMap.xml" />	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_user_performance_plan_SqlMap.xml" />	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_user_performance_item_SqlMap.xml" />	
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/s_role_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_role_action_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_action_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_information_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/t_customer_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_linkman_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_project_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_evaluation_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_fin_evaluation_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_user_SqlMap.xml" />
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_owner_user_SqlMap.xml" />
+    <sqlMap resource="com/sales/dao/sqlmaps/s_overtime_collection_SqlMap.xml" />
+    <sqlMap resource="com/sales/dao/sqlmaps/s_customer_level_SqlMap.xml" />
+	
+	<sqlMap resource="com/sales/dao/sqlmaps/t_orfq_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_saleProcess_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_saler_quota_SqlMap.xml" /> 
+	<sqlMap resource="com/sales/dao/sqlmaps/s_customer_pproduct_SqlMap.xml" />	
+		
+</sqlMapConfig>

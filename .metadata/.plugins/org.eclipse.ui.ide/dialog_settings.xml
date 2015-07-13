@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog">
+		<item value="false" key="ShowDerived"/>
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;workingSet workingSetName=&quot;&quot;/&gt;" key="WorkingSet"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/jsp/user/login.jsp&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/jsp/receiptprocess/leaveEdit.jsp&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/jsp/user/infoList.jsp&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/struts-app.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_customer_project_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/jsp/receiptprocess/overtimeEdit.jsp&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/service/impl/CustomerSyncServiceImpl.java&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_saleProcess_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/jdbc.properties&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_sales_quotation_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/test/ut.properties&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/t_saleProcess_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/struts-ftd.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/action/PerformanceAction.java&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/t_order_statistics_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_performance_sql_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_sales_activity_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_sales_project_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/WEB-INF/log4j.properties&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_sales_assess_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/WEB-INF/applicationContext-action.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/t_request_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/t_receive_bill_msg_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/src/com/sales/dao/sqlmaps/s_information_SqlMap.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;infoNode path=&quot;/salesManager/WebRoot/WEB-INF/applicationContext-service.xml&quot; type=&quot;1&quot;/&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;" key="History"/>
+		<section name="DialogBoundsSettings">
+			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="23" key="DIALOG_Y_ORIGIN"/>
+			<item value="340" key="DIALOG_X_ORIGIN"/>
+			<item value="500" key="DIALOG_HEIGHT"/>
+			<item value="1|.Helvetica Neue DeskInterface|11.0|0|COCOA|1|.HelveticaNeueDeskInterface-Regular" key="DIALOG_FONT_NAME"/>
+		</section>
+	</section>
+	<section name="ExternalProjectImportWizard">
+	</section>
+	<section name="CleanDialogSettings">
+		<item value="484" key="DIALOG_WIDTH"/>
+		<item value="143" key="DIALOG_Y_ORIGIN"/>
+		<item value="398" key="DIALOG_X_ORIGIN"/>
+		<item value="354" key="DIALOG_HEIGHT"/>
+		<item value="false" key="TOGGLE_SELECTED"/>
+	</section>
+</section>

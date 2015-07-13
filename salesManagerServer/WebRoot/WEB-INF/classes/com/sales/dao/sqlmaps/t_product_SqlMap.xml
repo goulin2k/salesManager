@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_product" >
+
+  <resultMap id="productResult" class="com.sales.model.TProduct" > 
+    <result column="FItemId" property="fItemId" jdbcType="INTEGER" />
+    <result column="FNumber" property="fNumber" jdbcType="VARCHAR" />
+    <result column="FFullNumber" property="fFullNumber" jdbcType="VARCHAR" />
+    <result column="FLevel" property="fLevel" jdbcType="INTEGER" />
+    <result column="FParentID" property="fParentID" jdbcType="INTEGER" />
+    <result column="FDetail" property="fDetail" jdbcType="VARCHAR" />
+    <result column="FName" property="fName" jdbcType="VARCHAR" />
+    <result column="FDeleted" property="fDeleted" jdbcType="VARCHAR" />
+    <result column="FShortNumber" property="fShortNumber" jdbcType="VARCHAR" />
+    <result column="FModel" property="fModel" jdbcType="VARCHAR" />
+    <result column="FErpClsId" property="fErpClsId" jdbcType="VARCHAR" />
+    <result column="productPropery" property="productPropery" jdbcType="VARCHAR" />
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="measureUnitName" property="measureUnitName" jdbcType="VARCHAR" /> 
+    <result column="FItemId" property="childProductList" select="t_product.getProductList" />
+    <result column="FQtyMin" property="minBuy" jdbcType="VARCHAR" />
+    <result column="FSecUnitName" property="packModel" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="productItemResult" class="com.sales.model.TProduct" > 
+    <result column="FItemId" property="fItemId" jdbcType="INTEGER" />
+    <result column="FNumber" property="fNumber" jdbcType="VARCHAR" />
+    <result column="FFullNumber" property="fFullNumber" jdbcType="VARCHAR" />
+    <result column="FLevel" property="fLevel" jdbcType="INTEGER" />
+    <result column="FParentID" property="fParentID" jdbcType="INTEGER" />
+    <result column="FDetail" property="fDetail" jdbcType="VARCHAR" />
+    <result column="FName" property="fName" jdbcType="VARCHAR" />
+    <result column="FDeleted" property="fDeleted" jdbcType="VARCHAR" />
+    <result column="FShortNumber" property="fShortNumber" jdbcType="VARCHAR" />
+    <result column="FModel" property="fModel" jdbcType="VARCHAR" />
+    <result column="FErpClsId" property="fErpClsId" jdbcType="VARCHAR" />
+    <result column="productPropery" property="productPropery" jdbcType="VARCHAR" />
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="measureUnitName" property="measureUnitName" jdbcType="VARCHAR" />  
+    <result column="FQtyMin" property="minBuy" jdbcType="VARCHAR" />
+    <result column="FSecUnitName" property="packModel" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getProductListById" resultMap="productItemResult" parameterClass="java.lang.Integer" > 
+    SELECT it.FItemId, it.FNumber, it.FFullNumber, it.FLevel, it.FParentID, it.FDetail, it.FName, 
+		it.FDeleted, it.FShortNumber,
+		ict.FModel, ict.FErpClsId, sm.FName AS productPropery, ict.FUnitID, mu.FName AS measureUnitName,
+		ict.FQtyMin, mu.FName AS FSecUnitName                                                                       
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID
+		LEFT JOIN t_measureUnit mu2 ON ict.FOrderUnitID = mu.FMeasureUnitID		
+	WHERE it.FItemClassId=4 and it.FParentID = #parentId:INTEGER#
+  </select>
+  
+  <select id="getProductListByParentId" resultMap="productResult" parameterClass="java.lang.Integer" > 
+    SELECT it.FItemId, it.FNumber, it.FFullNumber, it.FLevel, it.FParentID, it.FDetail, it.FName, 
+		it.FDeleted, it.FShortNumber,
+		ict.FModel, ict.FErpClsId, sm.FName AS productPropery,  mu.FName AS measureUnitName,
+		ict.FQtyMin, mu.FName AS FSecUnitName                                                                    
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID	 
+	WHERE it.FItemClassId=4 and it.FParentID = #parentId:INTEGER#
+  </select>
+  
+  <select id="getProductListByCondition" resultMap="productItemResult" parameterClass="java.util.Map" > 
+    SELECT it.FItemId, it.FNumber, it.FFullNumber, it.FLevel, it.FParentID, it.FDetail, it.FName, 
+		it.FDeleted, it.FShortNumber,
+		ict.FModel, ict.FErpClsId, sm.FName AS productPropery, ict.FUnitID, mu.FName AS measureUnitName,
+		ict.FQtyMin, mu.FName AS FSecUnitName                                                                    
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID	 
+	WHERE it.FItemClassId=4
+	<isNotNull property="fNumber" prepend="and">
+	    it.FNumber like '$fNumber$%'
+	</isNotNull>
+	<isNotNull property="fName" prepend="and">
+	    it.FName like '$fName$%'
+	</isNotNull>
+  </select>
+  
+  <select id="getProductByFNumber" resultMap="productItemResult" parameterClass="java.lang.String" > 
+    SELECT it.FItemId, it.FNumber, it.FFullNumber, it.FLevel, it.FParentID, it.FDetail, it.FName, 
+		it.FDeleted, it.FShortNumber,
+		ict.FModel, ict.FErpClsId, sm.FName AS productPropery, ict.FUnitID, mu.FName AS measureUnitName,
+		ict.FQtyMin, mu2.FName AS FSecUnitName                                                                    
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID	
+		LEFT JOIN t_measureUnit mu2 ON ict.FOrderUnitID = mu.FMeasureUnitID	
+	WHERE it.FNumber = #fNumber:VARCHAR# and it.FItemClassId=4 
+  </select>
+  
+  <select id="getProductList" resultMap="productItemResult" parameterClass="java.util.Map" > 
+    SELECT TOP $pageSize$ it.FItemId, it.FNumber, it.FFullNumber, it.FLevel, it.FParentID, it.FDetail, it.FName, 
+		it.FDeleted, it.FShortNumber,
+		ict.FModel, ict.FErpClsId, sm.FName AS productPropery, ict.FUnitID, mu.FName AS measureUnitName,
+		ict.FQtyMin, mu.FName AS FSecUnitName                                                                    
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID 
+	WHERE it.FItemClassId = 4 and it.FDetail = 1
+	<isNotNull property="fNumber" prepend="and">
+	    it.FNumber like '$fNumber$%'
+	</isNotNull>
+	<isNotNull property="fName" prepend="and">
+	    it.FName like '%$fName$%'
+	</isNotNull> 
+	and it.FItemId NOT IN 
+       (SELECT TOP $startNumber$ it.FItemId 
+		FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID	 
+		WHERE it.FItemClassId=4
+		<isNotNull property="fNumber" prepend="and">
+		    it.FNumber like '$fNumber$%'
+		</isNotNull>
+		<isNotNull property="fName" prepend="and">
+		    it.FName like '%$fName$%'
+		</isNotNull> 
+	   )  
+  </select>
+  
+  <select id="getProductCount" resultClass="java.lang.Integer" parameterClass="java.util.Map" > 
+    SELECT count(*)
+	FROM t_item it LEFT JOIN t_ICItem ict on it.FItemId = ict.FItemId
+		LEFT JOIN t_subMessage sm ON ict.FErpClsId = sm.FInterId
+		LEFT JOIN t_measureUnit mu ON ict.FUnitID = mu.FMeasureUnitID		
+	WHERE it.FItemClassId = 4 and it.FDetail = 1
+	<isNotNull property="fNumber" prepend="and">
+	    it.FNumber like '$fNumber$%'
+	</isNotNull>
+	<isNotNull property="fName" prepend="and">
+	    it.FName like '%$fName$%'
+	</isNotNull> 
+  </select>
+  
+</sqlMap>

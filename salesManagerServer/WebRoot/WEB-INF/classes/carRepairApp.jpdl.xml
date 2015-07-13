@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="carRepairApp" name="车辆维修申请流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="23,152,48,48" name="start1">
+      <transition to="车辆维修申请"/>  
+   </start> 
+   <task assignee="#{userId}" g="104,151,92,52" name="车辆维修申请">
+      <transition g="-11,-24" name="申请" to="后勤审批"/>
+   </task>
+   
+   <task form="process!toApprovalCarApp" g="221,151,92,52" name="后勤审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-11,-30" name="批准" to="总经理审批"/>
+      <transition g="221,94:-69,-22" name="驳回" to="车辆维修申请"/>
+   </task>
+   
+   <task form="process!toApprovalCarApp" g="335,151,92,52" name="总经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${总经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-11,-30" name="批准" to="end1"/>
+      <transition g="314,284:-69,-22" name="驳回" to="车辆维修申请"/>
+   </task>
+   <end g="462,153,48,48" name="end1"/>
+</process>

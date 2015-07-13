@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER" >
+	<resultMap id="userResult" class="com.sales.model.User" >
+		<result column="id" property="id" jdbcType="INTEGER" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="desc" property="desc" jdbcType="VARCHAR" />
+	</resultMap>
+	
+   <select id="getUserList" resultMap="userResult">
+     select * from user 
+   </select>
+   
+   <insert id="addUser" parameterClass="com.sales.model.User" >
+    
+    insert into user 
+    values (#id:INTEGER#, #name:VARCHAR#, #desc:VARCHAR#)
+      <selectKey resultClass="int" keyProperty="id">
+		select LAST_INSERT_ID() as id
+	  </selectKey>
+  </insert>
+  
+  <select id="getUserById" resultMap="userResult" parameterClass="java.lang.Integer" >
+    
+    select *
+    from user where id = #id#
+  </select>
+  
+  <delete id="deleteUserById" parameterClass="java.lang.Integer" >
+    delete from user where id = #id#
+  </delete>
+  
+  <select id="getUserListByConditions" resultMap="userResult" parameterClass="java.util.Map">
+     select * from user u
+     <dynamic  prepend="where">
+        <isNotEmpty prepend="or" property="searchtxt">
+			u.name like '%$searchtxt$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="or" property="searchtxt">
+			u.desc like '%$searchtxt$%'
+		</isNotEmpty>
+	</dynamic>
+   </select>
+</sqlMap>

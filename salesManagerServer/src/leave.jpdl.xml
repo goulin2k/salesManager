@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="leave" name="请假流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="1,184,48,48" name="启动">
+      <transition to="休假申请"/>
+   </start>
+   <task assignee="#{userId}" g="63,182,92,52" name="休假申请">
+      <transition g="-30,-5" name="申请" to="判断发起人流程"/>
+   </task> 
+   <decision g="198,277,48,48" name="判断发起人流程">
+      <handler class="com.sales.workflow.UserTypeDecisionHandler" />
+      <transition g="-53,-22" name="上级主管" to="上级审批"/>
+      <transition g="-65,-22" name="后勤部经理" to="后勤经理审批"/>
+      <transition g="-41,-22" name="总经理" to="总经理审批"/>
+   </decision>
+   <task form="process!toApprovalLeave" g="188,182,92,52" name="上级审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${上级主管}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="168,139:-17,7" name="驳回" to="休假申请"/>
+      <transition g="-23,-24" name="批准" to="后勤经理审批"/>
+   </task>
+   
+   
+   <task form="process!toApprovalLeave" g="316,182,92,52" name="后勤经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-17,-22" name="批准" to="判断休假天数"/>
+      <transition g="362,122;291,122;112,122:9,-32" name="驳回" to="休假申请"/>
+   </task>
+   
+   <decision expr="#{leaveDays > 8 ? '请假天数大于1' : '请假天数小于等于1'}" g="440,182,48,48" name="判断休假天数">
+      <transition g="-81,5" name="请假天数大于1" to="总经理审批"/>
+      <transition g="-24,-24" name="请假天数小于等于1" to="后勤归档"/>
+   </decision> 
+    
+   <task form="process!toApprovalLeave" g="453,274,92,52" name="总经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${总经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="1,7" name="批准" to="后勤归档"/>
+      <transition g="497,336;336,336;105,333:53,-10" name="驳回" to="休假申请"/>
+   </task>
+   
+   <task form="process!toApprovalLeave" g="514,181,92,52" name="后勤归档">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${销售助理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-17,-22" name="批准" to="结束"/>
+      <transition g="560,125;291,122;112,125:9,-32" name="驳回" to="休假申请"/>
+   </task>
+   <end g="624,183,48,48" name="结束"/>
+   
+   
+</process>

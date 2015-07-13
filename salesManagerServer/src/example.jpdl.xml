@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="leave" xmlns="http://jbpm.org/4.3/jpdl">
+	<start g="196,25,48,48" name="start1">
+		<transition to="申请" />
+	</start>
+
+	<task assignee="#{owner}" form="request.jsp" g="172,118,92,52"
+		name="申请">
+		<transition to="经理审批" />
+	</task>
+
+	<task form="manager.jsp" g="175,217,92,52" name="经理审批">
+		<assignment-handler class="com.sales.workflow.UserAssignHandler">
+			<field name="role">
+				<string value="${manager}" />
+			</field>
+		</assignment-handler>
+		<transition g="-32,-8" name="批准" to="exclusive1" />
+		<transition g="128,221;124,165:-42,-18" name="驳回" to="申请" />
+	</task>
+
+	<decision expr="#{day > 3 ? '老板审批' : '结束'}" g="200,308,48,48"
+		name="exclusive1">
+		<transition g="-39,-10" name="结束" to="end1" />
+		<transition g="339,342:-71,-17" name="老板审批" to="老板审批" />
+	</decision>
+
+	<task form="boss.jsp" g="294,375,92,52" name="老板审批">
+
+		<transition g="339,457:-5,-22" to="end1" name="批准" />
+		<transition name="驳回" to="经理审批" g="400,285:-69,-22" />
+		<assignment-handler class="com.sales.workflow.UserAssignHandler">
+			<field name="role">
+				<string value="${boss}" />
+			</field>
+		</assignment-handler>
+
+	</task>
+	<end g="199,445,48,48" name="end1" />
+</process>

@@ -1,0 +1,3 @@
+#Thu Jun 25 15:55:47 GMT+08:00 2015
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<watchExpressions>\n<expression enabled\="true" text\="this.getClass()"/>\n<expression enabled\="true" text\="dsField"/>\n<expression enabled\="true" text\="o.getClass()"/>\n<expression enabled\="true" text\="ClassAccessor.cast(o.getClass(), o)"/>\n</watchExpressions>\n
+eclipse.preferences.version=1

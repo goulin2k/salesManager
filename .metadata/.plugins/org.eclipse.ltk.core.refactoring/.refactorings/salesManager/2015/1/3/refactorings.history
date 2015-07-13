@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename field &apos;projectService&apos; in &apos;com.sales.action.app.SalePlanAction&apos; to &apos;salePlanService&apos;&#x0A;- Original project: &apos;salesManager&apos;&#x0A;- Original element: &apos;com.sales.action.app.SalePlanAction.projectService&apos;&#x0A;- Renamed element: &apos;com.sales.action.app.SalePlanAction.salePlanService&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" delegate="false" deprecate="false" description="Rename field &apos;projectService&apos;" flags="589826" getter="false" id="org.eclipse.jdt.ui.rename.field" input="/src&lt;com.sales.action.app{SalePlanAction.java[SalePlanAction^projectService" name="salePlanService" references="true" setter="false" stamp="1421245666839" textual="false" version="1.0"/>
+</session>

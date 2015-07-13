@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_quotation_product" >
+  
+  <resultMap id="quotationProductResult" class="com.sales.model.SSalesQuotationProduct" > 
+    <result column="quotation_product_id" property="quotationProductId" jdbcType="INTEGER" />
+    <result column="quotation_id" property="quotationId" jdbcType="INTEGER" />
+    <result column="product_code" property="productCode" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_model" property="productModel" jdbcType="VARCHAR" />
+    <result column="measure_unit_name" property="measureUnitName" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="pack_model" property="packModel" jdbcType="VARCHAR" />
+    <result column="logistics_cost" property="logisticsCost" jdbcType="VARCHAR" />
+    <result column="min_qty" property="minQty" jdbcType="VARCHAR" />
+    <result column="futures" property="futures" jdbcType="VARCHAR" />  
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="unit_id" property="unitId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="getQuotationProductListByQuotationId" resultMap="quotationProductResult" parameterClass="java.lang.Integer" > 
+    select quotation_product_id, quotation_id, product_code, product_name, product_model, 
+    	measure_unit_name, price, num, pack_model, logistics_cost, min_qty, futures,
+    	unit_id, item_id
+    from s_sales_quotation_product
+    where quotation_id = #quotationId:INTEGER#
+  </select>
+  
+  <insert id="insertQuotationProduct" parameterClass="com.sales.model.SSalesQuotationProduct" > 
+    insert into s_sales_quotation_product (quotation_id, product_code, product_name, product_model, measure_unit_name, 
+    	price, num, pack_model, logistics_cost, min_qty, futures, unit_id, item_id)
+    values (#quotationId:INTEGER#, #productCode:INTEGER#, #productName:VARCHAR#, #productModel:VARCHAR#, #measureUnitName:VARCHAR#, 
+    	#price:VARCHAR#, #num:VARCHAR#, #packModel:VARCHAR#, #logisticsCost:VARCHAR#, #minQty:VARCHAR#, 
+    	#futures:VARCHAR#, #unitId:INTEGER#, #itemId:INTEGER#)
+  </insert>
+  
+  <update id="updateQuotationProduct" parameterClass="com.sales.model.SSalesQuotationProduct" > 
+    update s_sales_quotation_product
+    <dynamic prepend="set" >  
+      <isNotNull prepend="," property="price" >
+        price = #price:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="num" >
+        num = #num:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="packModel" >
+        pack_model = #packModel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="logisticsCost" >
+        logistics_cost = #logisticsCost:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="minQty" >
+        min_qty = #minQty:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="futures" >
+        futures = #futures:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where quotation_product_id = #quotationProductId:INTEGER#
+  </update>
+</sqlMap>

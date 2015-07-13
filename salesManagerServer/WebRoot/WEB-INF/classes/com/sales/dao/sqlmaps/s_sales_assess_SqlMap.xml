@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_assess" >
+  <resultMap id="salesAssessResult" class="com.sales.model.SSalesAssess" > 
+    <result column="assess_id" property="assessId" jdbcType="INTEGER" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="comment_time" property="commentTime" jdbcType="DATE" />
+    <result column="assess_user_id" property="assessUserId" jdbcType="INTEGER" />
+    <result column="assess_user_name" property="assessUserName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getSaleAssessCountByPlan" resultClass="java.lang.Integer" parameterClass="java.lang.Integer" > 
+    select count(*)
+    from s_sales_assess a
+    where a.project_id=#projectId:INTEGER#
+  </select>
+  
+  <select id="getSalesAssessById" resultMap="salesAssessResult" parameterClass="java.lang.Integer" > 
+    select a.assess_id, a.project_id, a.activity_id, a.comment, a.comment_time, a.assess_user_id, u.user_name as assess_user_name
+    from s_sales_assess a, s_user u
+    where a.assess_id = #assessId:INTEGER# and a.assess_user_id = u.user_id
+  </select>
+  
+  <select id="getSalesAssessByProjectId" resultMap="salesAssessResult" parameterClass="java.lang.Integer" > 
+    select a.assess_id, a.project_id, a.activity_id, a.comment, a.comment_time, a.assess_user_id, u.user_name as assess_user_name
+    from s_sales_assess a, s_user u
+    where a.project_id = #projectId:INTEGER# and a.assess_user_id = u.user_id
+    order by a.comment_time desc
+  </select>
+   
+  <insert id="insertSalesAssess" parameterClass="com.sales.model.SSalesAssess" > 
+    insert into s_sales_assess (assess_id, project_id, activity_id, comment, comment_time,
+      assess_user_id)
+    values (#assessId:INTEGER#, #projectId:INTEGER#, #activityId:INTEGER#, #comment:VARCHAR#,
+      SYSDATE(), #assessUserId:INTEGER#)
+      <selectKey resultClass="int" keyProperty="assessId">
+		select LAST_INSERT_ID() as assessId
+	  </selectKey>
+  </insert> 
+  
+  <delete id="deleteSalesAssess" parameterClass="java.lang.Integer"> 
+  	delete from s_sales_assess where assess_id = #assessId:INTEGER# 
+  </delete>
+  
+  <update id="updateSalesAssess" parameterClass="com.sales.model.SSalesAssess"> 
+    update s_sales_assess 
+	  <dynamic prepend="set">  
+		  <isNotNull prepend="," property="comment">comment = #comment:VARCHAR#</isNotNull> 
+		  <isNotNull prepend="," property="commentTime">comment_time = SYSDATE()</isNotNull> 
+		  <isNotNull prepend="," property="assessUserId">assess_user_id = #assessUserId:INTEGER#</isNotNull> 
+	  </dynamic>
+    where assess_id = #assessId:INTEGER# 
+  </update>
+</sqlMap>

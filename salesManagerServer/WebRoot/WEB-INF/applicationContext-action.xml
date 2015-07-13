@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"> 
+	
+	<bean id="businessTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">      
+        <!-- 调用的类 -->            
+        <property name="targetObject" ref="billStatusChangeService"/>   
+         <!-- 调用类中的方法 -->   
+        <property name="targetMethod" value="dealK3Transaction"/>     
+        <!-- false,证明不执行并发任务 -->   
+        <property name="concurrent" value="false"/>       
+    </bean>  
+    
+    <bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">   
+        <property name="jobDetail" ref="businessTask"/>   
+        <property name="startDelay" value="10000" /> 
+        <property name="repeatInterval" value="1800000" />   
+    </bean> 
+    
+    <bean id="schdulerFactory" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">   
+        <property name="triggers">   
+            <list>   
+                <ref bean="simpleTrigger"/>   
+            </list>   
+        </property>   
+        <property name="autoStartup"> 
+			<value>true</value> 
+		</property> 
+    </bean>
+    
+	<bean id="businessTask1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">      
+        <!-- 调用的类 -->            
+        <property name="targetObject" ref="customerSyncService"/>   
+         <!-- 调用类中的方法 -->   
+        <property name="targetMethod" value="syncK3Customers"/>     
+        <!-- false,证明不执行并发任务 -->   
+        <property name="concurrent" value="false"/>       
+    </bean>  
+    
+    <bean id="simpleTrigger1" class="org.springframework.scheduling.quartz.SimpleTriggerBean">   
+        <property name="jobDetail" ref="businessTask1"/>   
+        <property name="startDelay" value="10000" /> 
+        <property name="repeatInterval" value="1800000" />   
+    </bean> 
+    
+    <bean id="schdulerFactory1" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">   
+        <property name="triggers">   
+            <list>   
+                <ref bean="simpleTrigger1"/>   
+            </list>   
+        </property>   
+        <property name="autoStartup"> 
+			<value>true</value> 
+		</property> 
+    </bean>  
+	
+	<bean id="businessTask2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">      
+        <!-- 调用的类 -->            
+        <property name="targetObject" ref="customerSyncService"/>   
+         <!-- 调用类中的方法 -->   
+        <property name="targetMethod" value="syncK3ProcessData"/>     
+        <!-- false,证明不执行并发任务 -->   
+        <property name="concurrent" value="false"/>       
+    </bean>  
+    
+    <bean id="dayDataJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+		<property name="jobDetail"> 
+			<ref bean="businessTask2"/> 
+		</property> 
+		<property name="cronExpression"> 
+			<value>59 59 23 * * ?</value> 
+		</property> 
+	</bean>
+    
+    <bean id="schdulerFactory2" lazy-init="false" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">   
+        <property name="triggers">   
+            <list>   
+                <ref bean="dayDataJobTrigger"/>   
+            </list>   
+        </property>   
+        <property name="autoStartup"> 
+			<value>true</value> 
+		</property> 
+    </bean>
+
+    <bean id="baseAction" scope="prototype"
+		class="com.sales.action.BaseAction">
+		 
+	</bean>
+	
+	<bean id="msgPushManager" scope="prototype"
+		class="com.sales.common.MsgPushManager">
+	</bean>
+	
+    <bean id="userAction" scope="prototype"
+		class="com.sales.action.UserAction" parent="baseAction">
+		<property name="userService" ref="userService"/>
+		<property name="msgPushManager" ref="msgPushManager"/>
+	</bean>
+	
+    <bean id="departmentAction" scope="prototype"
+		class="com.sales.action.DepartmentAction" parent="baseAction">
+		<property name="departmentService" ref="departmentService"/> 
+	</bean>
+	
+    <bean id="productAction" scope="prototype"
+		class="com.sales.action.ProductAction" parent="baseAction">
+		<property name="productService" ref="productService"/> 
+	</bean>
+	
+    <bean id="projectAction" scope="prototype"
+		class="com.sales.action.ProjectAction" parent="baseAction">
+		<property name="projectService" ref="projectService"/>  
+		<property name="enumerationService" ref="enumerationService"/>  
+		<property name="customerProjectService" ref="customerProjectService"/>
+	</bean>
+	
+    <bean id="assessAction" scope="prototype"
+		class="com.sales.action.AssessAction" parent="baseAction"> 
+		<property name="projectService" ref="projectService"/>  
+		<property name="assessService" ref="assessService"/> 
+	</bean>
+	
+    <bean id="newsAction" scope="prototype"
+		class="com.sales.action.NewsAction" parent="baseAction"> 
+		<property name="newsService" ref="newsService"/>   
+	</bean>
+	
+    <bean id="dispatchAction" scope="prototype"
+		class="com.sales.action.DispatchAction" parent="baseAction"> 
+		<property name="newsService" ref="newsService"/>   
+	</bean>
+	
+    <bean id="activityAction" scope="prototype"
+		class="com.sales.action.ActivityAction" parent="baseAction">
+		<property name="projectService" ref="projectService"/>  
+		<property name="activityService" ref="activityService"/> 
+		<property name="enumerationService" ref="enumerationService"/>  
+		<property name="customerProjectService" ref="customerProjectService"/>
+	</bean>
+	
+	<!-- 销售计划执行统计 -->
+	<bean id="salePlanReportAction" scope="prototype"
+		class="com.sales.action.SalePlanReportAction" parent="baseAction">
+		<property name="projectService" ref="projectService"/>
+	</bean>
+	
+    <bean id="quotationAction" scope="prototype"
+		class="com.sales.action.QuotationAction" parent="baseAction">
+		<property name="quotationService" ref="quotationService"/> 
+		<property name="customerService" ref="customerService"/> 
+		<property name="sUserService" ref="sUserService"/>
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="orfqAction" scope="prototype"
+		class="com.sales.action.OrfqAction" parent="baseAction">
+		<property name="orfqService" ref="orfqService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="orderAction" scope="prototype"
+		class="com.sales.action.OrderAction" parent="baseAction">
+		<property name="orderService" ref="orderService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="requestAction" scope="prototype"
+		class="com.sales.action.RequestAction" parent="baseAction">
+		<property name="requestService" ref="requestService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+	<bean id="poOrderAction" scope="prototype"
+		class="com.sales.action.POOrderAction" parent="baseAction">
+		<property name="orderService" ref="poOrderService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="outStockAction" scope="prototype"
+		class="com.sales.action.OutStockAction" parent="baseAction">
+		<property name="outStockService" ref="outStockService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="receiveBillAction" scope="prototype"
+		class="com.sales.action.ReceiveBillAction" parent="baseAction">
+		<property name="receiveBillService" ref="receiveBillService"/>
+		<property name="saleBillService" ref="saleBillService"/>  
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+    <bean id="returnGoodsAction" scope="prototype"
+		class="com.sales.action.ReturnGoodsAction" parent="baseAction">
+		<property name="returnGoodsService" ref="returnGoodsService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+	<bean id="saleAction" scope="prototype"
+		class="com.sales.action.SaleAction" parent="baseAction">
+		<property name="saleService" ref="saleService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+	<bean id="stockBillAction" scope="prototype"
+		class="com.sales.action.StockBillAction" parent="baseAction">
+		<property name="stockBillService" ref="stockBillService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+	<bean id="stockBillOutAction" scope="prototype"
+		class="com.sales.action.StockBillOutAction" parent="baseAction">
+		<property name="stockBillOutService" ref="stockBillOutService"/> 
+		<property name="saleBillService" ref="saleBillService"/> 
+		<property name="k3Service" ref="k3Service"/> 
+	</bean>
+	
+	<bean id="loginAction" scope="prototype"
+		class="com.sales.action.LoginAction" parent="baseAction">
+		<property name="sUserService" ref="sUserService"/>
+		<property name="workbenchService" ref="workbenchService"/>
+		<property name="roleActionService" ref="roleActionService"/>
+		<property name="informationService" ref="informationService"/>
+		<property name="permissionService" ref="permissionService"/>
+		<property name="actionService" ref="actionService"/>
+		<property name="statisticsOrderService" ref="k3OrderStatisticsService"/>
+		<property name="statisticsRecieveService" ref="k3RecieveBillStatisticsService"/>
+		<property name="statisticsICSaleService" ref="k3ICSaleStatisticsService"/> 
+		<property name="quotaService" ref="k3SalerQuotaService"/>
+	</bean>
+	
+	<bean id="sUserAction" scope="prototype"
+		class="com.sales.action.SUserAction" parent="baseAction">
+		<property name="sUserService" ref="sUserService"/>
+		<property name="roleService" ref="roleService"/>
+		<property name="positionService" ref="positionService"/>
+		<property name="departmentService" ref="departmentService"/>
+		<property name="k3Service" ref="k3Service"/>
+	</bean>
+	
+	<bean id="workbenchAction" scope="prototype"
+		class="com.sales.action.WorkbenchAction" parent="baseAction">
+		<property name="workbenchService" ref="workbenchService"/>
+		<property name="roleActionService" ref="roleActionService"/>
+		<property name="informationService" ref="informationService"/>
+		<property name="actionService" ref="actionService"/>
+	</bean>
+    
+    <bean id="logAction" scope="prototype"
+		class="com.sales.action.LogAction" parent="baseAction">
+		<property name="logService" ref="logService"/>
+	</bean>
+	
+	<bean id="parameterAction" scope="prototype"
+		class="com.sales.action.ParameterAction" parent="baseAction">
+		<property name="parameterService" ref="parameterService"/>
+	</bean>
+	
+	<bean id="performanceAction" scope="prototype"
+		class="com.sales.action.PerformanceAction" parent="baseAction">
+		<property name="performancePlanService" ref="performancePlanService"/>
+		<property name="performanceItemService" ref="performanceItemService"/>
+	</bean>
+	
+	<bean id="roleAction" scope="prototype"
+		class="com.sales.action.RoleAction" parent="baseAction">
+		<property name="roleService" ref="roleService"/>
+		<property name="actionService" ref="actionService"/>
+		<property name="roleActionService" ref="roleActionService"/>
+		<property name="workbenchService" ref="workbenchService"/>
+	</bean>
+	
+	<bean id="userPerformanceAction" scope="prototype"
+		class="com.sales.action.UserPerformanceAction" parent="baseAction">
+		<property name="userPerformancePlanService" ref="userPerformancePlanService"/>
+	</bean>
+	
+	<bean id="infoAction" scope="prototype"
+		class="com.sales.action.InformationAction" parent="baseAction">
+		<property name="informationService" ref="informationService"/>
+		<property name="msgPushManager" ref="msgPushManager"/>
+	</bean>
+	
+	<bean id="enumerationAction" scope="prototype"
+		class="com.sales.action.EnumerationAction" parent="baseAction">
+		<property name="enumerationService" ref="enumerationService"/>
+	</bean>
+	
+	<bean id="customerAction" scope="prototype"
+		class="com.sales.action.CustomerAction" parent="baseAction">
+		<property name="customerService" ref="customerService"/>
+		<property name="customerLinkmanService" ref="customerLinkmanService"/>
+		<property name="customerProjectService" ref="customerProjectService"/>
+		<property name="sUserService" ref="sUserService"/>
+		<property name="customerFinEvaluationService" ref="customerFinEvaluationService"/>
+		<property name="enumerationService" ref="enumerationService"/>
+		<property name="activityService" ref="activityService"/>
+		<property name="orderService" ref="orderService"/> 	
+		<property name="saleService" ref="saleService"/>
+		<property name="synService" ref="customerSyncService"/>
+		<property name="potentialProductService" ref="customerPotentialProductService"/>
+	</bean>
+	
+	<bean id="workCalendaAction" scope="prototype"
+		class="com.sales.action.WorkCalendaAction" parent="baseAction">
+		<property name="projectService" ref="projectService"/>
+	</bean>
+	
+	<bean id="leaveAction" scope="prototype"
+		class="com.sales.action.LeaveAction" parent="baseAction">
+		<property name="leaveService" ref="leaveService"/>
+		<property name="overtimeService" ref="overtimeService"/>
+	</bean>
+	
+	<bean id="processAction" scope="prototype"
+		class="com.sales.action.ProcessAction" parent="baseAction">
+		<property name="leaveService" ref="leaveService"/>
+		<property name="expenseApplicationService" ref="expenseApplicationService"/>
+		<property name="expenseReimbursementService" ref="expenseReimbursementService"/>
+		<property name="overtimeService" ref="overtimeService"/>
+		<property name="tripApplicationService" ref="tripApplicationService"/>
+		<property name="carRepairApplicationService" ref="carRepairApplicationService"/>
+		<property name="carRepairReimbursementService" ref="carRepairReimbursementService"/>
+	</bean>
+	
+	<bean id="expenseAction" scope="prototype"
+		class="com.sales.action.ExpenseAction" parent="baseAction">
+		<property name="expenseApplicationService" ref="expenseApplicationService"/>
+		<property name="expenseReimbursementService" ref="expenseReimbursementService"/>
+		<property name="tripApplicationService" ref="tripApplicationService"/>
+	</bean>
+	
+	<bean id="overtimeAction" scope="prototype"
+		class="com.sales.action.OvertimeAction" parent="baseAction">
+		<property name="overtimeService" ref="overtimeService"/>
+	</bean>
+	
+	<bean id="customerLinkmanAction" scope="prototype"
+		class="com.sales.action.CustomerLinkmanAction" parent="baseAction">
+		<property name="customerLinkmanService" ref="customerLinkmanService"/>
+		<property name="enumerationService" ref="enumerationService"/>
+	</bean>
+	
+	<bean id="customerProjectAction" scope="prototype"
+		class="com.sales.action.CustomerProjectAction" parent="baseAction">
+		<property name="customerProjectService" ref="customerProjectService"/>
+		<property name="enumerationService" ref="enumerationService"/>
+		<property name="customerLinkmanService" ref="customerLinkmanService"/>
+		<property name="projectService" ref="projectService"/>  
+		<property name="activityService" ref="activityService"/> 
+	</bean>
+	
+	<bean id="tripAction" scope="prototype"
+		class="com.sales.action.TripAction" parent="baseAction">
+		<property name="tripApplicationService" ref="tripApplicationService"/>
+	</bean>
+	
+	<bean id="carAction" scope="prototype"
+		class="com.sales.action.CarAction" parent="baseAction">
+		<property name="carRepairApplicationService" ref="carRepairApplicationService"/>
+		<property name="carRepairReimbursementService" ref="carRepairReimbursementService"/>
+	</bean>
+	
+	<!--  销售报表  -->
+	<bean id="reportAction" scope="prototype"
+		class="com.sales.action.ReportAction" parent="baseAction">
+		<property name="reportService" ref="reportService"/>
+		<property name="orderStatisticsService" ref="k3OrderStatisticsService"/>
+	</bean>
+	<!--  客户潜力产品  -->
+	<bean id="pProductAction" scope="prototype"
+		class="com.sales.action.CustomerPProductionAction" parent="baseAction">
+		<property name="pproductionService" ref="customerPotentialProductService"/>
+	</bean>
+</beans>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"> 
+	
+	<!-- 用户登录 -->
+	<bean id="appUserAction" scope="prototype"
+		class="com.sales.action.app.AppUserAction" parent="baseAction">
+		<property name="userService" ref="sUserService"/>
+		<property name="permissionService" ref="permissionService"/>
+		<property name="informationService" ref="informationService"/>
+	</bean>
+	
+	<!-- 销售计划、活动 -->
+	<bean id="salePlanAction" scope="prototype"
+		class="com.sales.action.app.SalePlanAction" parent="baseAction">
+		<property name="salePlanService" ref="projectService"/>
+		<property name="activityService" ref="activityService"/>
+		<property name="assessService" ref="assessService"/>
+	</bean>
+	
+	<!-- 消息通知 -->
+	<bean id="messageAction" scope="prototype"
+		class="com.sales.action.app.MessageAction" parent="baseAction">
+		<property name="informationService" ref="informationService"/>
+		<property name="leaveService" ref="leaveService"/>
+		<property name="expenseApplicationService" ref="expenseApplicationService"/>
+		<property name="expenseReimbursementService" ref="expenseReimbursementService"/>
+		<property name="overtimeService" ref="overtimeService"/>
+		<property name="tripApplicationService" ref="tripApplicationService"/>
+		<property name="carRepairApplicationService" ref="carRepairApplicationService"/>
+		<property name="carRepairReimbursementService" ref="carRepairReimbursementService"/>
+		<property name="newsService" ref="newsService"/>
+		
+		<property name="salePlanService" ref="projectService"/>
+		<property name="activityService" ref="activityService"/>
+		<property name="quotationService" ref="quotationService"/>
+		<property name="orfqService" ref="orfqService"/>
+		<property name="orderService" ref="orderService"/>
+		<property name="requestService" ref="requestService"/>
+		<property name="poOrderservice" ref="poOrderService"/>
+		<property name="stockBillService" ref="stockBillService"/>
+		<property name="outStockService" ref="outStockService"/>
+		<property name="stockBillOutService" ref="stockBillOutService"/>
+		<property name="saleBillService" ref="saleService"/>
+		<property name="receiveBillService" ref="receiveBillService"/>
+	</bean>
+</beans>
+	

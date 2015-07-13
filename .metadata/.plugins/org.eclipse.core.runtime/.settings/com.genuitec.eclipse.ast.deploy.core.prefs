@@ -1,0 +1,14 @@
+#Sun Nov 09 11:22:48 GMT+08:00 2014
+tomcat6Server.salesManager.altContextRoot=/salesManager
+tomcat6Server.salesManager.isUptoDate=true
+tomcat6Server.salesManager.shouldBackup=false
+tomcat6Server.salesManager.deploymentPath=/usr/local/apache-tomcat-6.0.35/webapps/salesManager
+tomcat6Server.salesManager.contextRoot=/salesManager
+tomcat6Server.salesManager.isDeployed=true
+tomcat6Server.salesManager.noFileCopy=false
+tomcat6Server.salesManager.shouldOverwrite=false
+eclipse.preferences.version=1
+tomcat6Server.salesManager.deployIsOverProject=false
+tomcat6Server.salesManager.IEARProjectName=
+tomcat6Server.salesManager.type=WebDeployment
+tomcat6Server.salesManager.isExploded=true

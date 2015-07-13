@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+package com.sales.action.app;
+
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.sales.action.BaseAction;
+import com.sales.common.Constants;
+import com.sales.model.BaseObject;
+import com.sales.service.SUserService;
+
+/**
+ * @author apple
+ *
+ */
+public class AppUserAction extends BaseAction {
+	private SUserService userService;
+	
+	public String login() {
+		try {
+			oneInfo = userService.getInformationById(this.infoId);
+			JSONObject json = JSONObject.fromObject(oneInfo);
+			if(oneInfo.getStatus() == Constants.INFO_STATUS_NEW) {
+				oneInfo.setStatus(Constants.INFO_STATUS_READE);
+				informationService.updateInfo(oneInfo);
+			}
+			
+			response = (HttpServletResponse) ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE); 
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().print(json);
+		} catch (Exception e) {
+			actionLog.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	public class LoginResult extends BaseObject {
+		private int result;
+		private String error;
+		private int userId;
+		private int name;
+		private int roleId;
+		private String department;
+		
+	}
+
+}

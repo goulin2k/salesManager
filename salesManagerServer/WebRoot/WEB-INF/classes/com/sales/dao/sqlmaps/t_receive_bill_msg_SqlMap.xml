@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_receive_bill_msg" >
+
+  <resultMap id="receiveBillInfo" class="com.sales.model.TReceiveBillInfo" > 
+    <result column="FBillID" property="billId" jdbcType="INTEGER" /> 
+    <result column="FNumber" property="number" jdbcType="VARCHAR" />
+    <result column="FDate" property="billDate" jdbcType="java.sql.Timestamp" />
+    <result column="FCustomer" property="customerId" jdbcType="INTEGER" />
+    <result column="FCustomerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FStatus" property="status" jdbcType="INTEGER" />
+    <result column="FReceiveAmount" property="receiveAmount" jdbcType="DOUBLE" />
+    <result column="FInsertTime" property="inserTime" jdbcType="java.sql.Timestamp" />
+  </resultMap> 
+
+  
+ 
+  <select id="getReceiveBillsInserted" resultMap="receiveBillInfo" > 
+	SELECT FBillID, FDate, FNumber, FCustomerName, FCustomer, FReceiveAmount, FStatus, FInsertTime
+	FROM sale_recieveSaleBill_inserted
+	WHERE FInsertTime > (SELECT syn_time FROM sale_bill_syn WHERE bill_type='rcvBill.checktime')
+  </select>
+  
+  <update id="updateSynTime">
+  	UPDATE sale_bill_syn SET syn_time = getDate() WHERE bill_type='rcvBill.checktime'
+  </update>
+  
+</sqlMap>

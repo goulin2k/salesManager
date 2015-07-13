@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_quotation_code" >
+
+  <resultMap id="codeResult" class="com.sales.model.SSalesQuotationCode" > 
+    <result column="code_id" property="codeId" jdbcType="INTEGER" />
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <select id="getCodeByYear" resultMap="codeResult" parameterClass="java.lang.Integer" >
+    select code_id, year, code
+    from s_sales_quotation_code
+    where year = #year:INTEGER#     
+  </select>
+  
+  <insert id="insertCode" parameterClass="com.sales.model.SSalesQuotationCode" > 
+    insert into s_sales_quotation_code (code_id, year, code)
+    values (#codeId:INTEGER#, #year:INTEGER#, #code:INTEGER#)
+  </insert>
+  
+  <update id="updateCode" parameterClass="com.sales.model.SSalesQuotationCode" > 
+    update s_sales_quotation_code
+    set code = #code:INTEGER#
+    where code_id = #codeId:INTEGER#
+  </update>
+  
+</sqlMap>

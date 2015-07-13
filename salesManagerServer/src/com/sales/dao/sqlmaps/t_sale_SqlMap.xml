@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_sale" >
+
+  <resultMap id="saleResult" class="com.sales.model.TSale" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FTranType" property="fTranType" jdbcType="INTEGER" />
+    <result column="tranTypeName" property="tranTypeName" jdbcType="VARCHAR" />  
+    <result column="FCustID" property="fCustID" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FCurrencyID" property="fCurrencyID" jdbcType="INTEGER" />
+    <result column="currencyName" property="currencyName" jdbcType="VARCHAR" />
+    <result column="FPayStyleID" property="fPayStyleID" jdbcType="INTEGER" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billerName" property="billerName" jdbcType="VARCHAR" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FCheckDate" property="fCheckDate" jdbcType="DATE" /> 
+    <result column="FPosterID" property="fPosterID" jdbcType="INTEGER" />
+    <result column="posterName" property="posterName" jdbcType="VARCHAR" /> 
+    <result column="FManagerID" property="fManagerID" jdbcType="INTEGER" />
+    <result column="managerName" property="managerName" jdbcType="VARCHAR" />
+    <result column="FClosed" property="fClosed" jdbcType="INTEGER" />
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" /> 
+    <result column="FROB" property="frob" jdbcType="INTEGER" /> 
+    <result column="FCancellation" property="fCancellation" jdbcType="VARCHAR" />
+    <result column="FHeadSelfI0546" property="fHeadSelfI0546" jdbcType="VARCHAR" />
+    <result column="FHeadSelfI0547" property="fHeadSelfI0547" jdbcType="VARCHAR" />
+    <result column="FHeadSelfI0449" property="fHeadSelfI0449" jdbcType="VARCHAR" />
+    <result column="FHeadSelfI0450" property="fHeadSelfI0450" jdbcType="VARCHAR" />
+    <result column="FInterID" property="saleEntryList" select="t_sale.getSaleEntryListBySaleId" />
+  </resultMap> 
+
+  <resultMap id="saleEntryResult" class="com.sales.model.TSaleEntry" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" /> 
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productNumber" property="productNumber" jdbcType="VARCHAR" /> 
+    <result column="productModel" property="productModel" jdbcType="VARCHAR" /> 
+    <result column="FQty" property="fQty" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" /> 
+    <result column="FOrderBillNo" property="fOrderBillNo" jdbcType="VARCHAR" />  
+    <result column="FOrderInterID" property="fOrderInterID" jdbcType="INTEGER" /> 
+    <result column="FOrderEntryID" property="fOrderEntryID" jdbcType="INTEGER" />
+    <result column="FSourceTranType" property="fSourceTranType" jdbcType="INTEGER" />
+    <result column="tranTypeName" property="tranTypeName" jdbcType="VARCHAR" /> 
+    <result column="FSourceInterId" property="fSourceInterId" jdbcType="INTEGER" />
+    <result column="FSourceBillNo" property="fSourceBillNo" jdbcType="VARCHAR" /> 
+  </resultMap>
+
+  <select id="getSaleById" resultMap="saleResult" parameterClass="java.util.Map" > 
+    SELECT ics.FInterID, ics.FBillNo, FDate,	
+		ics.FTranType, ttp.FName as tranTypeName,  
+		FCustID, cs.FName as customerName,
+		ics.FCurrencyID, cny.FName as currencyName,
+		ics.FPayStyleID,
+		ics.FDeptID, dep.FName as departName, 
+		ics.FEmpID,		emp.FName as employeeName,  
+		FBillerID,	blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName, FCheckDate,
+		FPosterID,  ptr.FName as posterName,	 
+		FManagerID, mgr.FName as managerName, 
+		ics.FClosed, FROB, 
+		ics.FStatus, FCancellation, 
+		FHeadSelfI0546, FHeadSelfI0547, FHeadSelfI0449, FHeadSelfI0450                                                                
+	FROM ICSale ics 
+		left join v_ICTransType ttp ON ics.FTranType = ttp.FID	 
+		left join t_organization cs on ics.FCustID = cs.FItemId
+		left join t_department dep ON ics.FDeptID = dep.FItemID
+		left join t_emp emp ON ics.FEmpID = emp.FItemID
+		left join t_user ckr ON ics.FCheckerID = ckr.FUserId
+		left join t_user blr ON ics.FBillerID = blr.FUserId
+		left join t_user ptr ON ics.FPosterID = ptr.FUserId
+		left join t_user mgr ON ics.FManagerID = mgr.FUserId 
+		left join t_currency cny ON ics.FCurrencyID = cny.FCurrencyID 
+    WHERE ics.FInterID = #saleId:INTEGER#
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getSaleEntryListBySaleId" resultMap="saleEntryResult" parameterClass="java.lang.Integer" > 
+	SELECT ise.FInterId, FEntryID,	
+		ise.FItemID, ict.FName as productName, ict.FNumber as productNumber, ict.FModel as productModel,
+		FQty, FPrice, ise.FUnitID, mut.FName as unitName, FAmount,
+		FOrderBillNo, FOrderInterID, FOrderEntryID,
+		FSourceTranType, ttp.FName as tranTypeName, FSourceInterId, FSourceBillNo
+	FROM ICSaleEntry ise  
+		inner join ICSale ics on ise.FInterId = ics.FInterID
+		inner join t_ICItem ict on ise.FItemId = ict.FItemId
+		left join t_MeasureUnit mut on ise.FUnitID = mut.FMeasureUnitId
+		left join v_ICTransType ttp ON ise.FSourceTranType = ttp.FID
+	WHERE ise.FInterId = #saleId:INTEGER# 
+  </select>
+  
+  <select id="getSaleList" resultMap="saleResult" parameterClass="com.sales.model.TSale" > 
+    SELECT TOP $pageSize$ ics.FInterID, ics.FBillNo, FDate,	
+		ics.FTranType, ttp.FName as tranTypeName,  
+		FCustID, cs.FName as customerName,
+		ics.FCurrencyID, cny.FName as currencyName,
+		ics.FPayStyleID,
+		ics.FDeptID, dep.FName as departName, 
+		ics.FEmpID,		emp.FName as employeeName,  
+		FBillerID,	blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName, FCheckDate,
+		FPosterID,  ptr.FName as posterName,	 
+		FManagerID, mgr.FName as managerName, 
+		ics.FClosed, FROB, 
+		ics.FStatus, FCancellation, 
+		FHeadSelfI0546, FHeadSelfI0547, FHeadSelfI0449, FHeadSelfI0450                                                                
+	FROM ICSale ics 
+		left join v_ICTransType ttp ON ics.FTranType = ttp.FID	 
+		left join t_organization cs on ics.FCustID = cs.FItemId
+		left join t_department dep ON ics.FDeptID = dep.FItemID
+		left join t_emp emp ON ics.FEmpID = emp.FItemID
+		left join t_user ckr ON ics.FCheckerID = ckr.FUserId
+		left join t_user blr ON ics.FBillerID = blr.FUserId
+		left join t_user ptr ON ics.FPosterID = ptr.FUserId
+		left join t_user mgr ON ics.FManagerID = mgr.FUserId 
+		left join t_currency cny ON ics.FCurrencyID = cny.FCurrencyID 
+    WHERE ics.FInterID NOT IN 
+      (SELECT TOP $startNumber$ ics.FInterID
+		FROM ICSale ics 
+			left join v_ICTransType ttp ON ics.FTranType = ttp.FID	 
+			left join t_organization cs on ics.FCustID = cs.FItemId
+			left join t_department dep ON ics.FDeptID = dep.FItemID
+			left join t_emp emp ON ics.FEmpID = emp.FItemID
+			left join t_user ckr ON ics.FCheckerID = ckr.FUserId
+			left join t_user blr ON ics.FBillerID = blr.FUserId
+			left join t_user ptr ON ics.FPosterID = ptr.FUserId
+			left join t_user mgr ON ics.FManagerID = mgr.FUserId 
+			left join t_currency cny ON ics.FCurrencyID = cny.FCurrencyID 
+		<dynamic prepend="where">
+			<isNotNull property="fCustID" prepend="and">
+			    FCustID = #fCustID#
+			</isNotNull>
+			<isNotNull property="fEmpID" prepend="and">
+			    ics.FEmpID = #fEmpID#
+			</isNotNull>
+			<isNotNull property="fStatus" prepend="and">
+			    ics.FStatus = #fStatus#
+			</isNotNull>
+		    <isNotNull property="startTime" prepend="and">
+			    FDate 
+			    <![CDATA[
+			     >= 
+			    ]]>
+			    #startTime#
+		    </isNotNull>
+		    <isNotNull property="endTime" prepend="and">
+			    FDate 
+			    <![CDATA[
+			     <= 
+			    ]]>
+			    #endTime#
+		    </isNotNull> 
+			<isNotNull property="customerIds" prepend="and">
+			    FCustID in $customerIds$
+			</isNotNull>
+		</dynamic>
+		order by Fdate desc
+	   ) 
+	<isNotNull property="fCustID" prepend="and">
+	    FCustID = #fCustID#
+	</isNotNull>
+	<isNotNull property="fEmpID" prepend="and">
+	    ics.FEmpID = #fEmpID#
+	</isNotNull>
+	<isNotNull property="fStatus" prepend="and">
+	    ics.FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+	order by Fdate desc
+  </select>
+
+  <select id="getSaleCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TSale" > 
+    SELECT count(*)
+    FROM ICSale ics 
+		left join v_ICTransType ttp ON ics.FTranType = ttp.FID	 
+		left join t_organization cs on ics.FCustID = cs.FItemId
+		left join t_department dep ON ics.FDeptID = dep.FItemID
+		left join t_emp emp ON ics.FEmpID = emp.FItemID
+		left join t_user ckr ON ics.FCheckerID = ckr.FUserId
+		left join t_user blr ON ics.FBillerID = blr.FUserId
+		left join t_user ptr ON ics.FPosterID = ptr.FUserId
+		left join t_user mgr ON ics.FManagerID = mgr.FUserId 
+		left join t_currency cny ON ics.FCurrencyID = cny.FCurrencyID 
+	<dynamic prepend="where">
+		<isNotNull property="fCustID" prepend="and">
+		    FCustID = #fCustID#
+		</isNotNull>
+		<isNotNull property="fEmpID" prepend="and">
+		    ics.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    ics.FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    FCustID in $customerIds$
+		</isNotNull>
+	</dynamic>
+  </select>
+
+  <select id="getSaleAllList" resultMap="saleResult" parameterClass="java.lang.String" > 
+    SELECT ics.FInterID, ics.FBillNo, FDate,	
+		ics.FTranType, ttp.FName as tranTypeName,  
+		FCustID, cs.FName as customerName,
+		ics.FCurrencyID, cny.FName as currencyName,
+		ics.FPayStyleID,
+		ics.FDeptID, dep.FName as departName, 
+		ics.FEmpID,		emp.FName as employeeName,  
+		FBillerID,	blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName, FCheckDate,
+		FPosterID,  ptr.FName as posterName,	 
+		FManagerID, mgr.FName as managerName, 
+		ics.FClosed, FROB, 
+		ics.FStatus, FCancellation, 
+		FHeadSelfI0546, FHeadSelfI0547, FHeadSelfI0449, FHeadSelfI0450                                                                
+	FROM ICSale ics 
+		left join v_ICTransType ttp ON ics.FTranType = ttp.FID	 
+		left join t_organization cs on ics.FCustID = cs.FItemId
+		left join t_department dep ON ics.FDeptID = dep.FItemID
+		left join t_emp emp ON ics.FEmpID = emp.FItemID
+		left join t_user ckr ON ics.FCheckerID = ckr.FUserId
+		left join t_user blr ON ics.FBillerID = blr.FUserId
+		left join t_user ptr ON ics.FPosterID = ptr.FUserId
+		left join t_user mgr ON ics.FManagerID = mgr.FUserId 
+		left join t_currency cny ON ics.FCurrencyID = cny.FCurrencyID 
+    WHERE ics.FInterID in $billIds$
+  </select>
+
+  <resultMap id="saleBillResult" class="com.sales.model.TSaleBill" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="saleAmount" property="saleAmount" jdbcType="VARCHAR" />
+    <result column="FBillNo" property="receiveBillList" select="t_sale.getReceiveBillAmountList" />
+  </resultMap> 
+
+  <resultMap id="receiveBillResult" class="com.sales.model.TReceiveBillResult" > 
+    <result column="FBillID" property="fBillID" jdbcType="INTEGER" /> 
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="receiveAmount" property="receiveAmount" jdbcType="VARCHAR" /> 
+  </resultMap> 
+
+  <select id="getSaleByCustomerId" resultMap="saleBillResult" parameterClass="java.lang.Integer" > 
+    select ics.FInterID, ics.FBillNo, ics.FDate, sum(ise.FAmount) as saleAmount
+	from ICSale ics, ICSaleEntry ise 
+	where ics.FCustID = #customerId:INTEGER# and ics.FInterID = ise.FInterId
+	group by ics.FInterID, ics.FBillNo, ics.FDate 
+  </select>
+ 
+  <select id="getReceiveBillAmountList" resultMap="receiveBillResult" parameterClass="java.lang.String" > 
+	SELECT rb.FBillID, rb.FDate, sum(sh.FReceiveAmount) as receiveAmount
+	FROM t_RP_NewReceiveBill rb, t_rp_ARBillOfSH sh
+	WHERE rb.FBillType = 1000 and sh.FBillNo_SRC = #fBillNo# and rb.FBillID = sh.FBillID
+	group by rb.FBillID, rb.FDate
+  </select>
+  
+</sqlMap>

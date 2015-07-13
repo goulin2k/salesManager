@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_sale_bill_status_change" >
+  
+  <resultMap id="saleBillStatusChangeResult" class="com.sales.model.TSaleBillStatusChange" > 
+    <result column="bill_status_id" property="billStatusId" jdbcType="INTEGER" />
+    <result column="bill_type" property="billType" jdbcType="INTEGER" />
+    <result column="bill_id" property="billId" jdbcType="INTEGER" />
+    <result column="old_status" property="oldStatus" jdbcType="INTEGER" />
+    <result column="new_status" property="newStatus" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="DATE" />
+    <result column="have_read" property="haveRead" jdbcType="INTEGER" /> 
+  </resultMap> 
+  
+  <select id="getSaleBillStatusChange" resultMap="saleBillStatusChangeResult" > 
+    select bill_status_id, bill_type, bill_id, old_status, new_status, update_time, have_read 
+    from sale_bill_status_change
+    where have_read = 0 and not bill_type is null
+  </select>
+  
+  <update id="updateSaleBillStatusChangeRead" parameterClass="java.lang.String" > 
+    update sale_bill_status_change
+    set have_read = 1
+    where bill_status_id in $billStatusIds$
+  </update> 
+  
+</sqlMap>

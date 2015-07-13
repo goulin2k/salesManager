@@ -1,0 +1,14 @@
+#Sun Nov 09 16:58:02 GMT+08:00 2014
+eclipse.preferences.version=1
+encoding//WebRoot/WEB-INF/applicationContext-dao.xml=UTF-8
+encoding//WebRoot/WEB-INF/applicationContext-service.xml=UTF-8
+encoding//WebRoot/WEB-INF/log4j.properties=UTF-8
+encoding//WebRoot/skin/Default/css/base.css=UTF-8
+encoding//WebRoot/skin/Default/css/global.css=UTF-8
+encoding//WebRoot/skin/bootstrap/js/jquery.ui.datepicker-zh-TW.js=UTF-8
+encoding//src/com/sales/action/InformationAction.java=UTF-8
+encoding//src/com/sales/dao/sqlmaps/t_order_statistics_SqlMap.xml=UTF-8
+encoding//test/com/sales/BaseTestCase.java=UTF-8
+encoding//test/com/sales/calenda/TestProjectService.java=UTF-8
+encoding//test/log4j.properties=UTF-8
+encoding/<project>=UTF-8

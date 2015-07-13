@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/decorators">
+  <!-- 在excludes元素下指定的页面将不会由sitemesh来装饰 -->  
+  <excludes>  
+    <pattern>/index.jsp</pattern>  
+    <pattern>/jsp/common/500.jsp</pattern>
+    <pattern>/index_bak.jsp</pattern>  
+    <pattern>/css/*</pattern>  
+    <pattern>/images/*</pattern>  
+    <pattern>/script/*</pattern> 
+    <pattern>/jsp/jbpmdemo/*</pattern>
+    <pattern>/*modal=true*</pattern> 
+    <pattern>/login*</pattern>
+    <pattern>/workbench!workbench*</pattern>
+    <pattern>/product!list*</pattern>
+    <pattern>/customer!customerOpenWindow*</pattern>
+    <pattern>/customer!customerDistributionOpenWindow*</pattern>
+    <pattern>/project!openlist*</pattern>
+    <pattern>/jsp/FCKeditor/*</pattern> 
+    <pattern>/sUser!userOpenWindowList*</pattern>
+    <pattern>/sUser!k3UserOpenWindowList*</pattern>
+    <pattern>/sUser!attentionUserList*</pattern>
+	
+	<pattern>/quotation!toOrfq*</pattern>	
+    <pattern>/orfq!initSOrfq*</pattern>
+    <pattern>/orfq!showSorfq*</pattern>
+    <pattern>/orfq!updateSOrfq*</pattern>
+    <pattern>/orfq!addSOrfq*</pattern>
+    <pattern>/orfq!verify*</pattern>
+    <pattern>/report!*</pattern>
+    <pattern>/orfq!show*</pattern>
+    
+    <pattern>/order!show*</pattern>
+    <pattern>/request!show*</pattern>
+    <pattern>/stockBill!show*</pattern>
+    <pattern>/outStock!show*</pattern>
+    <pattern>/stockBillOut!show*</pattern>
+    <pattern>/sale!show*</pattern>
+    <pattern>/receiveBill!show*</pattern>
+    <pattern>/poorder!show*</pattern>
+    
+    <pattern>/info!queryInfo*</pattern>
+  </excludes>  
+  
+    <!-- 创建一个名为main的装饰器，该装饰器页面为main.jsp，用于装饰pattern指定的URL的所有页面 -->  
+    <!--
+    <decorator name="main" page="main.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+     -->  
+    <!-- 定义一个装饰器，但该装饰器默认不装饰任何页面 -->  
+    <!--
+    <decorator name="panel" page="panel.jsp"/> -->  
+    
+    <decorator name="main" page="salesmain.jsp">
+        <pattern>/*</pattern>
+    </decorator>
+</decorators>

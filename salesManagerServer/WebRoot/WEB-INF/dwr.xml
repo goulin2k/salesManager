@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE dwr PUBLIC "-//GetAhead Limited//DTD Direct Web Remoting 3.0//EN" "http://getahead.org/dwr/dwr30.dtd"> 
+<dwr> 
+  <allow>
+		<create creator="spring" javascript="msgPushManager">         
+		     <param name="beanName" value="msgPushManager" />     
+	    </create>
+	    
+	<create creator="spring" javascript="performancePlanService">
+      <param name="beanName" value="performancePlanService"/>
+      <include method="getSqlList"/> 
+      <include method="getPostList"/> 
+      <include method="getUserList"/> 
+      <include method="getPlanListByUserPosition"/> 
+      <include method="getPerformancePlan"/>
+      <include method="getChildrenUserList"/>
+    </create>
+    
+    <create creator="spring" javascript="performanceItemService">
+      <param name="beanName" value="performanceItemService"/>
+      <include method="getItemListPage"/> 
+      <include method="getItem"/> 
+      <include method="getPlanItemList"/>
+    </create>
+    
+    <create creator="spring" javascript="customerProjectService">
+      <param name="beanName" value="customerProjectService"/>
+      <include method="getCPListByCustomerId"/>  
+    </create>
+    
+    <create creator="spring" javascript="expenseApplicationService">
+      <param name="beanName" value="expenseApplicationService"/>
+      <include method="getExpenseApplicationListForReimbursement"/> 
+    </create>
+    
+    <create creator="spring" javascript="tripApplicationService">
+      <param name="beanName" value="tripApplicationService"/>
+      <include method="getTripApplicationListForReimbursement"/> 
+    </create>
+    
+    <create creator="spring" javascript="carRepairApplicationService">
+      <param name="beanName" value="carRepairApplicationService"/>
+      <include method="getCarApplicationListForReimbursement"/> 
+    </create>
+    
+    <convert converter="bean" match="com.sales.model.SPerformanceSql"/>   
+    <convert converter="bean" match="com.sales.model.SPerformanceItem"/> 
+    <convert converter="bean" match="com.sales.model.SPosition"/>  
+    <convert converter="bean" match="com.sales.model.SUser"/>  
+    <convert converter="bean" match="com.sales.model.SPerformancePlan"/>  
+    <convert converter="bean" match="com.sales.model.SUserJson"/> 
+    <convert converter="bean" match="com.sales.model.SExpenseApplication"/> 
+    <convert converter="bean" match="com.sales.model.SCustomerProject"/> 
+    <convert converter="bean" match="com.sales.model.STripApplication"/> 
+    <convert converter="bean" match="com.sales.model.SCarRepairApplication"/> 
+  </allow>
+</dwr>

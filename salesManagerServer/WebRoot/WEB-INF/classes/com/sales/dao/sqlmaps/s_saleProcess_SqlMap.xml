@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_saleProcess" >
+  <resultMap id="BaseResultMap" class="com.sales.model.SaleProcess" >
+    <result column="porfq_bill_no" property="porfqBillNo" jdbcType="VARCHAR" />
+    <result column="porfq_bill_date" property="porfqBillDate" jdbcType="TIMESTAMP" />
+    <result column="porfq_bill_checkdate" property="porfqBillCheckdate" jdbcType="TIMESTAMP" />
+    <result column="porfq_fin_checkdate" property="porfqFinCheckdate" jdbcType="TIMESTAMP" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_bill_date" property="orderBillDate" jdbcType="TIMESTAMP" />
+    <result column="order_bill_checkdate" property="orderBillCheckdate" jdbcType="TIMESTAMP" />
+    <result column="porequest_bill_no" property="porequestBillNo" jdbcType="VARCHAR" />
+    <result column="porequest_bill_date" property="porequestBillDate" jdbcType="TIMESTAMP" />
+    <result column="porequest_bill_checkdate" property="porequestBillCheckdate" jdbcType="TIMESTAMP" />
+    <result column="poorder_bill_no" property="poorderBillNo" jdbcType="VARCHAR" />
+    <result column="poorder_bill_date" property="poorderBillDate" jdbcType="TIMESTAMP" />
+    <result column="poorder_bill_checkdate" property="poorderBillCheckdate" jdbcType="TIMESTAMP" />
+    <result column="stockin_bill_no" property="stockinBillNo" jdbcType="VARCHAR" />
+    <result column="stockin_bill_date" property="stockinBillDate" jdbcType="TIMESTAMP" />
+    <result column="stockout_bill_no" property="stockoutBillNo" jdbcType="VARCHAR" />
+    <result column="stockout_bill_date" property="stockoutBillDate" jdbcType="TIMESTAMP" />
+    <result column="saleout_bill_no" property="saleoutBillNo" jdbcType="VARCHAR" />
+    <result column="saleout_bill_date" property="saleoutBillDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="insert" parameterClass="com.sales.model.SaleProcess" >
+    insert into s_sale_proc (porfq_bill_no, porfq_bill_date, porfq_bill_checkdate, 
+      porfq_fin_checkdate, order_id, order_no, 
+      order_bill_date, order_bill_checkdate, 
+      porequest_bill_no, porequest_bill_date, porequest_bill_checkdate, 
+      poorder_bill_no, poorder_bill_date, poorder_bill_checkdate, 
+      stockin_bill_no, stockin_bill_date, stockout_bill_no, 
+      stockout_bill_date, saleout_bill_no, saleout_bill_date
+      )
+    values (#porfqBillNo:VARCHAR#, #porfqBillDate:TIMESTAMP#, #porfqBillCheckdate:TIMESTAMP#, 
+      #porfqFinCheckdate:TIMESTAMP#, #orderId:INTEGER#, #orderNo:VARCHAR#, 
+      #orderBillDate:TIMESTAMP#, #orderBillCheckdate:TIMESTAMP#, 
+      #porequestBillNo:VARCHAR#, #porequestBillDate:TIMESTAMP#, #porequestBillCheckdate:TIMESTAMP#, 
+      #poorderBillNo:VARCHAR#, #poorderBillDate:TIMESTAMP#, #poorderBillCheckdate:TIMESTAMP#, 
+      #stockinBillNo:VARCHAR#, #stockinBillDate:TIMESTAMP#, #stockoutBillNo:VARCHAR#, 
+      #stockoutBillDate:TIMESTAMP#, #saleoutBillNo:VARCHAR#, #saleoutBillDate:TIMESTAMP#
+      )
+  </insert>
+  
+  <update id="clear">
+  	TRUNCATE TABLE s_sale_proc
+  </update>
+  
+  <update id="updatePorfqDate">
+  	UPDATE s_sale_proc, porfq
+	SET 	s_sale_proc.porfq_bill_date = porfq.FDate,
+		s_sale_proc.porfq_bill_checkdate = porfq.FCheckDate
+	WHERE	s_sale_proc.porfq_bill_no = porfq.FBillNo
+  </update>
+  
+  <select id="getSaleProList" resultMap="BaseResultMap" parameterClass="java.util.Map">
+    select porfq_bill_no, porfq_bill_date, porfq_bill_checkdate, 
+      porfq_fin_checkdate, order_id, order_no, 
+      order_bill_date, order_bill_checkdate, 
+      porequest_bill_no, porequest_bill_date, porequest_bill_checkdate, 
+      poorder_bill_no, poorder_bill_date, poorder_bill_checkdate, 
+      stockin_bill_no, stockin_bill_date, stockout_bill_no, 
+      stockout_bill_date, saleout_bill_no, saleout_bill_date
+    from s_sale_proc
+    <dynamic prepend="where" >  
+	    <isNotNull property="startTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+    </dynamic>
+  </select>
+  
+  <select id="getSaleProPageList" resultMap="BaseResultMap" parameterClass="java.util.Map">
+    select porfq_bill_no, porfq_bill_date, porfq_bill_checkdate, 
+      porfq_fin_checkdate, order_id, order_no, 
+      order_bill_date, order_bill_checkdate, 
+      porequest_bill_no, porequest_bill_date, porequest_bill_checkdate, 
+      poorder_bill_no, poorder_bill_date, poorder_bill_checkdate, 
+      stockin_bill_no, stockin_bill_date, stockout_bill_no, 
+      stockout_bill_date, saleout_bill_no, saleout_bill_date
+    from s_sale_proc
+    <dynamic prepend="where" >  
+	    <isNotNull property="startTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+    </dynamic>
+    limit #startNumber#, #pageSize#
+  </select>
+  
+  <select id="getSaleProCount" resultClass="java.lang.Integer"  parameterClass="java.util.Map">
+    select count(*)
+    from s_sale_proc
+    <dynamic prepend="where" >  
+	    <isNotNull property="startTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    porfq_bill_date 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+    </dynamic>
+  </select>
+</sqlMap>

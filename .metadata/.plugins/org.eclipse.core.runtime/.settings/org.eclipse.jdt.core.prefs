@@ -1,0 +1,9 @@
+#Sun Nov 02 21:17:39 GMT+08:00 2014
+org.eclipse.jdt.core.classpathVariable.JRE_SRCROOT=
+org.eclipse.jdt.core.classpathVariable.JRE_LIB=/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/jre/lib/rt.jar
+org.eclipse.jdt.core.classpathVariable.JRE_SRC=/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home/src.zip
+eclipse.preferences.version=1
+org.eclipse.jdt.core.classpathVariable.MYECLIPSE_LIB_HOME=/Applications/MyEclipse/Common/plugins/com.genuitec.eclipse.j2eedt.core_10.0.0.me201110301321/data/libraryset
+org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
+org.eclipse.jdt.core.builder.resourceCopyExclusionFilter=
+org.eclipse.jdt.core.codeComplete.visibilityCheck=enabled

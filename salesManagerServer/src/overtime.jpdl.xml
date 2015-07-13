@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="overtime" name="加班流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="27,179,48,48" name="启动">
+      <transition to="加班申请"/>
+   </start>  
+   <task assignee="#{userId}" g="96,176,92,52" name="加班申请">
+      <transition g="-26,4" name="申请" to="判断发起人流程"/>
+   </task>
+   <decision g="201,262,48,48" name="判断发起人流程">
+      <handler class="com.sales.workflow.OtUserTypeDecisionHandler" />
+      <transition g="-53,-22" name="上级主管" to="上级审批"/>
+      <transition g="-2,7" name="后勤部经理" to="后勤审批"/>
+   </decision>   
+   <task form="process!toApprovalOvertime" g="211,174,92,52" name="上级审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${上级主管}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-18,-23" name="批准" to="后勤审批"/>
+      <transition g="253,133;141,131:-17,7" name="驳回" to="加班申请"/>
+   </task>
+   <task form="process!toApprovalOvertime" g="331,175,92,52" name="后勤审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field> 
+	  </assignment-handler>
+      <transition g="-29,-22" name="批准" to="后勤归档"/>
+      <transition g="297,117;253,143:9,-32" name="驳回" to="加班申请"/>
+   </task>
+   <task form="process!toApprovalOvertime" g="444,174,92,52" name="后勤归档">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${销售助理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-14,-24" name="批准" to="结束"/>
+      <transition g="297,117;253,143:9,-32" name="驳回" to="加班申请"/>
+   </task>
+   <end g="560,178,48,48" name="结束"/>
+</process>

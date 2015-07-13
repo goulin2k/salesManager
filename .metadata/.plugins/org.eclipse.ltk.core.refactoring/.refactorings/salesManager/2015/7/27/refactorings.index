@@ -1,0 +1,7 @@
+1435994036265	Extract constant 'LEAVE_ID_STR'
+1435996623251	Extract constant 'TRIP_ID_STR'
+1436012329141	Extract constant 'OVERTIME_ID_STR'
+1436012791751	Extract constant 'EA_ID_STR'
+1436013006989	Extract constant 'ER_ID_STR'
+1436013072760	Extract constant 'CA_ID_STR'
+1436013120493	Extract constant 'CR_ID_STR'

@@ -1,0 +1,8 @@
+1434248546272	Rename local variable 'activityList'
+1434248989514	Rename local variable 'assessId'
+1434337085514	Rename type 'LabelValueBean'
+1434338943485	Rename local variable 'displayField'
+1434339013666	Extract constant 'UNDIFINED'
+1434339549979	Extract local variable 'field'
+1434528279172	Copy file
+1434607904614	Rename type 'BuzObject'

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_department" >
+  <resultMap id="sDepartmentResult" class="com.sales.model.SDepartment" > 
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="has_child" property="hasChild" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="link_phone" property="linkPhone" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="department_id" property="childDepartmentList" select="s_department.getSDepartmentList" />
+  </resultMap>
+  
+  <resultMap id="underDepartmentResult" class="com.sales.model.SDepartment" > 
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="has_child" property="hasChild" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="link_phone" property="linkPhone" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="simpleDepartmentResult" class="com.sales.model.SDepartment" > 
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="has_child" property="hasChild" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="link_phone" property="linkPhone" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="sDepartJson" class="com.sales.model.SDepartJson" > 
+    <result column="department_id" property="id" jdbcType="INTEGER" /> 
+    <result column="name" property="text" jdbcType="VARCHAR" /> 
+    <result column="department_id" property="children" select="s_department.getSDepartByParentId" /> 
+  </resultMap>
+  
+  <select id="getSDepartByParentId" resultMap="sDepartJson" parameterClass="java.lang.Integer" > 
+    select s.department_id, s.name, s.parent_id
+    from s_department s 
+    where s.parent_id = #parentId:INTEGER# 
+  </select>
+  
+  <select id="getSDepartmentById" resultMap="underDepartmentResult" parameterClass="java.lang.Integer" >
+    select s.department_id, s.name, s.has_child, s.parent_id, p.name as parent_name, s.link_man, s.link_phone, s.comment
+    from s_department s left join s_department p on s.parent_id = p.department_id
+    where s.department_id = #departmentId:INTEGER# 
+  </select>
+  
+  <select id="getUnderDepartmentListById" resultMap="underDepartmentResult" parameterClass="java.lang.Integer" >
+    select s.department_id, s.name, s.has_child, s.parent_id, p.name as parent_name, s.link_man, s.link_phone, s.comment
+    from s_department s left join s_department p on s.parent_id = p.department_id
+    where s.parent_id = #parentId:INTEGER# 
+  </select>
+  
+  <select id="getSDepartmentList" resultMap="sDepartmentResult" parameterClass="java.lang.Integer" >
+    select s.department_id, s.name, s.has_child, s.parent_id, p.name as parent_name, s.link_man, s.link_phone, s.comment
+    from s_department s left join s_department p on s.parent_id = p.department_id
+    where s.parent_id = #parentId:INTEGER#
+  </select>
+  
+  <delete id="deleteSDepartment" parameterClass="java.lang.Integer" > 
+    delete from s_department
+    where department_id = #departmentId:INTEGER#
+  </delete>
+  
+  <insert id="insertSDepartment" parameterClass="com.sales.model.SDepartment" > 
+    insert into s_department (name, has_child, parent_id, link_man, link_phone,
+      comment)
+    values (#name:VARCHAR#, #hasChild:INTEGER#, #parentId:INTEGER#,
+      #linkMan:VARCHAR#, #linkPhone:VARCHAR#, #comment:VARCHAR#) 
+  </insert>
+   
+  <update id="updateSDepartment" parameterClass="com.sales.model.SDepartment" > 
+    update s_department
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="hasChild" >
+        has_child = #hasChild:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="parentId" >
+        parent_id = #parentId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="linkMan" >
+        link_man = #linkMan:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="linkPhone" >
+        link_phone = #linkPhone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="comment" >
+        comment = #comment:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where department_id = #departmentId:INTEGER#
+  </update>
+  
+  <select id="getDepAndChildById" resultMap="simpleDepartmentResult" parameterClass="java.lang.Integer" >
+    {call Pro_getAllDepart(#departmentId:INTEGER#)} 
+  </select>
+</sqlMap>

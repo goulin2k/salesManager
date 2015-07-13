@@ -1,0 +1,22 @@
+1.struts2+spring2.5+ibatis
+2.sitemesh
+3.struts-rest
+4.dwr push
+5.easy ui
+6.autocomplete （已做成标签，参数说明查看sale-util.tld）
+
+运行demo需要的数据结构：
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+  `desc` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+7-10遗留的问题跟踪
+1、检查单据数据的关联性；
+2、检查核实指标运算的正确性；
+3、布局菜单落实指标显示（加数据）、消息、公告提示栏（王炼）；
+4、K3消息通知机制；
+5、销售管理的计划任务部分的功能测试与验证
+6、流程消息通知的实现？

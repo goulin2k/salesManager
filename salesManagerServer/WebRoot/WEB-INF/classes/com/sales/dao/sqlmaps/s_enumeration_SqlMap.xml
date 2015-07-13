@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_enumeration" >
+  <resultMap id="SEnumerationResult" class="com.sales.model.SEnumeration" > 
+    <result column="enumeration_id" property="enumerationId" jdbcType="INTEGER" />
+    <result column="enumeration_code" property="enumerationCode" jdbcType="VARCHAR" />
+    <result column="enumeration_type" property="enumerationType" jdbcType="INTEGER" />
+    <result column="enumeration_name" property="enumerationName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectEnumerationByType" resultMap="SEnumerationResult" parameterClass="java.lang.Integer" > 
+    select enumeration_id, enumeration_code, enumeration_type, enumeration_name
+    from s_enumeration
+    where enumeration_type = #enumerationType:INTEGER#
+  </select> 
+</sqlMap>

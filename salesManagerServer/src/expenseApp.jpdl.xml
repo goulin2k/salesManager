@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="expenseApp" name="费用申请流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="35,152,48,48" name="start1">
+      <transition to="费用申请"/>
+   </start>  
+   <task assignee="#{userId}" g="104,151,92,52" name="费用申请">
+      <transition g="-16,-20" name="申请" to="后勤经理审批"/>
+   </task>
+   <task form="process!toApprovalEa" g="247,150,92,52" name="后勤经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="220,239:-69,-22" name="驳回" to="费用申请"/>
+      <transition g="-15,-25" name="批准" to="出纳审批"/>
+   </task> 
+   <task form="process!toApprovalEa" g="368,151,92,52" name="出纳审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${出纳}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-11,-25" name="批准" to="end1"/>
+      <transition g="287,109:43,12" name="驳回" to="费用申请"/>
+   </task>
+   <end g="478,152,48,48" name="end1"/>
+</process>

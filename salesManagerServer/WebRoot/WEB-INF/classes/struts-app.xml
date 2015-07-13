@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+    <package name="appAction" extends="base">
+    	<action name="appUserAction" class="appUserAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	      </action>
+	      
+	      <action name="salePlanAction" class="salePlanAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	      </action>
+	      
+	      <action name="messageAction" class="messageAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	      </action>
+    </package>
+</struts>

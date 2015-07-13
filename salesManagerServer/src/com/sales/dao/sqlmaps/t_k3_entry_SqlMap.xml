@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_k3_entry" >
+  <!-- 销售报价单开票方式  add by goulin -->
+  <resultMap id="invoiceTypeResult" class="com.sales.model.TInvoiceType" > 
+    <result column="FItemID" property="typeId" jdbcType="INTEGER" />
+    <result column="FName" property="name" jdbcType="VARCHAR" />
+  </resultMap> 
+  
+   <!-- 销售报价单运输方式  add by goulin -->
+  <resultMap id="transTypeResult" class="com.sales.model.TTransType" > 
+    <result column="FItemID" property="typeId" jdbcType="INTEGER" />
+    <result column="FName" property="name" jdbcType="VARCHAR" />
+  </resultMap> 
+  
+  <resultMap id="payConditionResult" class="com.sales.model.TPayColConditionEntry" > 
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" />
+    <result column="FID" property="fId" jdbcType="INTEGER" />
+    <result column="FName" property="fName" jdbcType="VARCHAR" />
+  </resultMap> 
+  
+  <resultMap id="currencyResult" class="com.sales.model.TCurrency" > 
+    <result column="FCurrencyID" property="fCurrencyID" jdbcType="INTEGER" />
+    <result column="FNumber" property="fNumber" jdbcType="VARCHAR" />
+    <result column="FName" property="fName" jdbcType="VARCHAR" />
+    <result column="FExchangeRate" property="fExchangeRate" jdbcType="VARCHAR" />
+  </resultMap> 
+  
+  <resultMap id="empResult" class="com.sales.model.TEmp" > 
+    <result column="FDepartmentID" property="fDepartmentID" jdbcType="INTEGER" />
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="FNumber" property="fNumber" jdbcType="VARCHAR" />
+    <result column="FName" property="fName" jdbcType="VARCHAR" />
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+  </resultMap> 
+  
+  <resultMap id="departResult" class="com.sales.model.TDepart" > 
+    <result column="FItemID" property="departId" jdbcType="INTEGER" /> 
+    <result column="FNumber" property="number" jdbcType="VARCHAR" />
+    <result column="FName" property="name" jdbcType="VARCHAR" /> 
+  </resultMap> 
+  
+  <resultMap id="staffResult" class="com.sales.model.TStaff" > 
+    <result column="FItemID" property="staffId" jdbcType="INTEGER" /> 
+    <result column="FNumber" property="number" jdbcType="VARCHAR" />
+    <result column="FName" property="name" jdbcType="VARCHAR" /> 
+  </resultMap> 
+  
+  <resultMap id="userResult" class="com.sales.model.TUser" > 
+    <result column="FUserID" property="userId" jdbcType="INTEGER" />  
+    <result column="FName" property="name" jdbcType="VARCHAR" /> 
+  </resultMap> 
+  
+  <!--     客户对象    -->
+  <resultMap id="TCustomerResult" class="com.sales.model.TCustomer" >
+    <result column="FLevel" property="flevel" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="FName" property="fname" jdbcType="VARCHAR" />
+    <result column="FNumber" property="fnumber" jdbcType="VARCHAR" />
+    <result column="FParentID" property="fparentid" jdbcType="INTEGER" />
+    <result column="FDeleted" property="fdeleted" jdbcType="BIT" />
+    <result column="FDetail" property="fdetail" jdbcType="BIT" />
+    <result column="FFullName" property="ffullname" jdbcType="VARCHAR" />
+    <result column="FFullNumber" property="ffullnumber" jdbcType="VARCHAR" />
+    <result column="FShortNumber" property="fshortnumber" jdbcType="VARCHAR" />
+    <result column="FUnUsed" property="funused" jdbcType="BIT" />
+    <result column="FShortName" property="fshortname" jdbcType="VARCHAR" />
+    <result column="Faddress" property="faddress" jdbcType="VARCHAR" />
+    <result column="regionName" property="regionname" jdbcType="VARCHAR" />
+    <result column="tradeName" property="tradename" jdbcType="VARCHAR" />
+    <result column="FContact" property="fcontact" jdbcType="VARCHAR" />
+    <result column="FPhone" property="fphone" jdbcType="VARCHAR" />
+    <result column="FMobilePhone" property="fmobilephone" jdbcType="VARCHAR" />
+    <result column="FFax" property="ffax" jdbcType="VARCHAR" />
+    <result column="FPostalCode" property="fpostalcode" jdbcType="VARCHAR" />
+    <result column="FEmail" property="femail" jdbcType="VARCHAR" />
+    <result column="FBank" property="fbank" jdbcType="VARCHAR" />
+    <result column="FAccount" property="faccount" jdbcType="VARCHAR" />
+    <result column="FTaxNum" property="ftaxnum" jdbcType="VARCHAR" />
+    <result column="FIsCreditMgr" property="fiscreditmgr" jdbcType="BIT" />
+    <result column="saleMode" property="salemode" jdbcType="VARCHAR" />
+    <result column="FValueAddRate" property="fvalueaddrate" jdbcType="DECIMAL" />
+    <result column="FCity" property="fcity" jdbcType="VARCHAR" />
+    <result column="FProvince" property="fprovince" jdbcType="VARCHAR" />
+    <result column="FCountry" property="fcountry" jdbcType="VARCHAR" />
+    <result column="FHomePage" property="fhomepage" jdbcType="VARCHAR" />
+    <result column="Fcorperate" property="fcorperate" jdbcType="VARCHAR" />
+    <result column="FCarryingAOS" property="fcarryingaos" jdbcType="INTEGER" />
+    <result column="customerType" property="customertype" jdbcType="VARCHAR" />
+    <result column="SaleTypeName" property="saletypename" jdbcType="VARCHAR" />
+    <result column="SupplierName" property="suppliername" jdbcType="VARCHAR" />
+    <result column="currencyName" property="currencyname" jdbcType="VARCHAR" />
+    <result column="settleName" property="settlename" jdbcType="VARCHAR" />
+    <result column="FfavorPolicy" property="ffavorpolicy" jdbcType="VARCHAR" />
+    <result column="departmentName" property="departmentname" jdbcType="VARCHAR" />
+    <result column="employeeName" property="employeename" jdbcType="VARCHAR" />
+    <result column="FlastTradeDate" property="flasttradedate" jdbcType="DATE" />
+    <result column="FlastTradeAmount" property="flasttradeamount" jdbcType="REAL" />
+    <result column="FlastReceiveDate" property="flastreceivedate" jdbcType="DATE" />
+    <result column="FendTradeDate" property="fendtradedate" jdbcType="DATE" />
+    <result column="FlastRPAmount" property="flastrpamount" jdbcType="REAL" />
+    <result column="FmaxDealAmount" property="fmaxdealamount" jdbcType="REAL" />
+    <result column="FminForeReceiveRate" property="fminforereceiverate" jdbcType="REAL" />
+    <result column="FminReserverate" property="fminreserverate" jdbcType="REAL" />
+    <result column="debtLevelName" property="debtlevelname" jdbcType="VARCHAR" />
+    <result column="FPayCondition" property="payCondition" jdbcType="VARCHAR" />
+    <result column="FPayConditionId" property="payConditionId" jdbcType="INTEGER" />
+    
+  </resultMap>
+  
+  <select id="getPayCondition" resultMap="payConditionResult" > 
+    select FEntryID, FID, FName from t_PayColConditionEntry
+  </select>
+
+  <select id="getCurrency" resultMap="currencyResult" > 
+    select FCurrencyID, FNumber, FName, FExchangeRate from T_Currency where FCurrencyID > 0
+  </select>
+
+  <select id="getCurrencyById" resultMap="currencyResult" parameterClass="java.lang.Integer" > 
+    select FCurrencyID, FNumber, FName, FExchangeRate from T_Currency where FCurrencyID = #fCurrencyID#
+  </select>
+
+  <select id="getEmp" resultMap="empResult" parameterClass="java.util.Map" > 
+    select FDepartmentID, FItemID, FNumber, FName, FItemID as FEmpID from T_EMP where 1=1
+	<isNotNull prepend="and" property="fName">
+		FName like '$fName$%'
+	</isNotNull>  
+  </select>
+  
+  <select id="getDepart" resultMap="departResult" > 
+    select FItemID, FNumber, FName
+	from t_item
+	where FItemClassID = 2
+  </select>
+
+  <select id="getStaff" resultMap="staffResult" > 
+    select FItemID, FNumber, FName
+	from t_item
+	where FItemClassID = 3
+	order by FName
+  </select>
+
+  <select id="getUser" resultMap="userResult" > 
+    select FUserID, FName
+	from t_user
+	where FUserID > 0
+	order by FName
+  </select>
+
+  <select id="getEmpList" resultMap="empResult" > 
+    select FDepartmentID, FItemID, FNumber, FName, FItemID as FEmpID from T_EMP
+  </select>
+  
+  <select id="getSyncCustomers" resultMap="TCustomerResult" > 
+    	SELECT	it.FItemID as customer_id, it.FName, it.FNumber , it.FParentID ,it.FDeleted, it.FDetail,
+				 it.FFullName ,it.FFullNumber ,it.FShortNumber, it.FLevel, it.FUnUsed,
+				org.FShortName, org.Faddress, FRegionID, sb1.Fname as regionName, FTrade, sb2.FName as tradeName,
+				FContact, org.FPhone, org.FMobilePhone, org.FFax, FPostalCode, org.FEmail, FBank, FAccount, FTaxNum, org.FIsCreditMgr,
+				sb3.Fname as saleMode, FValueAddRate, FCity, FProvince, FCountry, FHomePage, 
+				Fcorperate, FCarryingAOS, sb4.Fname as customerType, sb3.Fname as SaleTypeName, '' as SupplierName,
+				cy.FName as currencyName, sb6.FName as settleName,
+				FfavorPolicy, dp.FName as departmentName, emp.FName as employeeName,
+				FlastTradeDate,FlastTradeAmount, FlastReceiveDate,
+				FendTradeDate, FlastRPAmount, FmaxDealAmount, FminForeReceiveRate, FminReserverate, 
+				sb7.fname as debtLevelName, pc.FName as FPayCondition, org.FPayCondition as FPayConditionId
+		FROM	t_item it INNER JOIN t_organization org on it.fitemId = org.fitemId
+				left JOIN T_Submessage sb1 on FRegionID = sb1.FInterID
+				left JOIN T_Submessage sb2 on FTrade = sb2.FInterID
+				left JOIN T_Submessage sb3 on FSaleMode = sb3.FInterID
+				left JOIN T_Submessage sb4 on org.FTypeId = sb4.FInterID
+				left JOIN T_Submessage sb5 on FSaleId = sb5.FInterID
+				left JOIN T_currency cy on FCyID = cy.FCurrencyID
+				left JOIN T_settle sb6 on FSetID = sb6.FItemID
+				left JOIN t_department dp on Fdepartment = dp.FItemId
+				left JOIN t_emp emp on org.femployee = emp.FItemId
+				left JOIN T_Submessage sb7 on FdebtLevel = sb7.FInterID
+				left JOIN t_PayColCondition pc on FPayCondition = pc.FID
+		WHERE it.FModifyTime > (
+			SELECT CAST(syn_timestamp AS timestamp) FROM sale_bill_syn WHERE bill_type = 'customer.timestamp');
+		
+		UPDATE sale_bill_syn
+		SET syn_timestamp = (select cast(max(FModifyTime) as varchar(32)) from t_item where FItemClassID=1)
+		WHERE bill_type = 'customer.timestamp' ;
+  </select>
+  
+  <select id="selectInvoiceType" resultMap="invoiceTypeResult"> 
+    select FItemId, FName from T_item   where FItemClassID=3003 
+  </select>
+  
+  <select id="selectTransType" resultMap="transTypeResult"> 
+    select FItemId, FName from T_item   where FItemClassID=3004 
+  </select>
+</sqlMap>

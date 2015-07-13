@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_user" >
+  <resultMap id="sUserResult" class="com.sales.model.SUser" > 
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="login_passwor" property="loginPasswor" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="parent_user_id" property="parentUserId" jdbcType="INTEGER" />
+    <result column="parent_user_name" property="parentUserName" jdbcType="VARCHAR" />
+    <result column="position_org_id" property="positionOrgId" jdbcType="INTEGER" />
+    <result column="position_bs_id" property="positionBsId" jdbcType="INTEGER" />
+    <result column="position_bs_name" property="positionBsName" jdbcType="VARCHAR" />
+    <result column="k3_user_id" property="k3UserId" jdbcType="INTEGER" />
+    <result column="k3_user_name" property="k3UserName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="userResult" class="com.sales.model.SUser" > 
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="login_passwor" property="loginPasswor" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="parent_user_id" property="parentUserId" jdbcType="INTEGER" />
+    <result column="parent_user_name" property="parentUserName" jdbcType="VARCHAR" />
+    <result column="position_org_id" property="positionOrgId" jdbcType="INTEGER" />
+    <result column="position_bs_id" property="positionBsId" jdbcType="INTEGER" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+    <result column="position_org_name" property="positionOrgName" jdbcType="VARCHAR" />
+    <result column="position_bs_name" property="positionBsName" jdbcType="VARCHAR" />
+    <result column="k3_user_id" property="k3UserId" jdbcType="INTEGER" />
+    <result column="k3_user_name" property="k3UserName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getSUserList" resultMap="sUserResult" parameterClass="java.util.Map" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name, d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+	left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+	limit #startRow#,#endRow#
+  </select>
+  
+  <select id="getSUserById" resultMap="userResult" parameterClass="java.lang.Integer" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name,
+      d.name as department_name,p.name as position_org_name,b.name as position_bs_name
+    from s_user s
+    left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position p on s.position_org_id = p.position_id
+	left join s_position b on s.position_bs_id = b.position_id
+    where s.user_id = #userId:INTEGER#
+  </select>
+  
+  <update id="updateSUserStatus" parameterClass="com.sales.model.SUser" > 
+    update s_user set status = #status:INTEGER#
+    where user_id = #userId:INTEGER#
+  </update>
+  
+  <delete id="deleteSUser" parameterClass="com.sales.model.SUser" > 
+    delete from s_user
+    where user_id = #userId:INTEGER#
+  </delete>
+  
+  <insert id="insertSUser" parameterClass="com.sales.model.SUser" > 
+    insert into s_user (user_id, login_name, login_passwor, user_name, mobile, phone, email, status,
+      department_id, role_id, parent_user_id,position_org_id,position_bs_id,k3_user_id, k3_user_name)
+    values (#userId:INTEGER#, #loginName:VARCHAR#, #loginPasswor:VARCHAR#, #userName:VARCHAR#,
+      #mobile:VARCHAR#, #phone:VARCHAR#, #email:VARCHAR#, #status:INTEGER#, #departmentId:INTEGER#,
+      #roleId:INTEGER#, #parentUserId:INTEGER#,#positionOrgId:INTEGER#,#positionBsId:INTEGER#,#k3UserId:INTEGER#,#k3UserName:VARCHAR#)
+  </insert>
+  
+  <update id="updateSUserById" parameterClass="com.sales.model.SUser" > 
+    update s_user
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="loginName" >
+        login_name = #loginName:VARCHAR#
+      </isNotNull>
+      <isNotEmpty prepend="," property="loginPasswor" >
+        login_passwor = #loginPasswor:VARCHAR#
+      </isNotEmpty>
+      <isNotNull prepend="," property="userName" >
+        user_name = #userName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="mobile" >
+        mobile = #mobile:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        phone = #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        email = #email:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="departmentId" >
+        department_id = #departmentId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="roleId" >
+        role_id = #roleId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="roleId" >
+        parent_user_id = #parentUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="positionOrgId" >
+        position_org_id = #positionOrgId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="positionBsId" >
+        position_bs_id = #positionBsId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="k3UserId" >
+        k3_user_id = #k3UserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="k3UserName" >
+        k3_user_name = #k3UserName:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where user_id = #userId:INTEGER#
+  </update>
+  
+  <select id="getSUserByPassword" resultMap="sUserResult" parameterClass="com.sales.model.SUser" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name,  d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+    left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+    where s.login_name = #loginName:VARCHAR# and s.login_passwor = #loginPasswor:VARCHAR#
+  </select>
+  
+    <select id="getUserCount" resultClass="java.lang.Integer"  parameterClass="java.util.Map">
+      select count(*) from s_user 
+  </select>
+  
+  <select id="getSUserByUserName" resultMap="sUserResult" parameterClass="java.lang.String" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name, d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+    left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+    where s.login_name = #loginName:VARCHAR#
+  </select>
+  
+  <resultMap id="sUserJson" class="com.sales.model.SUserJson" > 
+    <result column="user_id" property="id" jdbcType="INTEGER" /> 
+    <result column="user_name" property="text" jdbcType="VARCHAR" /> 
+    <result column="user_id" property="children" select="s_user.getSUserByParentId" /> 
+  </resultMap>
+  
+  <select id="getSUserByParentId" resultMap="sUserJson" parameterClass="java.lang.Integer" > 
+    select s.user_id, s.login_name, s.user_name, s.parent_user_id
+    from s_user s 
+    where s.parent_user_id = #parentId:INTEGER# 
+  </select>
+  
+   <select id="getPerformanceUserList" resultMap="sUserResult"  parameterClass="java.util.Map" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name, d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+	left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+	<dynamic prepend="where">
+		<isNotEmpty property="postType">
+			<isNotEmpty property="postId">
+			    <isEqual prepend="and" property="postType" compareValue = "1">
+			        s.position_org_id = #postId# 
+			    </isEqual>
+			    <isEqual prepend="and" property="postType" compareValue = "2">
+			        s.position_bs_id = #postId# 
+			    </isEqual>
+		    </isNotEmpty>
+		</isNotEmpty>
+		
+	</dynamic>
+  </select>
+  
+  <resultMap id="simpleUserResult" class="com.sales.model.SUser" > 
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="parent_user_id" property="parentUserId" jdbcType="INTEGER" />
+    <result column="k3_user_id" property="k3UserId" jdbcType="INTEGER" />
+    <result column="k3_user_name" property="k3UserName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getUserListByPosition" resultMap="simpleUserResult"  parameterClass="com.sales.model.SPosition" > 
+    select distinct s.user_id, s.login_name, s.user_name, s.parent_user_id, s.k3_user_id, s.k3_user_name
+    from s_user s 
+    left join s_position p on (s.position_org_id = p.position_id or s.position_bs_id = p.position_id) 
+	<dynamic prepend="where">
+		<isNotEmpty property="name">
+			p.name = #name#
+		</isNotEmpty>
+		
+	</dynamic>
+  </select>
+  
+  <!-- 查询获取用户所有下级用户信息 -->
+  <select id="getChildUsersById" resultMap="simpleUserResult" parameterClass="java.lang.Integer" > 
+    {call Pro_getChildUsers(#userId:INTEGER#)} 
+  </select>
+  
+  <!-- 查询获取用户所有上级用户信息 -->
+  <select id="getParentUsersById" resultMap="simpleUserResult" parameterClass="java.lang.Integer" > 
+    {call Pro_getParentUsers(#userId:INTEGER#)} 
+  </select>
+  
+  <select id="getUserPageList" resultMap="sUserResult" parameterClass="java.util.Map" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name, d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+	left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="loginName">
+			s.login_name like #loginName#
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="userName">
+			s.user_name like '%$userName$%'
+	    </isNotEmpty>
+	</dynamic>
+	limit #startRow#,#endRow#
+  </select>
+  
+  <select id="getOpenUserList" resultMap="sUserResult" parameterClass="java.util.Map" > 
+    select s.user_id, s.login_name, s.login_passwor, s.user_name, s.mobile, s.phone, s.email, s.status,
+      s.department_id,s.position_org_id, s.position_bs_id, s.role_id, s.k3_user_id, s.k3_user_name,
+      r.name as role_name, s.parent_user_id, u.user_name as parent_user_name, d.name as department_name,
+      sp.name as position_bs_name
+    from s_user s
+	left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id
+	left join s_department d on s.department_id = d.department_id 
+	left join s_position sp on s.position_bs_id = sp.position_id
+	where 1=1
+	<isNotNull prepend="and" property="childUserIds">
+		s.user_id in $childUserIds$
+	</isNotNull>
+	<isNotEmpty prepend="and" property="departmentId">
+		s.department_id = #departmentId#
+    </isNotEmpty>
+	<isNotEmpty prepend="and" property="userName">
+		s.user_name like '%$userName$%'
+    </isNotEmpty>
+	limit #startRow#, #endRow#
+  </select>
+  
+  <select id="getOpenUserCount" resultClass="java.lang.Integer"  parameterClass="java.util.Map">
+    select count(*)
+    from s_user s
+	left join s_role r on s.role_id = r.role_id
+	left join s_user u on s.parent_user_id = u.user_id 
+	where 1=1 
+	<isNotNull prepend="and" property="childUserIds">
+		s.user_id in $childUserIds$
+	</isNotNull>
+	<isNotEmpty prepend="and" property="departmentId">
+		s.department_id = #departmentId#
+    </isNotEmpty>
+	<isNotEmpty prepend="and" property="userName">
+		s.user_name like '%$userName$%'
+    </isNotEmpty> 
+  </select>
+  
+  <select id="getUserListByPositionId" resultMap="simpleUserResult"  parameterClass="java.lang.Integer" > 
+    select s.user_id, s.login_name, s.user_name, s.parent_user_id, k3_user_id, k3_user_name
+    from s_user s
+    where s.role_id = #positionId#
+  </select>
+  
+  <select id="getUserListByRole" resultMap="simpleUserResult"  parameterClass="java.lang.Integer" > 
+    select s.user_id, s.login_name, s.user_name, s.parent_user_id, k3_user_id, k3_user_name
+    from s_user s
+    where s.position_bs_id = #positionId#
+  </select>
+  <select id="getUserPageCount" resultClass="java.lang.Integer"  parameterClass="com.sales.model.SUser">
+    select count(*)
+    from s_user s
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="loginName">
+			s.login_name like #loginName#
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="userName">
+			s.user_name like '%$userName$%'
+	    </isNotEmpty>
+	</dynamic>
+  </select>
+  
+  <select id="getUserByK3Name" resultMap="simpleUserResult"  parameterClass="java.lang.String" > 
+    select s.user_id, s.login_name, s.user_name, s.parent_user_id, k3_user_id, k3_user_name
+    from s_user s
+    where s.k3_user_name = #k3UserName#
+  </select>
+  
+  <select id="selectParentSalers" resultMap="simpleUserResult" > 
+    SELECT 	s.user_id, s.login_name, s.user_name, s.parent_user_id, k3_user_id, k3_user_name
+    FROM 	s_user s
+    WHERE 	user_id IN (SELECT parent_user_id FROM s_user)
+			AND NOT k3_user_id IS NULL
+	ORDER BY parent_user_id 
+  </select>
+</sqlMap>

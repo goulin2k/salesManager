@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_order" >
+
+  <resultMap id="orderResult" class="com.sales.model.TOrder" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FFetchDate" property="fFetchDate" jdbcType="DATE" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FPOOrdBillNo" property="fPOOrdBillNo" jdbcType="VARCHAR" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FCustID" property="fCustID" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FMangerID" property="fMangerID" jdbcType="INTEGER" />
+    <result column="managerName" property="managerName" jdbcType="VARCHAR" /> 
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billerName" property="billerName" jdbcType="VARCHAR" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" />
+    <result column="FPayDate" property="fPayDate" jdbcType="DATE" />
+    <result column="FPayStyle" property="fPayStyle" jdbcType="VARCHAR" />
+    <result column="FInvoiceClosed" property="fInvoiceClosed" jdbcType="INTEGER" />
+    <result column="FTranType" property="fTranType" jdbcType="INTEGER" />
+    <result column="transTypeName" property="transTypeName" jdbcType="VARCHAR" /> 
+    <result column="FCurrencyID" property="fCurrencyID" jdbcType="INTEGER" />
+    <result column="currencyName" property="currencyName" jdbcType="VARCHAR" />
+    <result column="FCancellation" property="fCancellation" jdbcType="VARCHAR" /> 
+    <result column="FClosed" property="fClosed" jdbcType="INTEGER" />
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" />
+    <result column="FInterID" property="orderEntryList" select="t_order.getOrderEntryListByOrderId" />
+  </resultMap> 
+
+  <resultMap id="orderEntryResult" class="com.sales.model.TOrderEntry" > 
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" />
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productModel" property="productModel" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" />
+    <result column="FQty" property="fQty" jdbcType="VARCHAR" /> 
+    <result column="FCess" property="fCess" jdbcType="VARCHAR" /> 
+    <result column="FDiscount" property="fDiscount" jdbcType="VARCHAR" />  
+    <result column="FDiscountAmount" property="fDiscountAmount" jdbcType="VARCHAR" /> 
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" />
+    <result column="FFinalAmount" property="fFinalAmount" jdbcType="VARCHAR" />
+    <result column="fInvoiceQty" property="fInvoiceQty" jdbcType="VARCHAR" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />
+    <result column="FSourceEntryID" property="fSourceEntryID" jdbcType="INTEGER" /> 
+    <result column="FDate" property="fDate" jdbcType="DATE" />  
+    <result column="FAdviceConsignDate" property="fAdviceConsignDate" jdbcType="DATE" />
+    <result column="FCommitQty" property="fCommitQty" jdbcType="VARCHAR" />  
+    <result column="FStockQty" property="fStockQty" jdbcType="VARCHAR" />  
+  </resultMap> 
+  
+  <!-- 客户产品销售情况统计 -->
+ 	<resultMap id="orderStatisticsByCustoemr" class="com.sales.model.K3OrderCustomerStatistics" >
+ 		<result column="customer_id" property="customerId" jdbcType="INTEGER" />
+ 		<result column="product_id" property="productId" jdbcType="INTEGER" />
+ 		<result column="qty" property="totalQuantity" jdbcType="DOUBLE" />
+ 		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+ 		<result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+ 	</resultMap>
+ 
+  <select id="getOrderById" resultMap="orderResult" parameterClass="java.util.Map" > 
+    SELECT so.FInterID, FFetchDate, FDate, FPOOrdBillNo, FBillNo, 
+		FCustID, cs.FName as customerName,
+		FDeptID, dep.FName as departName,
+		so.FEmpID, emp.FName as employeeName,
+		FMangerID, mgr.FName as managerName,
+		FBillerID, blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName,
+		FPayDate, FPayStyle, FInvoiceClosed,
+		so.FTranType, trt.Fname as transTypeName,
+		so.FCurrencyID, cny.Fname as currencyName,
+		FCancellation, FClosed, FStatus
+    FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID
+    WHERE so.FInterID = #orderId:INTEGER# 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getOrderEntryListByOrderId" resultMap="orderEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT FEntryID, FInterID, 
+		se.FItemID, ict.FName as productName, ict.FModel productModel,
+		se.FUnitID, unt.FName as unitName, 
+		FPrice, FQty, FCESS, FDiscount, FDiscountAmount, FAmount, FFinalAmount,
+		FInvoiceQty, se.FNote, FSourceEntryID, 
+		FDate, FAdviceConsignDate, FCommitQty, FStockQty
+	FROM SEOrderEntry se INNER JOIN T_ICItem ict ON se.FItemID = ict.FItemID
+		INNER JOIN t_measureUnit unt ON se.FUnitID = unt.FMeasureUnitID
+	WHERE FInterID = #orderId:INTEGER#
+  </select>
+  
+  <select id="getOrderList" resultMap="orderResult" parameterClass="com.sales.model.TOrder" > 
+    SELECT TOP $pageSize$ so.FInterID, FFetchDate, FDate, FPOOrdBillNo, FBillNo, 
+		FCustID, cs.FName as customerName,
+		FDeptID, dep.FName as departName,
+		so.FEmpID, emp.FName as employeeName,
+		FMangerID, mgr.FName as managerName,
+		FBillerID, blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName,
+		FPayDate, FPayStyle, FInvoiceClosed,
+		so.FTranType, trt.Fname as transTypeName,
+		so.FCurrencyID, cny.Fname as currencyName,
+		FCancellation, FClosed, FStatus
+    FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID
+    WHERE so.FInterID NOT IN 
+      (SELECT TOP $startNumber$ so.FInterID
+		FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID
+		<dynamic prepend="where">
+			<isNotNull property="fCustID" prepend="and">
+			    FCustID = #fCustID#
+			</isNotNull>
+			<isNotNull property="fEmpID" prepend="and">
+			    so.FEmpID = #fEmpID#
+			</isNotNull>
+			<isNotNull property="fStatus" prepend="and">
+			    FStatus = #fStatus#
+			</isNotNull>
+		    <isNotNull property="startTime" prepend="and">
+			    FDate 
+			    <![CDATA[
+			     >= 
+			    ]]>
+			    #startTime#
+		    </isNotNull>
+		    <isNotNull property="endTime" prepend="and">
+			    FDate 
+			    <![CDATA[
+			     <= 
+			    ]]>
+			    #endTime#
+		    </isNotNull> 
+			<isNotNull property="customerIds" prepend="and">
+			    FCustID in $customerIds$
+			</isNotNull>
+		</dynamic>
+		order by FDate desc
+	   ) 
+	<isNotNull property="fCustID" prepend="and">
+	    FCustID = #fCustID#
+	</isNotNull>
+	<isNotNull property="fEmpID" prepend="and">
+	    so.FEmpID = #fEmpID#
+	</isNotNull>
+	<isNotNull property="fStatus" prepend="and">
+	    FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+	order by FDate desc
+  </select>
+
+  <select id="getOrderCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TOrder" > 
+    SELECT count(*)
+    FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID 
+	<dynamic prepend="where">
+		<isNotNull property="fCustID" prepend="and">
+		    FCustID = #fCustID#
+		</isNotNull>
+		<isNotNull property="fEmpID" prepend="and">
+		    so.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    FCustID in $customerIds$
+		</isNotNull>
+	</dynamic>
+  </select>
+ 
+  <select id="getOrderAllList" resultMap="orderResult" parameterClass="java.lang.String" > 
+    SELECT so.FInterID, FFetchDate, FDate, FPOOrdBillNo, FBillNo, 
+		FCustID, cs.FName as customerName,
+		FDeptID, dep.FName as departName,
+		so.FEmpID, emp.FName as employeeName,
+		FMangerID, mgr.FName as managerName,
+		FBillerID, blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName,
+		FPayDate, FPayStyle, FInvoiceClosed,
+		so.FTranType, trt.Fname as transTypeName,
+		so.FCurrencyID, cny.Fname as currencyName,
+		FCancellation, FClosed, FStatus
+    FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID
+    WHERE so.FInterID IN $orderIds$
+  </select> 
+ 
+  <select id="getOrderByCustomerId" resultMap="orderResult" parameterClass="java.lang.Integer" > 
+    SELECT so.FInterID, FFetchDate, FDate, FPOOrdBillNo, FBillNo, 
+		FCustID, cs.FName as customerName,
+		FDeptID, dep.FName as departName,
+		so.FEmpID, emp.FName as employeeName,
+		FMangerID, mgr.FName as managerName,
+		FBillerID, blr.FName as billerName,
+		FCheckerID, ckr.FName as checkerName,
+		FPayDate, FPayStyle, FInvoiceClosed,
+		so.FTranType, trt.Fname as transTypeName,
+		so.FCurrencyID, cny.Fname as currencyName,
+		FCancellation, FClosed, FStatus
+    FROM SEOrder so INNER JOIN T_Item cs ON so.FCustID = cs.FItemID
+		INNER JOIN T_Item dep ON so.FDeptID = dep.FItemID
+		INNER JOIN T_Item emp ON so.FEmpID = emp.FItemID
+		INNER JOIN T_Item mgr ON so.FMangerID = mgr.FItemID
+		LEFT JOIN T_User blr ON so.FBillerID = blr.FUserId
+		LEFT JOIN T_User ckr ON so.FCheckerID = ckr.FUserId
+		LEFT JOIN v_ICTransType trt ON so.FTranType = trt.FInterID
+		INNER JOIN T_Currency cny ON so.FCurrencyID = cny.FCurrencyID
+    WHERE FCustID = #customerId:INTEGER#
+  </select>
+  
+  <!-- 根据客户id获取客户销售最大数量的产品 -->
+  <select id="getTopProductByCustomer" resultMap="orderStatisticsByCustoemr" parameterClass="java.util.Map">
+  	SELECT 	TOP $top$ seo.FCustID as customer_id, seoe.FItemID as product_id, 
+  			ict.FModel AS product_name, unt.FName as unit_name, sum(seoe.FQty) AS qty
+	FROM 	seorder seo INNER JOIN SEOrderEntry seoe on seo.FInterID = seoe.FInterID
+			INNER JOIN T_ICItem ict ON seoe.FItemID = ict.FItemID
+			INNER JOIN t_measureUnit unt ON seoe.FUnitID = unt.FMeasureUnitID
+	WHERE	seo.FCancellation = 0 and seo.FCustID = #customerId:INTEGER# 
+			and seo.FDate <![CDATA[	>= ]]> DATEADD(month, #months:INTEGER#, GETDATE())
+	GROUP BY seo.FCustID, seoe.FItemID, ict.FName, ict.FModel, unt.FName
+	ORDER BY qty DESC
+  </select>
+  
+</sqlMap>

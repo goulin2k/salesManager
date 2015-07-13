@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <bean id="userService"
+		class="com.sales.service.impl.UserServiceImpl">
+		<property name="userDao">
+			<ref bean="userDao" />
+		</property>
+		<property name="sUserService">
+			<ref bean="sUserService" />
+		</property>
+	</bean>
+	 
+	<bean id="departmentService"
+		class="com.sales.service.impl.DepartmentServiceImpl">
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+	</bean>
+	
+	<bean id="enumerationService"
+		class="com.sales.service.impl.EnumerationServiceImpl">
+		<property name="enumerationDao">
+			<ref bean="enumerationDao" />
+		</property> 
+	</bean>
+	
+	<bean id="projectService"
+		class="com.sales.service.impl.ProjectServiceImpl">
+		
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property> 
+		<property name="projectDao">
+			<ref bean="projectDao" />
+		</property> 
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+	</bean>
+	
+	<bean id="activityService"
+		class="com.sales.service.impl.ActivityServiceImpl">
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property> 
+		<property name="activityDao">
+			<ref bean="activityDao" />
+		</property>
+		<property name="projectDao">
+			<ref bean="projectDao" />
+		</property> 
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+	</bean>
+	
+	<bean id="assessService"
+		class="com.sales.service.impl.AssessServiceImpl">
+		<property name="assessDao">
+			<ref bean="assessDao" />
+		</property>
+		<property name="projectDao">
+			<ref bean="projectDao" />
+		</property> 
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+	</bean>
+	
+	<bean id="newsService"
+		class="com.sales.service.impl.NewsServiceImpl">
+		<property name="newsDao">
+			<ref bean="newsDao" />
+		</property>
+	</bean>
+
+	<bean id="productService"
+		class="com.sales.service.impl.ProductServiceImpl">
+		<property name="productDao">
+			<ref bean="productDao" />
+		</property>
+	</bean>
+
+	<bean id="orderService"
+		class="com.sales.service.impl.OrderServiceImpl">
+		<property name="orderDao">
+			<ref bean="orderDao" />
+		</property>
+	</bean>
+
+	<bean id="requestService"
+		class="com.sales.service.impl.RequestServiceImpl">
+		<property name="requestDao">
+			<ref bean="requestDao" />
+		</property>
+	</bean>
+
+	<bean id="orfqService"
+		class="com.sales.service.impl.OrfqServiceImpl">
+		<property name="orfqDao">
+			<ref bean="orfqDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="sorfqDao">
+			<ref bean="sOrfqDao" />
+		</property>
+		<property name="sUserDao">
+			<ref bean="sUserDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+		<property name="customerOwnerUserDao">
+			<ref bean="customerOwnerUserDao" />
+		</property>
+	</bean>
+
+	<bean id="stockBillService"
+		class="com.sales.service.impl.StockBillServiceImpl">
+		<property name="stockBillDao">
+			<ref bean="stockBillDao" />
+		</property>
+	</bean>
+
+	<bean id="stockBillOutService"
+		class="com.sales.service.impl.StockBillOutServiceImpl">
+		<property name="stockBillOutDao">
+			<ref bean="stockBillOutDao" />
+		</property>
+	</bean>
+
+	<bean id="saleService"
+		class="com.sales.service.impl.SaleServiceImpl">
+		<property name="saleDao">
+			<ref bean="saleDao" />
+		</property>
+	</bean>
+
+	<bean id="k3Service"
+		class="com.sales.service.impl.K3EntryServiceImpl">
+		<property name="k3Dao">
+			<ref bean="k3Dao" />
+		</property>
+	</bean>
+
+	<bean id="billStatusChangeService"
+		class="com.sales.service.impl.SaleBillStatusChangeServiceImpl">
+		<property name="saleStatusChangeDao">
+			<ref bean="billStatusChangeDao" />
+		</property>
+		<property name="saleBillDao">
+			<ref bean="saleBillDao" />
+		</property>
+		<property name="reciveBilInfoDao">
+			<ref bean="k3ReciveBilInfoDAO" />
+		</property>
+		<property name="orderDao">
+			<ref bean="orderDao" />
+		</property>
+		<property name="customerOwnerUserDao">
+			<ref bean="customerOwnerUserDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+		<property name="orfqDao">
+			<ref bean="sOrfqDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+	</bean>
+
+	<bean id="outStockService"
+		class="com.sales.service.impl.OutStockServiceImpl">
+		<property name="outStockDao">
+			<ref bean="outStockDao" />
+		</property>
+	</bean>
+
+	<bean id="receiveBillService"
+		class="com.sales.service.impl.ReceiveBillServiceImpl">
+		<property name="receiveBillDao">
+			<ref bean="receiveBillDao" />
+		</property>
+	</bean>
+
+	<bean id="returnGoodsService"
+		class="com.sales.service.impl.ReturnGoodsServiceImpl">
+		<property name="returnGoodsDao">
+			<ref bean="returnGoodsDao" />
+		</property>
+	</bean>
+
+	<bean id="saleBillService"
+		class="com.sales.service.impl.SaleBillServiceImpl">
+		<property name="saleBillDao">
+			<ref bean="saleBillDao" />
+		</property>
+	</bean>
+	
+	<bean id="quotationService"
+		class="com.sales.service.impl.QuotationServiceImpl">
+		<property name="roleService">
+			<ref bean="roleService" />
+		</property>
+		<property name="parameterService">
+			<ref bean="parameterService" />
+		</property>
+		<property name="quotationDao">
+			<ref bean="quotationDao" />
+		</property>
+		<property name="quotationProductDao">
+			<ref bean="quotationProductDao" />
+		</property>
+		<property name="quotationCodeDao">
+			<ref bean="quotationCodeDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+		<property name="sUserDao">
+			<ref bean="sUserDao" />
+		</property>
+	</bean>
+	
+	<bean id="sUserService"
+		class="com.sales.service.impl.SUserServiceImpl">
+		<property name="sUserDao">
+			<ref bean="sUserDao" />
+		</property>
+		<property name="userDao">
+			<ref bean="userDao" />
+		</property>
+	</bean>
+	
+	<bean id="permissionService"
+		class="com.sales.service.impl.PermissionServiceImpl">
+		<property name="roleService">
+			<ref bean="roleService" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="customerUserDao">
+			<ref bean="customerUserDao" />
+		</property>
+		<property name="customerOwnerUserDao">
+			<ref bean="customerOwnerUserDao" />
+		</property>
+		<property name="roleActionDao">
+			<ref bean="roleActionDao" />
+		</property>
+		<property name="sUserDao">
+			<ref bean="sUserDao" />
+		</property>
+	</bean>	
+	
+	<bean id="informationService"
+		class="com.sales.service.impl.InformationServiceImpl">
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+	</bean>	
+	
+	<bean id="roleService"
+		class="com.sales.service.impl.RoleServiceImpl">
+		<property name="roleDao">
+			<ref bean="roleDao" />
+		</property>
+	</bean>	
+	
+	<bean id="roleActionService"
+		class="com.sales.service.impl.RoleActionServiceImpl">
+		<property name="roleActionDao">
+			<ref bean="roleActionDao" />
+		</property>
+	</bean>
+	
+	<bean id="actionService"
+		class="com.sales.service.impl.ActionServiceImpl">
+		<property name="actionDao">
+			<ref bean="actionDao" />
+		</property>
+	</bean>
+	
+	<bean id="leaveService"
+		class="com.sales.service.impl.SLeaveServiceImpl">
+		<property name="leaveDao">
+			<ref bean="leaveDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="overtimeCollectionDao">
+			<ref bean="overtimeCollectionDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="overtimeService"
+		class="com.sales.service.impl.SOvertimeServiceImpl">
+		<property name="overtimeDao">
+			<ref bean="overtimeDao" />
+		</property>
+        <property name="overtimeCollectionDao">
+			<ref bean="overtimeCollectionDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="tripApplicationService"
+		class="com.sales.service.impl.STripApplicationServiceImpl">
+		<property name="tripApplicationDao">
+			<ref bean="tripApplicationDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+
+	
+	<bean id="expenseApplicationService"
+		class="com.sales.service.impl.SExpenseApplicationServiceImpl">
+		<property name="expenseApplicationDao">
+			<ref bean="expenseApplicationDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="tripExpenseService"
+		class="com.sales.service.impl.STripExpenseSerivceImpl">
+		<property name="tripExpenseDao">
+			<ref bean="tripExpenseDao" />
+		</property>
+	</bean>
+	
+	<bean id="carRepairApplicationService"
+		class="com.sales.service.impl.SCarRepairApplicationServiceImpl">
+		<property name="carRepairApplicationDao">
+			<ref bean="carRepairApplicationDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="carRepairReimbursementService"
+		class="com.sales.service.impl.SCarRepairReimbursementServiceImpl">
+		<property name="carRepairReimbursementDao">
+			<ref bean="carRepairReimbursementDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="workbenchService"
+		class="com.sales.service.impl.WorkbenchServiceImpl">
+		<property name="sModuleDao">
+			<ref bean="sModuleDao" />
+		</property>
+		<property name="sUserModuleDao">
+			<ref bean="sUserModuleDao" />
+		</property>
+	</bean>
+	
+	<bean id="logService"
+		class="com.sales.service.impl.SLogServiceImpl">
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+	</bean>
+	
+	<bean id="parameterService"
+		class="com.sales.service.impl.SParameterServiceImpl">
+		<property name="parameterDao">
+			<ref bean="parameterDao" />
+		</property>
+	</bean>
+	
+	<bean id="performancePlanService"
+		class="com.sales.service.impl.SPerformancePlanServiceImpl">
+		<property name="performancePlanDao">
+			<ref bean="performancePlanDao" />
+		</property>
+		<property name="planItemDao">
+			<ref bean="planItemDao" />
+		</property>
+		<property name="performanceSqlDao">
+			<ref bean="performanceSqlDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+		<property name="userDao">
+			<ref bean="sUserDao" />
+		</property>
+		
+		
+	</bean>
+		
+	<bean id="performanceItemService"
+		class="com.sales.service.impl.SPerformanceItemServiceImpl">
+		<property name="performanceItemDao">
+			<ref bean="performanceItemDao" />
+		</property>
+	</bean>
+	
+	<bean id="userPerformancePlanService"
+		class="com.sales.service.impl.SUserPerformancePlanServiceImpl">
+		<property name="userPerformancePlanDao">
+			<ref bean="userPerformancePlanDao" />
+		</property>
+		<property name="userPerformanceItemDao">
+			<ref bean="userPerformanceItemDao" />
+		</property>
+		<property name="performancePlanDao">
+			<ref bean="performancePlanDao" />
+		</property>
+		<property name="performanceSqlDao">
+			<ref bean="performanceSqlDao" />
+		</property>
+		<property name="statisticsOrderService" ref="k3OrderStatisticsService"/>
+		<property name="statisticsRecieveService" ref="k3RecieveBillStatisticsService"/>
+		<property name="statisticsICSaleService" ref="k3ICSaleStatisticsService"/>
+		<property name="quotaService" ref="k3SalerQuotaService"/>
+	</bean>
+	
+	<bean id="positionService"
+		class="com.sales.service.impl.PositionServiceImpl">
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerService"
+		class="com.sales.service.impl.CustomerServiceImpl">
+		<property name="customerDao">
+			<ref bean="customerDao" />
+		</property>
+		<property name="customerUserDao">
+			<ref bean="customerUserDao" />
+		</property>
+		<property name="customerOwnerUserDao">
+			<ref bean="customerOwnerUserDao" />
+		</property>
+		<property name="customerLevelDao">
+			<ref bean="customerLevelDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerLinkmanService"
+		class="com.sales.service.impl.CustomerLinkmanServiceImpl">
+		<property name="customerLinkmanDao">
+			<ref bean="customerLinkmanDao" />
+		</property>
+		<property name="customerDao">
+			<ref bean="customerDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerEvaluationService"
+		class="com.sales.service.impl.CustomerEvaluationServiceImpl">
+		<property name="customerEvaluationDao">
+			<ref bean="customerEvaluationDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerFinEvaluationService"
+		class="com.sales.service.impl.CustomerFinEvaluationServiceImpl">
+		<property name="customerFinEvaluationDao">
+			<ref bean="customerFinEvaluationDao" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+		<property name="informationDao">
+			<ref bean="informationDao" />
+		</property>
+		<property name="customerUserDao">
+			<ref bean="customerUserDao" />
+		</property>
+		<property name="customerOwnerUserDao">
+			<ref bean="customerOwnerUserDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerProjectService"
+		class="com.sales.service.impl.CustomerProjectServiceImpl">
+		<property name="customerProjectDao">
+			<ref bean="customerProjectDao" />
+		</property>
+		<property name="activityService">
+			<ref bean="activityService" />
+		</property>
+		<property name="logDao">
+			<ref bean="logDao" />
+		</property>
+	</bean>
+	
+    <bean id="expenseReimbursementService"
+		class="com.sales.service.impl.SExpenseReimbursementServiceImpl">
+		<property name="expenseReimbursementDao">
+			<ref bean="expenseReimbursementDao" />
+		</property>
+		<property name="departmentDao">
+			<ref bean="departmentDao" />
+		</property>
+		<property name="positionDao">
+			<ref bean="positionDao" />
+		</property>
+	</bean>
+	
+	<bean id="customerSyncService"
+		class="com.sales.service.impl.CustomerSyncServiceImpl">
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property>
+		<property name="customerDao">
+			<ref bean="customerDao" />
+		</property>
+		<property name="k3CustomerDao">
+			<ref bean="k3CustomerDao" />
+		</property>
+				<property name="tSaleProcessDAO">
+			<ref bean="tSaleProcessDAO" />
+		</property>
+		<property name="saleProcessDAO">
+			<ref bean="saleProcessDAO" />
+		</property>
+		
+	</bean>
+	
+	<bean id="reportService"
+		class="com.sales.service.impl.ReportServiceImpl">
+		<property name="roleService">
+			<ref bean="roleService" />
+		</property>
+		<property name="quotationDao">
+			<ref bean="quotationDao" />
+		</property>
+		<property name="saleProcessDAO">
+			<ref bean="saleProcessDAO" />
+		</property>
+	</bean>
+	
+	<!-- 销售业绩统计报表业务类 -->
+	<bean id="k3OrderStatisticsService"
+		class="com.sales.service.impl.K3OrderStatisticsServiceImpl">
+		<property name="statisticsDAO">
+			<ref bean="k3OrderStatisticsDao" />
+		</property>
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property>
+	</bean>
+	
+	<!-- 销售收款统计报表业务类 -->
+	<bean id="k3RecieveBillStatisticsService"
+		class="com.sales.service.impl.K3RecieveBillStatisticsServiceImpl">
+		<property name="statisticsDAO">
+			<ref bean="k3RecieveBillStatisticsDao" />
+		</property>
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property>
+	</bean>
+	
+	<!-- 销售发票开票金额统计报表业务类 -->
+	<bean id="k3ICSaleStatisticsService"
+		class="com.sales.service.impl.K3ICSaleStatisticsServiceImpl">
+		<property name="statisticsDAO">
+			<ref bean="k3ICSaleStatisticsDao" />
+		</property>
+		<property name="userService">
+			<ref bean="sUserService" />
+		</property>
+	</bean>
+	
+	<!-- 销售指标管理业务类 -->
+	<bean id="k3SalerQuotaService"
+		class="com.sales.service.impl.K3SalerQuotaServiceImpl">
+		<property name="quotaDAO">
+			<ref bean="k3SalerQuotaDao" />
+		</property>
+	</bean>
+	 
+	<!-- 客户潜力产品管理业务类 -->
+	<bean id="customerPotentialProductService"
+		class="com.sales.service.impl.CustomerPotentialProductServiceImpl">
+		<property name="customerPotentialProductDao">
+			<ref bean="customerPotentialProductDao" />
+		</property>
+	</bean>
+	
+	<!-- K3采购订单业务管理业务接口  -->
+	<bean id="poOrderService"
+		class="com.sales.service.impl.POOrderServiceImpl">
+		<property name="orderDAO">
+			<ref bean="poOrderDAO" />
+		</property>
+	</bean>
+</beans>

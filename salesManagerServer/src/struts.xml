@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+    <constant name="struts.devMode" value="true" />
+
+	<constant name="struts.locale" value="zh_CN" />
+	
+	<constant name="struts.custom.i18n.resources" value="messages" />
+	
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.ui.templateDir" value="template" />
+	
+	<constant name="struts.multipart.maxSize" value="5242880" />
+	 <!-- 设置浏览器是否缓存静态内容,默认值为true(生产环境下使用),开发阶段最好关闭 -->   
+    <constant name="struts.serve.static.browserCache" value="false" />  
+	
+	<package name="base" extends="json-default">
+
+		<interceptors>
+
+			<interceptor-stack name="sysStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="userInterceptor"/>
+				 <interceptor-ref name="fileUpload">
+    				<param name="maximumSize">102400000</param>
+    			</interceptor-ref>
+			</interceptor-stack>
+			
+			<!-- 系统自定义拦截器,用于登录用户session验证 -->
+			<interceptor name="userInterceptor"
+				class="com.sales.action.interceptor.UserInterceptor">
+				<param name="excludeMethods">userLogin,login</param>
+			</interceptor>
+			
+		</interceptors>
+		
+        <default-interceptor-ref name="sysStack">
+		</default-interceptor-ref>
+
+        <global-results>
+			<result name="sysError">/jsp/common/500.jsp</result>
+			<result name="redirectWelcome" type="redirect">/</result>
+		</global-results>
+	</package>
+
+	<include file="struts-lq.xml"></include>
+	<include file="struts-ly.xml"></include>
+	<include file="struts-ftd.xml"></include>
+	<include file="struts-app.xml"></include>
+</struts>    

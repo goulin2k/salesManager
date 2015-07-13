@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="tripApp" name="出差流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="27,179,48,48" name="启动">
+      <transition to="出差申请"/>
+   </start>
+   <task assignee="#{userId}" g="102,179,92,52" name="出差申请">
+      <transition g="-16,-23" name="申请" to="上级审批"/>
+   </task>
+   <task form="process!toApprovalTrip" g="249,183,92,52" name="上级审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${上级主管}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-18,-23" name="批准" to="后勤归档"/>
+      <transition g="292,267;148,265:-17,7" name="驳回" to="出差申请"/>
+   </task>
+   <task form="process!toApprovalTrip" g="395,183,92,52" name="后勤归档">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${销售助理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-29,-22" name="批准" to="结束"/>
+      <transition g="297,117;253,143:9,-32" name="驳回" to="出差申请"/>
+   </task>
+   <end g="540,189,48,48" name="结束"/>
+   
+   
+</process>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="carRepairRei" name="车辆维修报销流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="23,152,48,48" name="start1">
+      <transition to="车辆维修报销"/>
+   </start>
+   <task assignee="#{userId}" g="104,151,92,52" name="车辆维修报销">
+      <transition g="-15,-22" name="申请" to="后勤审批"/>
+   </task>   
+   <task form="process!toApprovalCarRei" g="279,153,92,52" name="后勤审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-14,-22" name="批准" to="总经理审批"/>
+      <transition g="327,241;270,243;155,241:-69,-22" name="驳回" to="车辆维修报销"/>
+   </task>
+   <task form="process!toApprovalCarRei" g="439,154,92,52" name="总经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${总经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition name="批准" to="出纳审批" g="-13,-35"/>
+      <transition g="484,276;330,281;152,283:-69,-22" name="驳回" to="车辆维修报销"/>
+   </task>
+   <task form="process!toApprovalCarRei" name="出纳审批" g="544,154,92,52">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${出纳}"/>
+			</field>
+	  </assignment-handler>
+      <transition name="批准" to="end1" g="-8,-35"/>
+      <transition name="驳回" to="车辆维修报销" g="590,108;148,107:-93,-22"/>
+   </task>
+   <end g="648,157,48,48" name="end1"/>
+</process>

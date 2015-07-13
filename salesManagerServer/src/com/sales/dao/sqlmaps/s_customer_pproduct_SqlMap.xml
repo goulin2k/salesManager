@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_customer_pproduct" >
+  <resultMap id="result_pproduct" class="com.sales.model.SCustomerPProduct" >
+    <result column="potential_product_id" property="potentialProductId" jdbcType="INTEGER" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="product_description" property="productDescription" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="last_update_time" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    <result column="is_validate" property="isValidate" jdbcType="BOOLEAN" />
+    
+    <result column="customer_name" property="customerName" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <!--  根据客户id查询当前有效的潜力产品描述 -->
+  <select id="selectById" resultMap="result_pproduct" parameterClass="java.lang.Integer" >
+    select potential_product_id, customer_id, customer_name, product_description, user_name, last_update_time, is_validate
+	from s_customer_potentialProdct 
+	where customer_id = #customerId:INTEGER# and is_validate = 1
+  </select>
+  
+  <!-- 新增客户潜力产品记录 -->
+  <insert id="insert" parameterClass="com.sales.model.SCustomerPProduct" >
+    insert into s_customer_potentialProdct (customer_id, customer_name, product_description,
+    	user_name)
+    values (#customerId:INTEGER#, #customerName:VARCHAR#, #productDescription:VARCHAR#,
+    	#userName:VARCHAR#)
+  </insert>
+  
+  <!--  修改原来的潜力产品记录为无效 -->
+  <update id="updateInValid" parameterClass="java.lang.Integer" >
+    update s_customer_potentialProdct
+    set is_validate = 0
+    where potential_product_id = #potentialProductId:INTEGER#
+  </update>
+  
+ <!-- 查询修改的历史记录 --> 
+  <select id="selectHostryByCustomerId" resultMap="result_pproduct" parameterClass="java.lang.Integer" >
+    select potential_product_id, customer_id, customer_name, product_description, user_name, last_update_time, is_validate
+	from s_customer_potentialProdct 
+	where customer_id = #customerId:INTEGER#
+	order by last_update_time desc
+  </select>
+</sqlMap>

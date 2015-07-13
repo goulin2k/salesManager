@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+
+    <package name="departmentinfo" extends="base">
+
+	      <action name="department" class="departmentAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="treePage">/jsp/department/departmentTree.jsp</result> 
+	        <result name="treedemo">/jsp/department/departmentTreeDemo.jsp</result> 
+	        <result name="list">/jsp/department/departmentList.jsp</result> 
+	        <result  name="show">/jsp/department/showDepartment.jsp</result>
+	        <result  name="add">/jsp/department/addDepartment.jsp</result>
+	      </action>
+	      
+	      <action name="product" class="productAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="treePage">/jsp/productTree.jsp</result> 
+	        <result name="list">/jsp/openwindow/productList.jsp</result> 
+	      </action>
+
+	      <action name="project" class="projectAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result> 
+	        <result name="list">/jsp/salesactivity/projectList.jsp</result> 
+	        <result  name="show">/jsp/salesactivity/projectShow.jsp</result>
+	        <result  name="edit">/jsp/salesactivity/editProject.jsp</result>
+	        <result  name="add">/jsp/salesactivity/projectAdd.jsp</result>
+	        <result  name="get">/jsp/salesactivity/projectUpdate.jsp</result>
+	        
+	        <result name="projectlist" type="redirect">project</result> 
+	        <result  name="openlist">/jsp/openwindow/projectList.jsp</result>
+	      </action>
+
+	      <action name="assess" class="assessAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>  
+	        <result name="project" type="redirect">project!get?project.projectId=${projectId}</result>
+	        <result name="add">/jsp/salesactivity/assessProject.jsp</result>
+	        <result name="get">/jsp/salesactivity/assessUpdate.jsp</result>
+	      </action>
+
+	      <action name="news" class="newsAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>  
+	        <result name="add" type="redirect">news!list</result>
+	        <result name="update" type="redirect">news!list</result>
+	        <result name="delete" type="redirect">news!list</result>
+	        <result name="editNew">/jsp/manage/newsAdd.jsp</result>
+	        <result name="show">/jsp/manage/newsUpdate.jsp</result>
+	        <result name="list">/jsp/manage/newsList.jsp</result>
+	        <result name="showNews">/jsp/manage/newsShow.jsp</result>
+	      </action>
+
+	      <action name="dispatch" class="dispatchAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>  
+	        <result name="add" type="redirect">dispatch!list</result>
+	        <result name="update" type="redirect">dispatch!list</result>
+	        <result name="delete" type="redirect">dispatch!list</result>
+	        <result name="editNew">/jsp/manage/dispatchAdd.jsp</result>
+	        <result name="show">/jsp/manage/dispatchUpdate.jsp</result>
+	        <result name="list">/jsp/manage/dispatchList.jsp</result>
+	      </action>
+	      
+	      <action name="activity" class="activityAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="pageList">/jsp/salesactivity/activityList.jsp</result> 
+	        <result name="add">/jsp/salesactivity/activityAdd.jsp</result> 
+	        <result name="list" type="redirect">activity!index</result>
+	        <result name="showActivityProject">/jsp/salesactivity/activityProject.jsp</result> 
+	        <result name="projectlist" type="redirect">project!index</result>
+	        <result name="show">/jsp/salesactivity/activityShow.jsp</result> 
+	        <!-- <result name="showModal">/jsp/fragments/activity_fragment.jsp</result>  -->
+	        <result name="get">/jsp/salesactivity/activityAdd.jsp</result> 
+	        <result name="getActivityByProId">/jsp/salesactivity/activityCustomerProject.jsp</result> 
+	      </action>
+	      
+	      <!-- 销售计划完成情况统计表 -->
+	       <action name="salePlanReport" class="salePlanReportAction" method="{1}">
+	        	<result name="reportWeekly">/jsp/salesactivity/projectWeeklyReport.jsp</result>  
+	        	<result name="detailWeekly">/jsp/salesactivity/projectWeeklyDetail.jsp</result> 
+	      </action>
+	      
+	      <action name="quotation" class="quotationAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="pageList">/jsp/k3/quotationList.jsp</result> 
+	        <result name="add">/jsp/k3/quotationAdd.jsp</result>  
+	        <result name="show">/jsp/k3/quotationShow.jsp</result>  
+	        <result name="reply">/jsp/k3/quotationUpdate.jsp</result>  
+	        <result name="list" type="redirect">quotation!index</result>
+	        <result name="toOrfq">/jsp/k3/sOrfqAdd.jsp</result>  
+	      </action>
+	      
+	      <action name="orfq" class="orfqAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="pageList">/jsp/k3/orfqList.jsp</result> 
+	        <result name="show">/jsp/k3/orfqShow.jsp</result>  
+	        <result name="add">/jsp/k3/orfqAdd.jsp</result>   
+	        <result name="showAll">/jsp/k3/orfqAllList.jsp</result>  
+	        <result name="list" type="redirect">orfq!index?verifyName=2</result>
+	        <result name="salesPageList">/jsp/k3/sOrfqList.jsp</result>    
+	        <result name="addSOrfq">/jsp/k3/sOrfqAdd.jsp</result>   
+	        <result name="addOkList" type="redirect">orfq!index</result>
+	        <result name="showSorfq">/jsp/k3/sOrfqShow.jsp</result>  
+	        <result name="verify">/jsp/k3/sOrfqVerify.jsp</result>  
+	        <result name="updateSOrfq">/jsp/k3/sOrfqAdd.jsp</result>  
+	      </action> 
+	      
+	      <action name="order" class="orderAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="pageList">/jsp/k3/orderList.jsp</result> 
+	        <result name="show">/jsp/k3/orderShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/orderAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="request" class="requestAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/requestList.jsp</result> 
+	        <result name="show">/jsp/k3/requestShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/requestAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="poorder" class="poOrderAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/poOrderList.jsp</result> 
+	        <result name="show">/jsp/k3/poOrderShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/poOrderAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="outStock" class="outStockAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/outStockList.jsp</result> 
+	        <result name="show">/jsp/k3/outStockShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/outStockAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="receiveBill" class="receiveBillAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/receiveBillList.jsp</result> 
+	        <result name="show">/jsp/k3/receiveBillShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/receiveBillAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="returnGoods" class="returnGoodsAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/returnGoodsList.jsp</result> 
+	        <result name="show">/jsp/k3/returnGoodsShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/returnGoodsAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="sale" class="saleAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/saleList.jsp</result> 
+	        <result name="show">/jsp/k3/saleShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/saleAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="stockBill" class="stockBillAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/stockBillList.jsp</result> 
+	        <result name="show">/jsp/k3/stockBillShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/stockBillAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="stockBillOut" class="stockBillOutAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/stockBillOutList.jsp</result> 
+	        <result name="show">/jsp/k3/stockBillOutShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/stockBillOutAllList.jsp</result>  
+	      </action>
+	      
+	      <action name="stockBillOut" class="stockBillOutAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="list">/jsp/k3/stockBillOutList.jsp</result> 
+	        <result name="show">/jsp/k3/stockBillOutShow.jsp</result>  
+	        <result name="showAll">/jsp/k3/stockBillOutAllList.jsp</result>  
+	      </action>
+	      
+   </package>
+    
+</struts>    

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process key="expenseRei" name="费用报销流程" xmlns="http://jbpm.org/4.4/jpdl">
+   <start g="8,157,48,48" name="start1">
+      <transition to="费用报销"/>
+   </start>  
+   <task assignee="#{userId}" g="71,152,92,52" name="费用报销">
+      <transition g="-16,-20" name="申请" to="员工级别"/>
+   </task>
+   <decision g="188,157,48,48" name="员工级别">
+   	  <transition to="部门审批">
+      	<condition expr="#{orgPosition=='普通员工'}"/>
+      </transition>
+      <transition to="分管副总审批">
+      	<condition expr="#{orgPosition=='部门经理'}"/>
+      </transition>
+      <transition to="财务审批">
+      	<condition expr="#{orgPosition=='副总经理'}"/>
+      </transition>
+   </decision> 
+   
+   <task form="process!toApprovalEr" g="286,85,92,52" name="部门审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${上级主管}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-15,-21" name="批准" to="分管副总审批"/>
+      <transition g="272,131;126,101:-14,-25" name="驳回" to="费用报销"/>
+   </task>
+   
+   <task form="process!toApprovalEr" g="303,179,92,52" name="分管副总审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${分管副总}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-15,-21" name="批准" to="财务审批"/>
+      <transition g="247,326:-14,-25" name="驳回" to="费用报销"/>
+   </task>
+   
+   <task form="process!toApprovalEr" g="439,87,92,52" name="财务审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${后勤部经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-14,-22" name="批准" to="总经理审批"/>
+      <transition g="411,312:-69,-22" name="驳回" to="费用报销"/>
+   </task>
+   
+   <task form="process!toApprovalEr" g="476,183,92,52" name="总经理审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${总经理}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="-11,-31" name="批准" to="出纳审批"/>
+      <transition g="518,277;330,281;152,283:-69,-22" name="驳回" to="费用报销"/>
+   </task>
+   <task form="process!toApprovalEr" g="592,186,92,52" name="出纳审批">
+      <assignment-handler class="com.sales.workflow.UserProcessAssignHandler">
+			<field name="role">
+				<string value="${出纳}"/>
+			</field>
+	  </assignment-handler>
+      <transition g="2,-13" name="批准" to="end1"/>
+      <transition g="432,332:42,-23" name="驳回" to="费用报销"/>
+   </task>
+   <end g="619,257,48,48" name="end1"/>
+   
+</process>

@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_icsale_statistics" >
+  <resultMap id="BaseResultMap" class="com.sales.model.K3OrderStatistics" >
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="month" property="month" jdbcType="INTEGER" />
+    <result column="week" property="week" jdbcType="INTEGER" />
+    <result column="day" property="day" jdbcType="INTEGER" />
+    <result column="empId" property="empId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    
+    <result column="empName" property="empName" jdbcType="VARCHAR" />
+    <result column="depName" property="depName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="WeekResultMap" class="com.sales.model.K3OrderStatistics" >
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="week" property="week" jdbcType="INTEGER" />
+    <result column="empId" property="empId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    
+    <result column="empName" property="empName" jdbcType="VARCHAR" />
+    <result column="depName" property="depName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="MonthResultMap" class="com.sales.model.K3OrderStatistics" >
+    <result column="year" property="year" jdbcType="INTEGER" />
+    <result column="month" property="month" jdbcType="INTEGER" />
+    <result column="empId" property="empId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DOUBLE" />
+    
+    <result column="empName" property="empName" jdbcType="VARCHAR" />
+    <result column="depName" property="depName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="statBetweenDate" resultClass="java.lang.Double" parameterClass="java.util.Map">
+  	SELECT isnull(sum(icsale_amount),0) as sumAmount
+	FROM sale_order_statistics st INNER JOIN t_emp emp on st.empId = emp.FItemID
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="start">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     >= 
+		    ]]>  $start$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="end">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     <= 
+		    ]]>  $end$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="empNames">
+			emp.FName IN $empNames$
+	    </isNotEmpty>
+	</dynamic>	
+  </select>
+  
+  <select id="statByDay" resultMap="BaseResultMap" parameterClass="java.util.Map">
+  	SELECT	year,month,week,day,depId,dp.FName as depName, empId, emp.FName as empName, sum(icsale_amount) as amount
+	FROM	sale_order_statistics st INNER JOIN t_emp emp on st.empId = emp.FItemID
+			INNER JOIN t_Department dp on st.depId = dp.FItemID	
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="start">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     >= 
+		    ]]>  $start$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="end">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     <= 
+		    ]]>  $end$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="empNames">
+			emp.FName IN $empNames$
+	    </isNotEmpty>
+	</dynamic>
+	GROUP BY year,month,week,day,depId,dp.FName, empId, emp.FName
+  </select>
+  
+  <select id="statByWeek" resultMap="WeekResultMap" parameterClass="java.util.Map">
+  	SELECT	year,week,depId,dp.FName as depName, empId, emp.FName as empName, sum(icsale_amount) as amount
+	FROM	sale_order_statistics st INNER JOIN t_emp emp on st.empId = emp.FItemID
+			INNER JOIN t_Department dp on st.depId = dp.FItemID	
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="start">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     >= 
+		    ]]>  $start$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="end">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     <= 
+		    ]]>  $end$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="empNames">
+			emp.FName IN $empNames$
+	    </isNotEmpty>
+	</dynamic>
+	GROUP BY year,week,depId,dp.FName, empId, emp.FName
+  </select>
+  
+  <select id="statByMonth" resultMap="MonthResultMap" parameterClass="java.util.Map">
+  	SELECT	year,month,depId,dp.FName as depName, empId, emp.FName as empName, sum(icsale_amount) as amount
+	FROM	sale_order_statistics st INNER JOIN t_emp emp on st.empId = emp.FItemID
+			INNER JOIN t_Department dp on st.depId = dp.FItemID	
+	<dynamic prepend="where">
+	    <isNotEmpty prepend="and" property="start">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     >= 
+		    ]]>  $start$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="end">
+			st.year*10000 + st.month *100 + st.day <![CDATA[
+		     <= 
+		    ]]>  $end$
+	    </isNotEmpty>
+	    <isNotEmpty prepend="and" property="empNames">
+			emp.FName IN $empNames$
+	    </isNotEmpty>
+	</dynamic>
+	GROUP BY year,month,depId,dp.FName, empId, emp.FName
+  </select>
+  
+  <update id="sumChildrenOrder" parameterClass="java.util.Map">
+  	UPDATE [sale_order_statistics]
+	SET [icsale_amount] = v.amount
+	FROM 
+		(SELECT year, month, day, sum([icsale_amount] ) as amount
+		FROM [sale_order_statistics] st, t_emp emp 
+		WHERE emp.fname in $childrenNames$ and st.empId = emp.FItemID
+		GROUP BY  year, month, day) as v, t_emp emp
+	WHERE [sale_order_statistics].year = v.year
+		AND [sale_order_statistics].month = v.month
+		AND [sale_order_statistics].day = v.day 
+		AND [sale_order_statistics].empId = emp.FItemID
+		AND emp.fName = #empName#
+  </update>
+</sqlMap>

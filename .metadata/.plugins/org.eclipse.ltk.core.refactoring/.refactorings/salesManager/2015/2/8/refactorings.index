@@ -1,0 +1,5 @@
+1423968174409	Rename type 'MessageActivity'
+1423968391609	Rename local variable 'activityList'
+1423969072865	Extract method 'writeJson'
+1423969122162	Pull up 'writeJson(JSONObject)' to 'BaseAction'
+1423969200809	Rename local variable 'json'

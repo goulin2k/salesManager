@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_project" >
+  <resultMap id="salesProjectResult" class="com.sales.model.SSalesProject" > 
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="topical" property="topical" jdbcType="VARCHAR" />
+    <result column="goal" property="goal" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="response_user_id" property="responseUserId" jdbcType="INTEGER" /> 
+    <result column="response_user_name" property="responseUserName" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" /> 
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="completion_rate" property="completionRate" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="completion_time" property="completionTime" jdbcType="DATE" />  
+    <result column="enumeration_id" property="enumerationId" jdbcType="INTEGER" /> 
+    <result column="enumeration_name" property="enumerationName" jdbcType="VARCHAR" />
+    <result column="customer_project_id" property="customerProjectId" jdbcType="INTEGER" /> 
+    <result column="customer_project_name" property="customerProjectName" jdbcType="VARCHAR" />
+    <result column="project_id" property="activityList" select="s_sales_activity.getActivityByProjectId" /> 
+    <result column="project_id"  property="attentionUserList" select="s_sales_project.getAttentionUserByProjectId" /> 
+    <result column="project_id" property="assessList" select="s_sales_assess.getSalesAssessByProjectId" /> 
+    <result column="customer_level" property="customerLevel" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="commit_time" property="commitTime" jdbcType="TIMESTAMP"/>
+  </resultMap>
+  
+  <resultMap id="projectListResult" class="com.sales.model.SSalesProject" > 
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="topical" property="topical" jdbcType="VARCHAR" />
+    <result column="goal" property="goal" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="response_user_id" property="responseUserId" jdbcType="INTEGER" /> 
+    <result column="response_user_name" property="responseUserName" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" /> 
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="completion_rate" property="completionRate" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="completion_time" property="completionTime" jdbcType="DATE" />   
+    <result column="enumeration_id" property="enumerationId" jdbcType="INTEGER" /> 
+    <result column="enumeration_name" property="enumerationName" jdbcType="VARCHAR" />
+    <result column="customer_project_id" property="customerProjectId" jdbcType="INTEGER" /> 
+    <result column="customer_project_name" property="customerProjectName" jdbcType="VARCHAR" />
+    <result column="customer_level" property="customerLevel" jdbcType="VARCHAR"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="assess_count" property="assessListCount" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="commit_time" property="commitTime" jdbcType="TIMESTAMP"/>
+    <result column="activity_count" property="activityCount" jdbcType="INTEGER"/>
+  </resultMap>
+   
+  <resultMap id="sUserResult" class="com.sales.model.SUser" > 
+    <result column="user_id" property="userId" jdbcType="INTEGER" /> 
+    <result column="user_name" property="userName" jdbcType="VARCHAR" /> 
+  </resultMap> 
+  
+  <resultMap id="statisticsResult" class="com.sales.model.SalePlanStatistics" > 
+    <result column="user_id" property="userId" jdbcType="INTEGER" /> 
+    <result column="user_name" property="userName" jdbcType="VARCHAR" /> 
+    <result column="depart_name" property="departmentName" jdbcType="VARCHAR" /> 
+    <result column="pCount" property="plans" jdbcType="INTEGER" /> 
+    <result column="cCount" property="completes" jdbcType="INTEGER" /> 
+  </resultMap> 
+  
+  <resultMap id="statisticsPersonResult" class="com.sales.model.SalePlanWithActivityVO" > 
+    <result column="project_id" 	property="planId" jdbcType="INTEGER" /> 
+    <result column="plan_topical" 	property="planTopical" jdbcType="VARCHAR" /> 
+    <result column="plan_time" 		property="planTime" jdbcType="DATE" /> 
+    <result column="customer_project_id" property="saleProjectId" jdbcType="INTEGER" /> 
+    <result column="project_name" 	property="saleProjectName" jdbcType="VARCHAR" /> 
+    <result column="customer_id" 	property="customerId" jdbcType="INTEGER" /> 
+    <result column="customer_name" 	property="customerName" jdbcType="VARCHAR" /> 
+    <result column="activity_id" 	property="activityId" jdbcType="INTEGER" /> 
+    <result column="activity_topical" property="activityTopical" jdbcType="VARCHAR" /> 
+    <result column="activity_date" 	property="activityTime" jdbcType="DATE" /> 
+    <result column="activity_type" 	property="activityTypeName" jdbcType="VARCHAR" />
+    <result column="visit_person" 	property="visitPerson" jdbcType="VARCHAR" />
+    <result column="customer_level" property="customerLevel" jdbcType="VARCHAR"/>
+    <result column="create_time"    property="createTime" jdbcType="TIMESTAMP"/>
+  </resultMap> 
+  
+  <select id="getProjectList" resultMap="projectListResult" parameterClass="java.util.Map" > 
+    SELECT v.*, v2.ct as assess_count, v3.act as activity_count FROM 
+	(SELECT DISTINCT p.project_id, p.topical, p.goal, p.start_time, p.end_time, p.response_user_id, u1.user_name AS response_user_name,
+      p.create_user_id, u2.user_name AS create_user_name,p.comment, p.completion_rate, p.customer_id, c.FName AS customer_name, 
+      p.completion_time, p.enumeration_id, e.enumeration_name, p.customer_project_id, 
+      s.name AS customer_project_name , en.`enumeration_name` AS customer_level, p.create_time, p.commit_time, p.status
+    FROM s_user u1, s_user u2, s_enumeration e, s_sales_project p 
+    	LEFT JOIN s_project_attention_user a ON p.project_id = a.project_id  
+    	LEFT JOIN t_customer c ON p.customer_id = c.customer_id 
+    	LEFT JOIN s_customer_project s ON p.customer_project_id = s.project_id 
+    	LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+    WHERE p.response_user_id = u1.user_id AND p.create_user_id = u2.user_id AND e.enumeration_id = p.enumeration_id 
+    <dynamic> 
+		<isNotNull property="topical" prepend="and">
+		    p.topical like '%$topical$%'
+		</isNotNull>
+		<isNotNull property="enumerationId" prepend="and">
+		    p.enumeration_id = #enumerationId#
+		</isNotNull>
+		<isNotNull property="responseUserName" prepend="and">
+		    u1.user_name like '%$responseUserName$%'
+		</isNotNull>
+		<isNotNull property="createUserName" prepend="and">
+		    u2.user_name like '%$createUserName$%'
+		</isNotNull>
+		<isEqual property="status"  prepend="and" compareValue="1">
+		    p.status = #status#
+		</isEqual>
+		<isEqual property="status"  prepend="and" compareValue="0">
+		    p.status = #status# and p.create_user_id = #createUserId#
+		</isEqual>
+	    <isNotNull property="startTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull>
+	    <isNotNull property="assessUser" prepend="and">
+	    	EXISTS (SELECT pa.project_id FROM s_sales_assess pa , s_user u
+	    		WHERE p.`project_id` = pa.`project_id` and pa.assess_user_id=u.user_id and u.user_name like '%$assessUser$%')
+	    </isNotNull>	 
+		<isNotNull property="customerId" prepend="and">
+		    p.customer_id = #customerId#
+		</isNotNull>   
+		<isNotNull property="childUserIds" prepend="and">
+		    (p.create_user_id in $childUserIds$ or p.response_user_id in $childUserIds$ or a.user_id in $childUserIds$)
+		</isNotNull>
+	</dynamic>
+	) AS v
+		LEFT JOIN (
+			SELECT  project_id, COUNT(*) AS ct 
+			FROM 	`s_sales_assess` 
+			GROUP BY   project_id
+		) AS v2 ON v.project_id = v2.project_id
+		LEFT JOIN (
+			SELECT  project_id, COUNT(*) AS act 
+			FROM 	`s_sales_activity` 
+			GROUP BY   project_id
+		) AS v3 ON v.project_id = v3.project_id
+	order by v.start_time desc
+	<dynamic> 
+		<isNotNull property="pageSize" prepend=" ">
+		    limit #startNumber#, #pageSize#
+		</isNotNull>
+	</dynamic> 
+  </select>
+  
+  <select id="getProjectListM" resultMap="projectListResult" parameterClass="java.util.Map" > 
+    SELECT v.*, v2.ct as assess_count, v3.act as activity_count FROM 
+	(SELECT DISTINCT p.project_id, p.topical, p.goal, p.start_time, p.end_time, p.response_user_id, u1.user_name AS response_user_name,
+      p.create_user_id, u2.user_name AS create_user_name,p.comment, p.completion_rate, p.customer_id, c.FName AS customer_name, 
+      p.completion_time, p.enumeration_id, e.enumeration_name, p.customer_project_id, 
+      s.name AS customer_project_name , en.`enumeration_name` AS customer_level, p.create_time, p.commit_time, p.status
+    FROM s_user u1, s_user u2, s_enumeration e, s_sales_project p 
+    	LEFT JOIN s_project_attention_user a ON p.project_id = a.project_id  
+    	LEFT JOIN t_customer c ON p.customer_id = c.customer_id 
+    	LEFT JOIN s_customer_project s ON p.customer_project_id = s.project_id 
+    	LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+    WHERE p.response_user_id = u1.user_id AND p.create_user_id = u2.user_id AND e.enumeration_id = p.enumeration_id 
+    <dynamic> 
+		
+		<isNotNull property="responseUserId" prepend="and">
+		    p.response_user_id = #responseUserId#
+		</isNotNull>
+		
+	    <isNotNull property="planStartTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #planStartTime#
+	    </isNotNull>
+	    <isNotNull property="planEndTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #planEndTime#
+	    </isNotNull> 
+	    
+	    <isNotNull property="completStartTime" prepend="and">
+		    p.end_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #completStartTime#
+	    </isNotNull>
+	    <isNotNull property="completEndTime" prepend="and">
+		    p.end_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #completEndTime#
+	    </isNotNull> 
+	    
+	      
+		<isNotNull property="childUserIds" prepend="and">
+		    (p.create_user_id in $childUserIds$ or p.response_user_id in $childUserIds$ or a.user_id in $childUserIds$)
+		</isNotNull>
+	</dynamic>
+	) AS v
+		LEFT JOIN (
+			SELECT  project_id, COUNT(*) AS ct 
+			FROM 	`s_sales_assess` 
+			GROUP BY   project_id
+		) AS v2 ON v.project_id = v2.project_id
+		LEFT JOIN (
+			SELECT  project_id, COUNT(*) AS act 
+			FROM 	`s_sales_activity` 
+			GROUP BY   project_id
+		) AS v3 ON v.project_id = v3.project_id
+	order by v.$orderBy$ $orderType$
+	<dynamic> 
+		<isNotNull property="pageSize" prepend=" ">
+		    limit #startNumber#, #pageSize#
+		</isNotNull>
+	</dynamic> 
+  </select>
+  
+  <select id="getProjectCount" resultClass="java.lang.Integer" parameterClass="java.util.Map" > 
+    select count(distinct p.project_id)
+    from s_user u1, s_user u2, s_sales_project p left join s_project_attention_user a on p.project_id = a.project_id
+    where p.response_user_id = u1.user_id and p.create_user_id = u2.user_id 
+    <dynamic> 
+		<isNotNull property="topical" prepend="and">
+		    p.topical like '%$topical$%'
+		</isNotNull>
+		<isNotNull property="enumerationId" prepend="and">
+		    p.enumeration_id = #enumerationId#
+		</isNotNull>
+		<isNotNull property="responseUserName" prepend="and">
+		    u1.user_name like '%$responseUserName$%'
+		</isNotNull>
+		<isNotNull property="createUserName" prepend="and">
+		    u2.user_name like '%$createUserName$%'
+		</isNotNull>
+		<isEqual property="status"  prepend="and" compareValue="1">
+		    p.status = #status#
+		</isEqual>
+		<isEqual property="status"  prepend="and" compareValue="0">
+		    p.status = #status# and p.create_user_id = #createUserId#
+		</isEqual>
+	    <isNotNull property="startTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerId" prepend="and">
+		    p.customer_id = #customerId#
+		</isNotNull> 
+		<isNotNull property="childUserIds" prepend="and">
+		    (p.create_user_id in $childUserIds$ or p.response_user_id in $childUserIds$ or a.user_id in $childUserIds$)
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <select id="getProjectCountM" resultClass="java.lang.Integer" parameterClass="java.util.Map" > 
+    select count(distinct p.project_id)
+    from  s_sales_project p left join s_project_attention_user a on p.project_id = a.project_id
+    where 1=1
+    <dynamic> 
+		
+		<isNotNull property="responseUserId" prepend="and">
+		    p.response_user_id = #responseUserId#
+		</isNotNull>
+		
+	    <isNotNull property="planStartTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #planStartTime#
+	    </isNotNull>
+	    <isNotNull property="planEndTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #planEndTime#
+	    </isNotNull> 
+	    
+	    <isNotNull property="completStartTime" prepend="and">
+		    p.end_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #completStartTime#
+	    </isNotNull>
+	    <isNotNull property="completEndTime" prepend="and">
+		    p.end_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #completEndTime#
+	    </isNotNull> 
+		 
+		<isNotNull property="childUserIds" prepend="and">
+		    (p.create_user_id in $childUserIds$ or p.response_user_id in $childUserIds$ or a.user_id in $childUserIds$)
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <select id="getProjectById" resultMap="salesProjectResult" parameterClass="java.util.HashMap" > 
+    select distinct p.project_id, p.topical, p.goal, p.start_time, p.end_time, p.response_user_id, u1.user_name as response_user_name,
+      p.create_user_id, u2.user_name as create_user_name,p.comment, p.completion_rate, p.customer_id, c.FName as customer_name,
+      p.completion_time, p.enumeration_id, e.enumeration_name, p.customer_project_id, 
+      s.name as customer_project_name, en.`enumeration_name` AS customer_level, p.create_time,p.commit_time, p.status
+    from s_user u1, s_user u2, s_enumeration e, s_sales_project p left join t_customer c on p.customer_id = c.customer_id
+    	 left join s_customer_project s on p.customer_project_id = s.project_id  
+    	 left join s_project_attention_user a on p.project_id = a.project_id
+    	 LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+    where p.project_id = #projectId:INTEGER# and p.response_user_id = u1.user_id and p.create_user_id = u2.user_id 
+    	and p.enumeration_id = e.enumeration_id 
+		<isNotNull property="childUserIds" prepend="and">
+		    (p.create_user_id in $childUserIds$ or p.response_user_id in $childUserIds$ or a.user_id in $childUserIds$)
+		</isNotNull> 
+  </select>
+  
+  <select id="getAttentionUserByProjectId" resultMap="sUserResult" parameterClass="java.lang.Integer" > 
+    select u.user_id, u.user_name
+    from s_project_attention_user a, s_user u
+    where a.project_id = #projectId:INTEGER# and a.user_id = u.user_id
+  </select>
+   
+  <delete id="abatorgenerated_deleteByPrimaryKey" parameterClass="com.sales.model.SSalesProject" >
+    <!--
+      WARNING - This element is automatically generated by Abator for iBATIS, do not modify.
+      This element was generated on Tue Apr 23 17:36:31 CST 2013.
+    -->
+    delete from s_sales_project
+    where project_id = #projectId:INTEGER#
+  </delete>
+  
+  <insert id="insertSalesProject" parameterClass="com.sales.model.SSalesProject" > 
+    insert into s_sales_project (topical, goal, start_time, end_time, response_user_id,
+      create_user_id, comment, completion_rate, customer_id, completion_time, 
+      enumeration_id, customer_project_id)
+    values (#topical:VARCHAR#, #goal:VARCHAR#, #startTime:DATE#,
+      #endTime:DATE#, #responseUserId:INTEGER#, #createUserId:INTEGER#, #comment:VARCHAR#,
+      #completionRate:VARCHAR#, #customerId:INTEGER#, #completionTime:DATE#, 
+      #enumerationId:INTEGER#, #customerProjectId:INTEGER#)
+      <selectKey resultClass="int" keyProperty="projectId">
+		select LAST_INSERT_ID() as projectId
+	  </selectKey>
+  </insert>
+  
+  <update id="updareSalesProjectStatus" parameterClass="com.sales.model.SSalesProject">
+  	update 	s_sales_project
+  	set		status=#status:INTEGER#, commit_time=now()
+  	where	project_id = #projectId:INTEGER#
+  </update>
+  
+  <delete id="deleteAttentionUserByProject" parameterClass="java.lang.Integer" > 
+    delete from s_project_attention_user
+    where project_id = #projectId:INTEGER#
+  </delete>
+  
+  <insert id="insertProjectAttentionUser" parameterClass="com.sales.model.SProjectAttentionUser" > 
+    insert into s_project_attention_user (user_id, project_id)
+    values (#userId:INTEGER#, #projectId:INTEGER#)
+  </insert>
+  
+  <update id="updateProject" parameterClass="com.sales.model.SSalesProject"> 
+	  update s_sales_project 
+	  <dynamic prepend="set">
+		  <isNotNull prepend="," property="topical">topical = #topical:VARCHAR#</isNotNull> 
+		  <isNotNull prepend="," property="goal">goal = #goal:VARCHAR#</isNotNull> 
+		  <isNotNull prepend="," property="startTime">start_time = #startTime:DATE#</isNotNull> 
+		  <isNotNull prepend="," property="endTime">end_time = #endTime:DATE#</isNotNull> 
+		  <isNotNull prepend="," property="responseUserId">response_user_id = #responseUserId:INTEGER#</isNotNull>  
+		  <isNotNull prepend="," property="comment">comment = #comment:VARCHAR#</isNotNull> 
+		  <isNotNull prepend="," property="completionRate">completion_rate = #completionRate:VARCHAR#</isNotNull> 
+		  <isNotNull prepend="," property="customerId">customer_id = #customerId:INTEGER#</isNotNull>  
+		  <isNotNull prepend="," property="enumerationId">enumeration_id = #enumerationId:INTEGER#</isNotNull>  
+		  <isNotNull prepend="," property="customerProjectId">customer_project_id = #customerProjectId:INTEGER#</isNotNull>  
+	  </dynamic>
+	  where project_id = #projectId:INTEGER# 
+  </update>
+  
+  <update id="updateSalesProjectRate" parameterClass="com.sales.model.SSalesProject" > 
+    update s_sales_project
+    set completion_rate = #completionRate:VARCHAR#
+    <isNotNull prepend="," property="completionTime">completion_time = SYSDATE()</isNotNull> 
+    where project_id = #projectId:INTEGER#
+  </update>
+  
+  <select id="getProjectOpenList" resultMap="projectListResult" parameterClass="java.util.Map" > 
+    select distinct p.project_id, p.topical, p.goal, p.start_time, p.end_time, p.response_user_id, u1.user_name as response_user_name,
+      p.create_user_id, u2.user_name as create_user_name,p.comment, p.completion_rate, p.customer_id, c.FName as customer_name, 
+      p.completion_time, p.enumeration_id, e.enumeration_name, p.customer_project_id, 
+      s.name as customer_project_name , en.`enumeration_name` AS customer_level, 
+      p.create_time, 0 as assess_count, p.commit_time, p.status
+    from s_user u1, s_user u2, s_enumeration e, s_sales_project p left join s_project_attention_user a on p.project_id = a.project_id  
+    	left join t_customer c on p.customer_id = c.customer_id 
+    	left join s_customer_project s on p.customer_project_id = s.project_id 
+    	LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+    where p.response_user_id = u1.user_id and p.create_user_id = u2.user_id and e.enumeration_id = p.enumeration_id and 
+    p.response_user_id = #responseUserId# and p.status=1
+    <dynamic> 
+		<isNotNull property="topical" prepend="and">
+		    p.topical like '%$topical$%'
+		</isNotNull>
+		<isNotNull property="enumerationId" prepend="and">
+		    p.enumeration_id = #enumerationId#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull>	 
+		<isNotNull property="customerId" prepend="and">
+		    p.customer_id = #customerId#
+		</isNotNull>   
+	</dynamic>
+	order by p.project_id desc
+	<dynamic> 
+		<isNotNull property="pageSize" prepend=" ">
+		    limit #startNumber#, #pageSize#
+		</isNotNull>
+	</dynamic> 
+  </select>
+  
+  <select id="getProjectOpenCount" resultClass="java.lang.Integer" parameterClass="java.util.Map" > 
+    select count(distinct p.project_id)
+    from s_user u1, s_user u2, s_sales_project p left join s_project_attention_user a on p.project_id = a.project_id
+    where p.response_user_id = u1.user_id and p.create_user_id = u2.user_id and
+    p.response_user_id = #responseUserId# and p.status=1
+    <dynamic>
+		<isNotNull property="topical" prepend="and">
+		    p.topical like '%$topical$%'
+		</isNotNull>
+		<isNotNull property="enumerationId" prepend="and">
+		    p.enumeration_id = #enumerationId#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    p.start_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerId" prepend="and">
+		    p.customer_id = #customerId#
+		</isNotNull> 
+	</dynamic>
+  </select>
+  
+  <select id="getProjectByCustomerProjectId" resultMap="projectListResult" parameterClass="java.lang.Integer" > 
+    select distinct p.project_id, p.topical, p.goal, p.start_time, p.end_time, p.response_user_id, u1.user_name as response_user_name,
+      p.create_user_id, u2.user_name as create_user_name,p.comment, p.completion_rate, p.customer_id, c.FName as customer_name, 
+      p.completion_time, p.enumeration_id, e.enumeration_name, p.customer_project_id, 
+      s.name as customer_project_name, en.`enumeration_name` AS customer_level, p.create_time, 
+      0 as assess_count, p.commit_time, p.status
+    from s_user u1, s_user u2, s_enumeration e, s_sales_project p left join s_project_attention_user a on p.project_id = a.project_id  
+    	left join t_customer c on p.customer_id = c.customer_id 
+    	left join s_customer_project s on p.customer_project_id = s.project_id 
+    	LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+    where p.response_user_id = u1.user_id and p.create_user_id = u2.user_id and e.enumeration_id = p.enumeration_id 
+    	and customer_project_id = #customerProjectId# and p.status=1
+  </select>
+  
+  <select id="reportWeekly" resultMap="statisticsResult" parameterClass="java.util.Map">
+  	SELECT p.response_user_id AS user_id, u.user_name, d.name AS depart_name, COUNT(*) pCount, IFNULL(cCount, 0) AS cCount
+	FROM 	s_sales_project p INNER JOIN s_user u ON p.response_user_id = u.user_id
+		INNER JOIN s_department d ON u.department_id = d.department_id
+		LEFT JOIN (
+			SELECT p.response_user_id, COUNT(*) AS cCount
+			FROM 	s_sales_project p 
+				INNER JOIN s_sales_activity a ON p.project_id = a.project_id
+			WHERE	start_time 
+				<![CDATA[
+			     >= 
+			    ]]> #startTime# 
+			    AND end_time 
+			    <![CDATA[
+			     <= 
+			    ]]> #endTime# 
+			<dynamic>
+				<isNotNull property="childrenUserIds" prepend="and">
+				    p.response_user_id in $childrenUserIds$
+				</isNotNull>
+			</dynamic>
+			GROUP BY response_user_id
+		) AS cp ON p.response_user_id = cp.response_user_id
+	WHERE	p.status=1 and start_time 
+					<![CDATA[
+			     	>= 
+			    ]]> #startTime# 
+			    AND end_time 
+			    <![CDATA[
+			     	<= 
+			    ]]> #endTime# 
+	<dynamic>
+		<isNotNull property="childrenUserIds" prepend="and">
+		    p.response_user_id in $childrenUserIds$
+		</isNotNull>
+	</dynamic>
+	GROUP BY p.response_user_id, u.user_name, d.name
+  </select>
+  
+  <select id="personPlanWeekly"  resultMap="statisticsPersonResult" parameterClass="java.util.Map">
+  	SELECT  p.project_id, p.topical AS plan_topical, p.start_time AS plan_time, p.customer_project_id, cp.name AS project_name, 
+		cp.customer_id, c.FName AS customer_name, a.activity_id, a.activity_date, a.topical AS activity_topical,
+		a.visit_person, e.enumeration_name AS activity_type, 
+		pe.enumeration_name AS plan_type, en.`enumeration_name` AS customer_level, p.create_time AS create_time
+	FROM 	s_sales_project p LEFT JOIN s_customer_project cp ON p.customer_project_id = cp.project_id
+		LEFT JOIN t_customer c ON p.customer_id= c.customer_id
+		LEFT JOIN s_sales_activity a ON p.project_id = a.project_id
+		LEFT JOIN s_enumeration e ON a.enumeration_id = e.enumeration_id
+		LEFT JOIN s_enumeration pe ON p.enumeration_id = e.enumeration_id
+		LEFT JOIN s_customer_level cl ON c.`customer_id` =  cl.`customer_id`
+    	LEFT JOIN s_enumeration en ON cl.`level_id` = en.`enumeration_id`
+	WHERE	p.response_user_id = #userId#  and p.status=1
+	<dynamic> 
+		<isNotNull property="startTime" prepend="and">
+			p.start_time 
+			<![CDATA[
+		     	>= 
+		    ]]> #startTime# 
+		</isNotNull>
+		<isNotNull property="endTime" prepend="and">
+		 	p.end_time 
+			<![CDATA[
+		     	<= 
+		    ]]> #endTime#
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+</sqlMap>

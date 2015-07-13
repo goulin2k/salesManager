@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_sale_bill_status" >
+
+  <resultMap id="saleBillStatusResult" class="com.sales.model.SaleBillStatus" > 
+    <result column="bill_status_id" property="billStatusId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="relation_type" property="relationType" jdbcType="INTEGER" />
+    <result column="bill_id" property="billId" jdbcType="INTEGER" />
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="Timestamp" /> 
+    <result column="have_read" property="haveRead" jdbcType="INTEGER" /> 
+  </resultMap>  
+
+  <resultMap id="orfqSale" class="com.sales.model.OrfqSale" >  
+    <result column="bill_no" property="billNo" jdbcType="VARCHAR" /> 
+    <result column="deal_date" property="dealDate" jdbcType="Timestamp" />  
+  </resultMap>  
+  
+  <select id="getSaleBillStatusByOrderId" resultMap="saleBillStatusResult" parameterClass="java.lang.Integer" > 
+    SELECT bill_status_id, order_id, order_no, relation_type, bill_id, bill_no, status, modify_time, have_read                                                               
+	FROM sale_bill_status
+    WHERE order_id = #orderId:INTEGER# 
+    ORDER BY relation_type
+  </select>
+  
+  <select id="getSaleBillStatusByBillId" resultMap="saleBillStatusResult" parameterClass="java.util.Map" >
+    SELECT bill_status_id, order_id, order_no, relation_type, bill_id, bill_no, status, modify_time, have_read                                                               
+	FROM sale_bill_status
+    WHERE relation_type = #relationType:INTEGER# and bill_id = #billId:INTEGER# 
+  </select>
+  
+  <select id="getSaleBillListByBillId" resultMap="saleBillStatusResult" parameterClass="java.util.Map" >
+    SELECT bill_status_id, order_id, order_no, relation_type, bill_id, bill_no, status, modify_time, have_read                                                       
+	FROM sale_bill_status
+    WHERE relation_type = #relationType:INTEGER# and bill_id = #billId:INTEGER# 
+  </select>
+  
+  <select id="getSaleBillListNotRead" resultMap="saleBillStatusResult" parameterClass="java.util.Map" >
+    SELECT bill_status_id, order_id, order_no, relation_type, bill_id, bill_no, status, modify_time, have_read                                                       
+	FROM sale_bill_status
+    WHERE have_read = 0
+  </select>
+  
+  <update id="updateSaleBillRead" parameterClass="java.lang.String" > 
+    update sale_bill_status
+    set have_read = 1
+    where bill_status_id in $billStatusIds$
+  </update> 
+  
+  <select id="getSaleCheck" resultMap="orfqSale" parameterClass="java.lang.String" > 
+    select FBillNo as bill_no, FCheckDate as deal_date from ICClassCheckRecords1007006 
+	where FMode = 2 and FCheckdate > #checkDate:DATE# 
+		and fid in (select max(FID) from ICClassCheckRecords1007006 group by FBillID)
+	order by fid
+  </select>
+  
+  <select id="getSaleDelete" resultMap="orfqSale" parameterClass="java.lang.String" > 
+    select bill_no, delete_date as deal_date from sale_bill_deleted 
+	where delete_date > #deleteDate:DATE#
+	order by id
+  </select>
+  
+  <select id="getOrfqDealDate" resultClass="java.util.Date" parameterClass="java.lang.String" > 
+    select syn_time from sale_bill_syn 
+	where bill_type = #billType:VARCHAR#
+  </select>
+  
+  <update id="updateOrfqDealDate" parameterClass="java.util.Map" > 
+    update sale_bill_syn
+    set syn_time = #dealDate:DATE#
+    where bill_type = #billType:VARCHAR#
+  </update> 
+  
+  <procedure id="synBillRef" >  
+	{call sales_bill_ref_syn}
+  </procedure>
+  
+  <procedure id="synBillStatus" >  
+	{call sales_bill_status_syn}
+  </procedure>
+  
+</sqlMap>

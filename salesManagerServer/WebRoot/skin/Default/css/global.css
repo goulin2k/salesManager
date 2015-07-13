@@ -1,0 +1,55 @@
+/*
+* global.css 属于整站点全局设置
+*  创建人：王炼 创建时间2013年4月下旬
+* global.css组件是属于全局设置，base.css等其他文件都需要依赖此文件
+*/
+/*======================全局定义======================*/
+body{ margin:0; padding:0; background:url(../../../images/bg.jpg); font-size:13px; font-family:Arial,"微软雅黑", "宋体" ; }
+a img { border:0;}
+a { text-decoration:none}
+ul{ list-style:none; }
+/*======================全局组合调用库======================*/
+.f13{ font-size:13px}
+.fl{ float:left;}
+.fr{ float:right;}
+.clear{ clear:both;}
+.null{ margin:0; padding:0;}
+.hr-one{  height:50px; margin:0; padding:0; border:none; background:url(../images/ui-lv2ico.png); background-position:0 -482px;  }
+.hr-two{margin:0 15px; padding:0; border:none; border-top:1px solid #dadada;}
+.color555{color:#555;}
+.color-bule{ color:#00b5f8;}
+.color-red{ color:#e60012;}
+.content-width-full{width:98%;}
+.center{ margin:0 0 0 40%;}
+.h600{ height:600px; }
+.f12{ font-size:12px;}
+.f13{ font-size:13px;}
+.w20{ width:20px;}
+.w30{ width:30px;}
+.w40{ width:40px;}
+.w200{ width:200px;}
+.w300{ width:300px;}
+.w400{ width:400px;}
+/*======================magin======================*/
+.ml10{ margin-left:10px;}
+.mt5{ margin-top:5px}
+.mt10{ margin-top:10px}
+.mt15{ margin-top:15px}
+.mt20{ margin-top:20px}
+.mt30{ margin-top:30px; font-weight:bold;}
+.mt50{ margin-top:50px}
+.ml8{ margin-left:8px;}
+.ml15{ margin-left:15px;}
+.ml20{ margin-left:20px;}
+.mr5{ margin-right:5px;}
+.mr8{ margin-right:8px;}
+.mr10{ margin-right:10px;}
+.mr30{ margin-right:30px;}
+.mr50{ margin-right:50px}
+.mb10{ margin-bottom:10px}
+.mb15{ margin-bottom:15px}
+.mb30{ margin-bottom:30px}
+.mb50{ margin-bottom:50px}
+
+/*======================padding======================*/
+.pb5{ padding-bottom:5px}

@@ -1,0 +1,87 @@
+/**
+ * 
+ */
+package com.sales.action.app;
+
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
+
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionContext;
+import com.sales.action.BaseAction;
+import com.sales.common.Constants;
+import com.sales.model.BaseObject;
+import com.sales.service.SUserService;
+
+/**
+ * @author apple
+ *
+ */
+public class AppUserAction extends BaseAction {
+	private SUserService userService;
+	
+	public String login() {
+		try {
+			LoginResult loginResult = new LoginResult();
+			JSONObject json = JSONObject.fromObject(LoginResult);
+			
+			response = (HttpServletResponse) ActionContext.getContext().get(ServletActionContext.HTTP_RESPONSE); 
+			response.setCharacterEncoding("UTF-8"); 
+			response.getWriter().print(json);
+		} catch (Exception e) {
+			actionLog.error(e.getMessage());
+		}
+		return null;
+	}
+	
+	public class LoginResult extends BaseObject {
+		private int result;
+		private String error;
+		
+		private int userId;
+		private int name;
+		private int roleId;
+		private String department;
+		public int getResult() {
+			return result;
+		}
+		public void setResult(int result) {
+			this.result = result;
+		}
+		public String getError() {
+			return error;
+		}
+		public void setError(String error) {
+			this.error = error;
+		}
+		public int getUserId() {
+			return userId;
+		}
+		public void setUserId(int userId) {
+			this.userId = userId;
+		}
+		public int getName() {
+			return name;
+		}
+		public void setName(int name) {
+			this.name = name;
+		}
+		public int getRoleId() {
+			return roleId;
+		}
+		public void setRoleId(int roleId) {
+			this.roleId = roleId;
+		}
+		public String getDepartment() {
+			return department;
+		}
+		public void setDepartment(String department) {
+			this.department = department;
+		}
+		
+		
+	}
+
+}

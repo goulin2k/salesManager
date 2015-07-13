@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_orfq" >
+
+  <resultMap id="orfqResult" class="com.sales.model.TOrfq" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FCustID" property="fCustID" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billUserName" property="billUserName" jdbcType="VARCHAR" />
+    <result column="Fdate" property="fdate" jdbcType="Timestamp" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FCurrencyID" property="fCurrencyID" jdbcType="INTEGER" />
+    <result column="currencyName" property="currencyName" jdbcType="VARCHAR" /> 
+    <result column="FExchangeRate" property="fExchangeRate" jdbcType="VARCHAR" />
+    <result column="FMangerID" property="fMangerID" jdbcType="INTEGER" />
+    <result column="managerName" property="managerName" jdbcType="VARCHAR" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FCheckDate" property="fCheckDate" jdbcType="DATE" />
+    <result column="FCancellation" property="fCancellation" jdbcType="VARCHAR" />
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" /> 
+    <result column="FTranType" property="fTranType" jdbcType="INTEGER" />
+    <result column="transType" property="transType" jdbcType="VARCHAR" />  
+    <result column="FPayCondition" property="fPayCondition" jdbcType="INTEGER" />  
+    <result column="payCondition" property="payCondition" jdbcType="VARCHAR" />   
+    <result column="FBase" property="invoiceTypeId" jdbcType="INTEGER" />  
+    <result column="FBase1" property="transTypeId" jdbcType="INTEGER" />  
+    <result column="invoiceTypeName" property="invoiceTypeName" jdbcType="VARCHAR" />  
+    <result column="transTypeName" property="transTypeName" jdbcType="VARCHAR" /> 
+    <result column="FInterID" property="orfqEntryList" select="t_orfq.getOrfqEntryListByOrfqId" />
+  </resultMap> 
+
+  <resultMap id="sorfqResult" class="com.sales.model.TOrfq" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FCustID" property="fCustID" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billUserName" property="billUserName" jdbcType="VARCHAR" />
+    <result column="Fdate" property="fdate" jdbcType="Timestamp" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FCurrencyID" property="fCurrencyID" jdbcType="INTEGER" />
+    <result column="currencyName" property="currencyName" jdbcType="VARCHAR" /> 
+    <result column="FExchangeRate" property="fExchangeRate" jdbcType="VARCHAR" />
+    <result column="FMangerID" property="fMangerID" jdbcType="INTEGER" />
+    <result column="managerName" property="managerName" jdbcType="VARCHAR" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FCheckDate" property="fCheckDate" jdbcType="Timestamp" />
+    <result column="FCancellation" property="fCancellation" jdbcType="VARCHAR" />
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" /> 
+    <result column="FTranType" property="fTranType" jdbcType="INTEGER" />
+    <result column="transType" property="transType" jdbcType="VARCHAR" />  
+    <result column="FPayCondition" property="fPayCondition" jdbcType="INTEGER" />  
+    <result column="payCondition" property="payCondition" jdbcType="VARCHAR" />  
+    <result column="UserId" property="userId" jdbcType="INTEGER" />
+    <result column="FBase" property="invoiceTypeId" jdbcType="INTEGER" />  
+    <result column="FBase1" property="transTypeId" jdbcType="INTEGER" />
+    <result column="invoiceTypeName" property="invoiceTypeName" jdbcType="VARCHAR" />  
+    <result column="transTypeName" property="transTypeName" jdbcType="VARCHAR" /> 
+    <result column="FInterID" property="orfqEntryList" select="t_orfq.getSOrfqEntryListBySOrfqId" />  
+    <result column="quotation_code" property="quotationCode" jdbcType="VARCHAR" />  
+    <result column="quotation_code" property="quotationList" select="s_sales_quotation.getQuotationByCodeNoFilter" />
+  </resultMap> 
+
+  <resultMap id="orfqEntryResult" class="com.sales.model.TOrfqEntry" > 
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" />
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FSourceEntryID" property="fSourceEntryID" jdbcType="INTEGER" />
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="iCNumber" property="iCNumber" jdbcType="VARCHAR" />
+    <result column="iCItemName" property="iCItemName" jdbcType="VARCHAR" /> 
+    <result column="fModel" property="fModel" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" />
+    <result column="FQtyFrom" property="fQtyFrom" jdbcType="VARCHAR" /> 
+    <result column="FQtyTo" property="fQtyTo" jdbcType="VARCHAR" /> 
+    <result column="FAuxQtyFrom" property="fAuxQtyFrom" jdbcType="VARCHAR" />  
+    <result column="FAuxQtyTo" property="fAuxQtyTo" jdbcType="VARCHAR" /> 
+    <result column="FAuxPrice" property="fAuxPrice" jdbcType="VARCHAR" />
+    <result column="FDescount" property="fDescount" jdbcType="VARCHAR" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />     
+    <!-- <result column="FAuxQty" property="fAuxQty" jdbcType="VARCHAR" />
+    <result column="FAuxPriceIncludeTax" property="fAuxPriceIncludeTax" jdbcType="VARCHAR" /> 
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" /> 
+    <result column="FCess" property="fCess" jdbcType="VARCHAR" />  
+    <result column="FDiscountAmt" property="fDiscountAmt" jdbcType="VARCHAR" /> 
+    <result column="FAuxTaxPriceDiscount" property="fAuxTaxPriceDiscount" jdbcType="VARCHAR" />
+    <result column="FTaxAmount" property="fTaxAmount" jdbcType="VARCHAR" />
+    <result column="FAmountIncludeTax" property="fAmountIncludeTax" jdbcType="VARCHAR" /> 
+    <result column="FText" property="fText" jdbcType="VARCHAR" />  -->
+  </resultMap>
+
+  <resultMap id="sorfqEntryResult" class="com.sales.model.TOrfqEntry" > 
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" />
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FSourceEntryID" property="fSourceEntryID" jdbcType="INTEGER" />
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="iCNumber" property="iCNumber" jdbcType="VARCHAR" />
+    <result column="iCItemName" property="iCItemName" jdbcType="VARCHAR" /> 
+    <result column="fModel" property="fModel" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" />
+    <result column="FQtyFrom" property="fQtyFrom" jdbcType="VARCHAR" /> 
+    <result column="FQtyTo" property="fQtyTo" jdbcType="VARCHAR" /> 
+    <result column="FAuxQtyFrom" property="fAuxQtyFrom" jdbcType="VARCHAR" />  
+    <result column="FAuxQtyTo" property="fAuxQtyTo" jdbcType="VARCHAR" /> 
+    <result column="FAuxPrice" property="fAuxPrice" jdbcType="VARCHAR" />
+    <result column="FDescount" property="fDescount" jdbcType="VARCHAR" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />     
+    <result column="FAuxQty" property="fAuxQty" jdbcType="VARCHAR" />
+    <result column="FAuxPriceIncludeTax" property="fAuxPriceIncludeTax" jdbcType="VARCHAR" /> 
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" /> 
+    <result column="FCess" property="fCess" jdbcType="VARCHAR" />  
+    <result column="FDiscountAmt" property="fDiscountAmt" jdbcType="VARCHAR" /> 
+    <result column="FAuxTaxPriceDiscount" property="fAuxTaxPriceDiscount" jdbcType="VARCHAR" />
+    <result column="FTaxAmount" property="fTaxAmount" jdbcType="VARCHAR" />
+    <result column="FAmountIncludeTax" property="fAmountIncludeTax" jdbcType="VARCHAR" /> 
+    <result column="FText" property="fText" jdbcType="VARCHAR" />  
+  </resultMap>
+  
+  <parameterMap class="java.util.HashMap" id="interTable">
+	  <parameter property="TableName" jdbcType="VARCHAR" javaType="java.lang.String"  mode="IN"/>
+	  <parameter property="FInterID" jdbcType="INTEGER" javaType="java.lang.Integer" mode="OUT"/>
+	  <parameter property="Increment" jdbcType="INTEGER" javaType="java.lang.Integer" mode="IN"/>
+ </parameterMap>
+
+  <select id="getOrfqById" resultMap="orfqResult" parameterClass="java.util.Map" > 
+    SELECT po.FInterID, FBillNo, FCustID, cs.Fname as customerName, 
+		FBillerID, usr.Fname as billUserName,
+		po.Fdate, FDeptID, dep.FName as departName, 
+		po.FEmpID, emp.FName as employeeName,
+		po.FCurrencyID, cny.FName as currencyName, po.FExchangeRate,
+		FMangerID, mgr.FName as managerName,
+		FCheckerID, chk.FName as checkerName, FCheckDate,
+		FCancellation, FStatus, 
+		po.FTranType, trt.FName as transType,
+		po.FPayCondition, pc.FName as payCondition, FBase, FBase1,
+		ivt.FName as invoiceTypeName, tst.FName as transTypeName
+	FROM PORFQ po INNER JOIN T_Item cs ON po.FCustID = cs.FItemID
+		INNER JOIN t_user usr ON po.FBillerID = usr.FUserId
+		INNER JOIN T_Item dep ON po.FDeptID = dep.FItemID
+		LEFT JOIN T_Item emp ON po.FEmpID = emp.FItemID
+		INNER JOIN T_Currency cny ON po.FCurrencyID = cny.FCurrencyID
+		LEFT JOIN T_Item mgr ON po.FEmpID = mgr.FItemID
+		LEFT JOIN v_ICTransType trt ON po.FTranType = trt.FInterID
+		INNER JOIN t_user chk ON po.FCheckerID = chk.FUserId
+		LEFT JOIN t_PayColConditionEntry pc on po.FPayCondition = pc.FID
+		LEFT JOIN t_Item ivt ON po.FBase = ivt.FItemId
+		LEFT JOIN t_Item tst ON po.FBase1 = tst.FItemId
+    WHERE po.FInterID = #orfqId:INTEGER#
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getOrfqEntryListByOrfqId" resultMap="orfqEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT FEntryID, pe.FInterID, FSourceEntryID,
+		pe.FItemID, itm.FNumber as ICNumber, itm.FName as ICItemName, itm.FModel,
+		pe.FUnitID, unt.FName as unitName,
+		FPrice, FQtyFrom, FQtyTo, FAuxQtyFrom, FAuxQtyTo, FAuxPrice, FDescount, pe.FNote
+	FROM PORFQEntry pe INNER JOIN PORFQ po on pe.FInterId = po.FInterId
+		INNER JOIN t_ICItem itm ON pe.FItemID = itm.FItemID
+		INNER JOIN t_measureUnit unt ON pe.FUnitID = unt.FMeasureUnitID
+	WHERE po.FInterID =  #orfqId:INTEGER#
+  </select>
+  
+  <select id="getOrfqList" resultMap="orfqResult" parameterClass="com.sales.model.TOrfq" > 
+    SELECT TOP $pageSize$ po.FInterID, FBillNo, FCustID, cs.Fname as customerName, 
+		FBillerID, usr.Fname as billUserName,
+		po.Fdate, FDeptID, dep.FName as departName, 
+		po.FEmpID, emp.FName as employeeName,
+		po.FCurrencyID, cny.FName as currencyName, po.FExchangeRate,
+		FMangerID, mgr.FName as managerName,
+		FCheckerID, chk.FName as checkerName, FCheckDate,
+		FCancellation, FStatus,
+		po.FTranType, trt.FName as transType,
+		po.FPayCondition, pc.FName as payCondition, FBase, FBase1,
+		ivt.FName as invoiceTypeName, tst.FName as transTypeName
+		
+	FROM PORFQ po INNER JOIN T_Item cs ON po.FCustID = cs.FItemID
+		INNER JOIN t_user usr ON po.FBillerID = usr.FUserId
+		INNER JOIN T_Item dep ON po.FDeptID = dep.FItemID
+		LEFT JOIN T_Item emp ON po.FEmpID = emp.FItemID
+		INNER JOIN T_Currency cny ON po.FCurrencyID = cny.FCurrencyID
+		LEFT JOIN T_Item mgr ON po.FEmpID = mgr.FItemID
+		LEFT JOIN v_ICTransType trt ON po.FTranType = trt.FInterID
+		INNER JOIN t_user chk ON po.FCheckerID = chk.FUserId
+		LEFT JOIN t_PayColConditionEntry pc on po.FPayCondition = pc.FID
+		LEFT JOIN t_Item ivt ON po.FBase = ivt.FItemId
+		LEFT JOIN t_Item tst ON po.FBase1 = tst.FItemId
+    WHERE po.FInterID NOT IN 
+      (SELECT TOP $startNumber$ po.FInterID
+		FROM PORFQ po INNER JOIN T_Item cs ON po.FCustID = cs.FItemID
+		INNER JOIN t_user usr ON po.FBillerID = usr.FUserId
+		INNER JOIN T_Item dep ON po.FDeptID = dep.FItemID
+		LEFT JOIN T_Item emp ON po.FEmpID = emp.FItemID
+		INNER JOIN T_Currency cny ON po.FCurrencyID = cny.FCurrencyID
+		LEFT JOIN T_Item mgr ON po.FEmpID = mgr.FItemID
+		LEFT JOIN v_ICTransType trt ON po.FTranType = trt.FInterID
+		INNER JOIN t_user chk ON po.FCheckerID = chk.FUserId
+		LEFT JOIN t_PayColConditionEntry pc on po.FPayCondition = pc.FID
+		<dynamic prepend="where">
+			<isNotNull property="fCustID" prepend="and">
+			    FCustID = #fCustID#
+			</isNotNull>
+			<isNotNull property="fEmpID" prepend="and">
+			    po.FEmpID = #fEmpID#
+			</isNotNull>
+			<isNotNull property="fStatus" prepend="and">
+			    FStatus = #fStatus#
+			</isNotNull>
+		    <isNotNull property="startTime" prepend="and">
+			    po.Fdate 
+			    <![CDATA[
+			     >= 
+			    ]]>
+			    #startTime#
+		    </isNotNull>
+		    <isNotNull property="endTime" prepend="and">
+			    po.Fdate 
+			    <![CDATA[
+			     <= 
+			    ]]>
+			    #endTime#
+		    </isNotNull> 
+			<isNotNull property="customerIds" prepend="and">
+			    FCustID in $customerIds$
+			</isNotNull>
+		</dynamic>
+		order by po.Fdate desc
+	   ) 
+	<isNotNull property="fCustID" prepend="and">
+	    FCustID = #fCustID#
+	</isNotNull>
+	<isNotNull property="fEmpID" prepend="and">
+	    po.FEmpID = #fEmpID#
+	</isNotNull>
+	<isNotNull property="fStatus" prepend="and">
+	    FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    po.Fdate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    po.Fdate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+	order by po.Fdate desc
+  </select>
+
+  <select id="getOrfqCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TOrfq" >  
+    SELECT count(*)
+    FROM PORFQ po INNER JOIN T_Item cs ON po.FCustID = cs.FItemID
+		INNER JOIN t_user usr ON po.FBillerID = usr.FUserId
+		INNER JOIN T_Item dep ON po.FDeptID = dep.FItemID
+		LEFT JOIN T_Item emp ON po.FEmpID = emp.FItemID
+		INNER JOIN T_Currency cny ON po.FCurrencyID = cny.FCurrencyID
+		LEFT JOIN T_Item mgr ON po.FEmpID = mgr.FItemID
+		LEFT JOIN v_ICTransType trt ON po.FTranType = trt.FInterID
+		INNER JOIN t_user chk ON po.FCheckerID = chk.FUserId
+	<dynamic prepend="where">
+		<isNotNull property="fCustID" prepend="and">
+		    FCustID = #fCustID#
+		</isNotNull>
+		<isNotNull property="fEmpID" prepend="and">
+		    po.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    FCustID in $customerIds$
+		</isNotNull>
+	</dynamic>
+  </select>
+
+  <select id="getOrfqDesc" resultClass="java.lang.String" > 
+    select FDesc from ICBillNo Where FBillID = '1007006'
+  </select>
+  
+  <insert id="insertOrfq" parameterClass="com.sales.model.TOrfq" > 
+    INSERT INTO PORFQ(FBillNo,FDate,FCustID,FPayCondition,FCurrencyID,
+				FInterID,FExchangeRate,FCheckerID,FCheckDate,FClassTypeID,FDeptID,
+				FMangerID,FEmpID,FBillerID,FMultiCheckStatus,FStatus,FCancellation,FBrNo,FTranType,FVersionNo,FChangeDate,
+				FChangeCauses,FChangeMark,FChangeUser,FBase,FBase1,FPrintCount) 
+    Values (#fBillNo:VARCHAR#, #fdate:DATE#, #fCustID:INTEGER#, #fPayCondition:INTEGER#, #fCurrencyID:INTEGER#,
+      #fInterID:INTEGER#, #fExchangeRate:VARCHAR#, 0, null, 1007006, #fDeptID:INTEGER#,
+      #fMangerID:INTEGER#, #fEmpID:INTEGER#, #fBillerID:INTEGER#, 2, 0, 0, '0', 84, '000', null,
+      '', '', 0, #invoiceTypeId:INTEGER#, #transTypeId:INTEGER#, 0)
+  </insert>
+  
+  <insert id="insertOrfqEntry" parameterClass="com.sales.model.TOrfqEntry" > 
+    INSERT INTO PORFQEntry(
+				FEntryID,FInterID,FMapID,FItemID,FAuxPropID,FPrice,FUnitID,FAuxQty,FAuxPrice,FAuxPriceIncludeTax,FAmount,
+				FAuxQtyFrom,FCess,FAuxQtyTo,FDescount,FDiscountAmt,FAuxTaxPriceDiscount,FTaxAmount,FAmountIncludeTax,FText,
+				FNote,FSourceTranType,FSourceBillNo,FSourceEntryID,FSourceInterId,FSelfDefinePrice1,FSelfDefinePrice2,
+				FSelfDefinePrice3,FSelfDefinePrice4,FCustMtrlName,FCustMtrlNo,FMRPClosed,FBrNo,FPriceUpdated,FEntryNo) 
+	Values (#fEntryID:INTEGER#, #fInterID:INTEGER#, 0, #fItemID:INTEGER#, 0, #fPrice:VARCHAR#, #fUnitID:INTEGER#, #fAuxQty:VARCHAR#, #FAuxPrice:VARCHAR#, #fAuxPriceIncludeTax:VARCHAR#, #fAmount:VARCHAR#,
+      #fAuxQtyFrom:VARCHAR#, #fCess:VARCHAR#, #fAuxQtyTo:VARCHAR#, #fDescount:VARCHAR#, #fDiscountAmt:VARCHAR#, #fAuxTaxPriceDiscount:VARCHAR#, #fTaxAmount:VARCHAR#, #fAmountIncludeTax:VARCHAR#, #fText:VARCHAR#,
+      #fNote:VARCHAR#, 0, '', 0, 0, 0, 0,
+      0, 0, '', '', 0, '0', 0, 1)
+  </insert>
+
+  <insert id="insertOrfqCheckStatus" parameterClass="java.lang.Integer" > 
+    Insert Into ICClassCheckStatus1007006 (FPage,FBillID,FBillEntryID,FBillEntryIndex,FCurrentLevel) 
+	Values(1, #fInterID:INTEGER#, 0, 0, 0)
+  </insert>
+
+  <insert id="insertOrfqCheckRecords" parameterClass="java.util.Map" > 
+    Insert Into ICClassCheckRecords1007006(FPage,FBillID,FBillEntryID,FBillNo, FBillEntryIndex,FCheckLevel,FCheckLevelTo,
+		FMode,FCheckMan, FCheckIdea,FCheckDate,FDescriptions)  
+	Values(1, #fInterID:INTEGER#, 0, #fBillNo:VARCHAR#, 0, -99, -1,
+		0, #fBillerID:INTEGER#, '', GetDate(), '审核')
+  </insert>
+  
+  <update id="updateOrfqBillNo" parameterClass="java.lang.String" > 
+    Update ICBillNo Set FDesc = #fDesc:VARCHAR# Where FBillID = '1007006'
+  </update>
+
+  <select id="getMaxFInterID" resultClass="java.lang.Integer" > 
+    select max(FInterID) from PORFQ 
+  </select>
+
+  <select id="getOrfqAllList" resultMap="orfqResult" parameterClass="java.lang.String" > 
+    SELECT po.FInterID, FBillNo, FCustID, cs.Fname as customerName, 
+		FBillerID, usr.Fname as billUserName,
+		po.Fdate, FDeptID, dep.FName as departName, 
+		po.FEmpID, emp.FName as employeeName,
+		po.FCurrencyID, cny.FName as currencyName, po.FExchangeRate,
+		FMangerID, mgr.FName as managerName,
+		FCheckerID, chk.FName as checkerName, FCheckDate,
+		FCancellation, FStatus,
+		po.FTranType, trt.FName as transType,
+		po.FPayCondition, pc.FName as payCondition, FBase, FBase1,
+		ivt.FName as invoiceTypeName, tst.FName as transTypeName
+	FROM PORFQ po INNER JOIN T_Item cs ON po.FCustID = cs.FItemID
+		INNER JOIN t_user usr ON po.FBillerID = usr.FUserId
+		INNER JOIN T_Item dep ON po.FDeptID = dep.FItemID
+		LEFT JOIN T_Item emp ON po.FEmpID = emp.FItemID
+		INNER JOIN T_Currency cny ON po.FCurrencyID = cny.FCurrencyID
+		LEFT JOIN T_Item mgr ON po.FEmpID = mgr.FItemID
+		LEFT JOIN v_ICTransType trt ON po.FTranType = trt.FInterID
+		INNER JOIN t_user chk ON po.FCheckerID = chk.FUserId
+		LEFT JOIN t_PayColConditionEntry pc on po.FPayCondition = pc.FID
+		LEFT JOIN t_Item ivt ON po.FBase = ivt.FItemId
+		LEFT JOIN t_Item tst ON po.FBase1 = tst.FItemId
+    WHERE po.FInterID IN $billIds$
+  </select>
+  
+  <delete id="deleteOrfqEntryById" parameterClass="java.lang.Integer" >
+    DELETE PORFQEntry WHERE FInterID = #fInterID#
+  </delete>
+  
+  <delete id="deleteOrfqById" parameterClass="java.util.Map" >
+    DELETE PORFQ WHERE FInterID = #fInterID#
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </delete>
+  
+  <delete id="deleteICCCSById" parameterClass="java.lang.Integer" >
+    DELETE ICClassCheckStatus1007006 WHERE FBillID = #fInterID#
+  </delete>
+  
+  <delete id="deleteICCCRById" parameterClass="java.lang.Integer" >
+    DELETE ICClassCheckRecords1007006 WHERE FBillID = #fInterID#
+  </delete>
+  
+  <select id="getSOrfqList" resultMap="sorfqResult" parameterClass="com.sales.model.TOrfq" > 
+    SELECT po.FInterID, FBillNo, FCustID, po.customerName, 
+		FBillerID, po.billUserName,
+		po.Fdate, po.FDeptID, po.departName, 
+		po.FEmpID, po.employeeName,
+		po.FCurrencyID, po.currencyName, po.FExchangeRate,
+		po.FMangerID, po.managerName,
+		po.FCheckerID, po.checkerName, po.FCheckDate,
+		po.FCancellation, po.FStatus,
+		po.FTranType, po.transType,
+		po.FPayCondition, po.payCondition, po.UserId, FBase, FBase1,
+		po.invoiceTypeName, po.transTypeName, po.quotation_code
+	FROM PORFQ po 
+	<dynamic prepend="where " >  
+	    <isNotNull property="fCustID" prepend="and">
+		    po.FCustID = #fCustID#
+		</isNotNull>
+		<isNotNull property="fEmpID" prepend="and">
+		    po.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    po.FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    po.FCustID in $customerIds$
+		</isNotNull>
+	</dynamic>
+	order by po.FInterID desc
+	limit #startNumber#, #pageSize#
+  </select>
+
+  <select id="getSOrfqCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TOrfq" >  
+    SELECT count(*)
+    FROM PORFQ po 
+	<dynamic prepend="where">
+		<isNotNull property="fCustID" prepend="and">
+		    po.FCustID = #fCustID#
+		</isNotNull>
+		<isNotNull property="fEmpID" prepend="and">
+		    po.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    po.FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    po.Fdate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    po.FCustID in $customerIds$
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <insert id="insertSOrfq" parameterClass="com.sales.model.TOrfq" > 
+    INSERT INTO PORFQ(FBillNo,FDate,FCustID,customerName,FPayCondition,payCondition,FCurrencyID,currencyName,
+				FExchangeRate,FCheckerID,FCheckDate,FClassTypeID,FDeptID,departName,
+				FMangerID,managerName,FEmpID,employeeName,FBillerID,billUserName,FMultiCheckStatus,FStatus,FCancellation,FBrNo,FTranType,transType,FVersionNo,FChangeDate,
+				FChangeCauses,FChangeMark,FChangeUser,FBase,FBase1,FPrintCount,UserId, invoiceTypeName, transTypeName, quotation_code) 
+    Values (#fBillNo:VARCHAR#, SYSDATE(), #fCustID:INTEGER#, #customerName:VARCHAR#, #fPayCondition:INTEGER#, #payCondition:VARCHAR#, #fCurrencyID:INTEGER#, #currencyName:VARCHAR#,
+      #fExchangeRate:VARCHAR#, 0, null, 1007006, #fDeptID:INTEGER#, #departName:VARCHAR#,
+      #fMangerID:INTEGER#, #managerName:VARCHAR#, #fEmpID:INTEGER#, #employeeName:VARCHAR#, #fBillerID:INTEGER#, #billUserName:VARCHAR#, 2, 0, 0, '0', 84, #transType:VARCHAR#, '000', null,
+      '', 0, 0, #invoiceTypeId:INTEGER#, #transTypeId:INTEGER#, 0, #userId:INTEGER#, #invoiceTypeName:VARCHAR#, #transTypeName:VARCHAR#, #quotationCode:VARCHAR#)
+    <selectKey resultClass="int" keyProperty="fInterID">
+	    select LAST_INSERT_ID() as FInterID
+    </selectKey>
+  </insert>
+  
+  <insert id="insertSOrfqEntry" parameterClass="com.sales.model.TOrfqEntry" > 
+    INSERT INTO PORFQEntry(
+				FEntryID,FInterID,FMapID,FItemID,ICNumber,ICItemName,FModel,FAuxPropID,FPrice,FUnitID,unitName,FAuxQty,FAuxPrice,FAuxPriceIncludeTax,FAmount,
+				FAuxQtyFrom,FCess,FAuxQtyTo,FDescount,FDiscountAmt,FAuxTaxPriceDiscount,FTaxAmount,FAmountIncludeTax,FText,
+				FNote,FSourceTranType,FSourceBillNo,FSourceEntryID,FSourceInterId,FSelfDefinePrice1,FSelfDefinePrice2,
+				FSelfDefinePrice3,FSelfDefinePrice4,FCustMtrlName,FCustMtrlNo,FMRPClosed,FBrNo,FPriceUpdated,FEntryNo) 
+	Values (#fEntryID:INTEGER#, #fInterID:INTEGER#, 0, #fItemID:INTEGER#, #iCNumber:VARCHAR#, #iCItemName:VARCHAR#, #fModel:VARCHAR#, 
+	  0, #fPrice:VARCHAR#, #fUnitID:INTEGER#, #unitName:VARCHAR#, #fAuxQty:VARCHAR#, #FAuxPrice:VARCHAR#, #fAuxPriceIncludeTax:VARCHAR#, #fAmount:VARCHAR#,
+      #fAuxQtyFrom:VARCHAR#, #fCess:VARCHAR#, #fAuxQtyTo:VARCHAR#, #fDescount:VARCHAR#, #fDiscountAmt:VARCHAR#, 
+      #fAuxTaxPriceDiscount:VARCHAR#, #fTaxAmount:VARCHAR#, #fAmountIncludeTax:VARCHAR#, #fText:VARCHAR#,
+      #fNote:VARCHAR#, 0, '', 0, 0, 0, 0,
+      0, 0, '', '', 0, '0', 0, 1)
+  </insert>
+  
+  <select id="getSOrfqById" resultMap="sorfqResult" parameterClass="java.util.Map" > 
+    SELECT po.FInterID, FBillNo, FCustID, po.customerName, 
+		FBillerID, po.billUserName,
+		po.Fdate, po.FDeptID, po.departName, 
+		po.FEmpID, po.employeeName,
+		po.FCurrencyID, po.currencyName, po.FExchangeRate,
+		po.FMangerID, po.managerName,
+		po.FCheckerID, po.checkerName, po.FCheckDate,
+		po.FCancellation, po.FStatus,
+		po.FTranType, po.transType,
+		po.FPayCondition, po.payCondition, po.UserId, FBase, FBase1, invoiceTypeName, transTypeName, po.quotation_code
+	FROM PORFQ po  
+    WHERE po.FInterID = #orfqId:INTEGER#
+	<isNotNull property="customerIds" prepend="and">
+	    po.FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getSOrfqEntryListBySOrfqId" resultMap="sorfqEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT pe.FEntryID, pe.FInterID, pe.FSourceEntryID,
+		pe.FItemID, pe.ICNumber, pe.ICItemName, pe.FModel, pe.FUnitID, pe.unitName,
+		FPrice, FQtyFrom, FQtyTo, FAuxQtyFrom, FAuxQtyTo, FAuxPrice, FDescount, pe.FNote,
+		FAuxQty, FAuxPriceIncludeTax, FAmount, FCess, FDiscountAmt, FAuxTaxPriceDiscount, FTaxAmount, FAmountIncludeTax, FText
+	FROM PORFQEntry pe INNER JOIN PORFQ po on pe.FInterId = po.FInterId
+	WHERE po.FInterID =  #orfqId:INTEGER#
+  </select>
+  
+  <update id="verifySOrfq" parameterClass="java.util.Map" > 
+    update PORFQ
+    set FStatus = #fStatus:INTEGER#, FCheckerID = #checkUserId:INTEGER#, checkerName = #checkerName:VARCHAR#, fCheckDate = current_timestamp()
+    where FInterID = #fInterID:INTEGER#
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </update> 
+  
+  <delete id="deleteSOrfqEntryById" parameterClass="java.lang.Integer" >
+    DELETE FROM PORFQEntry WHERE FInterID = #fInterID#
+  </delete>
+  
+  <delete id="deleteSOrfqById" parameterClass="java.util.Map" >
+    DELETE FROM PORFQ WHERE FInterID = #fInterID# 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </delete>
+  
+  <update id="updateSOrfq" parameterClass="com.sales.model.TOrfq" > 
+    update PORFQ
+    set FCustID = #fCustID:INTEGER#, FPayCondition = #fPayCondition:INTEGER#, FCurrencyID = #fCurrencyID:INTEGER#, 
+    FExchangeRate = #fExchangeRate:VARCHAR#, FDeptID = #fDeptID:INTEGER#, FMangerID = #fMangerID:INTEGER#, 
+    FEmpID = #fEmpID:INTEGER#, FStatus = #fStatus:INTEGER#
+    where FInterID = #fInterID:INTEGER#
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </update> 
+
+  <select id="getBillNo" resultClass="java.lang.String" >
+    select FProjectVal from t_BillCodeRule  Where FBillTypeID = '1007006'
+  </select>
+
+  <select id="getCurNo" resultClass="java.lang.Integer" >
+    select FCurNo from ICBillNo where fbillid = 1007006
+  </select>
+
+  <select id="getInterId" resultClass="java.lang.Integer" parameterClass="java.lang.String" >
+    select FInterID from PORFQ where FBillNo = #fBillNo:VARCHAR#
+  </select>
+  
+  <procedure id="updateOrfqId">  
+	{call sales_updateOrfqId()}  
+  </procedure>
+  
+  <procedure id="getNewInterId" parameterMap="interTable" >  
+	{call GetICMaxNumOld(?, ?, ?)}
+  </procedure>
+  
+  <update id="updateOrfqByBillNoes" parameterClass="java.util.Map" > 
+    Update PORFQ 
+    Set fStatus = #fStatus:Integer# 
+    Where FBillNo in $billNoes$
+  </update>
+  
+  <delete id="deleteOrfqByBillNoes" parameterClass="java.lang.String" > 
+    delete from PORFQ   
+    Where FBillNo in $billNoes$
+  </delete>
+
+  <select id="getInterIdBybillNo" resultClass="java.lang.Integer" parameterClass="java.lang.String" >
+    select FInterID from PORFQ where FBillNo in $fBillNo$
+  </select>
+  
+  <delete id="deleteOrfqEntrys" parameterClass="java.lang.String" > 
+    delete from PORFQENTRY   
+    Where FInterID in $interIds$
+  </delete>
+  
+  <update id="updateBillNoByInterId" parameterClass="com.sales.model.TOrfq" > 
+    Update PORFQ 
+    Set FBillNo = #fBillNo:VARCHAR# 
+    Where FInterID = #fInterID:Integer# 
+  </update>
+  
+</sqlMap>

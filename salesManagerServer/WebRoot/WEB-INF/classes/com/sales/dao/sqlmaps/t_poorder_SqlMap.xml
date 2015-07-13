@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_poOrder" >
+
+  <resultMap id="poOrderResult" class="com.sales.model.TPOOrder" > 
+    <result column="FInterID" property="fInterId" jdbcType="INTEGER" /> 
+    <result column="FDate" property="fDate" jdbcType="DATE" /> 
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FTranType" property="fTranType" jdbcType="INTEGER" />
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departName" property="departName" jdbcType="VARCHAR" />
+    <result column="requestUserId" property="requestUserId" jdbcType="INTEGER" />
+    <result column="requsterUserName" property="requsterUserName" jdbcType="VARCHAR" />
+    <result column="FSupplyID" property="fSupplyID" jdbcType="INTEGER" />
+    <result column="supplierName" property="supplierName" jdbcType="VARCHAR" />
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billerName" property="billerName" jdbcType="VARCHAR" /> 
+    <result column="FCheckDate" property="fCheckDate" jdbcType="DATE" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FSelTranType" property="fSelTranType" jdbcType="INTEGER" />
+    <result column="FTotalCostFor" property="totalCostFor" jdbcType="DOUBLE" /> 
+    <result column="FChildren" property="fChildren" jdbcType="INTEGER" />
+    <result column="FCancellation" property="fCancellation" jdbcType="INTEGER" />  
+    <result column="FClosed" property="fClosed" jdbcType="INTEGER" />
+    <result column="FInterID" property="orderEntryList" select="t_poOrder.getEntryListById" />
+    <result column="FInterID" property="stockinBillList" select="t_poOrder.getStockInBillListById" />
+  </resultMap> 
+
+  <resultMap id="poOrderEntryResult" class="com.sales.model.TPOOrderEntry" > 
+    <result column="FInterID" property="fInterId" jdbcType="INTEGER" />
+    <result column="FEntryID" property="fEntryId" jdbcType="INTEGER" />
+    <result column="FItemID" property="fItemId" jdbcType="INTEGER" />
+    <result column="productNumber" property="productNumber" jdbcType="VARCHAR" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="pruductModel" property="pruductModel" jdbcType="VARCHAR" /> 
+    <result column="FQty" property="fQty" jdbcType="VARCHAR" /> 
+    <result column="FCommitQty" property="fCommitQty" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" /> 
+    
+    <result column="FAuxQty" property="fAuxQty" jdbcType="DOUBLE" /> 
+    <result column="FAuxCommitQty" property="fAuxCommitQty" jdbcType="DOUBLE" />
+    <result column="FAuxPrice" property="fAuxPrice" jdbcType="DOUBLE" />
+    <result column="FAllAmount" property="allAmount" jdbcType="DOUBLE" />
+    
+    <result column="FPlanMode" property="fPlanMode" jdbcType="INTEGER" />
+    <result column="planMode" property="planMode" jdbcType="VARCHAR" />
+    <result column="FUnitID" property="fUnitId" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FSourceBillNo" property="fSourceBillNo" jdbcType="VARCHAR" />  
+    <result column="FSourceInterId" property="fSourceInterId" jdbcType="INTEGER" /> 
+    <result column="FSourceEntryID" property="fSourceEntryID" jdbcType="INTEGER" />
+    <result column="FSourceTranType" property="fSourceTranType" jdbcType="INTEGER" />
+    <result column="tranTypeName" property="tranTypeName" jdbcType="VARCHAR" />
+    
+    <result column="requestAmount" property="requestAmount" jdbcType="DOUBLE" /> 
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" /> 
+    <result column="requestUserId" property="requestUserId" jdbcType="INTEGER" />   
+    <result column="requestUserName" property="requestUserName" jdbcType="VARCHAR" /> 
+    <result column="inventory_amount" property="inventoryAmount" jdbcType="DOUBLE" />  
+  </resultMap> 
+  
+  <resultMap id="k3BillStatusResult" class="com.sales.model.K3BillStatus" >
+  	<result column="FInterID" property="interId" jdbcType="INTEGER" />
+  	<result column="FBillNo" property="billNo" jdbcType="VARCHAR" />
+  	<result column="FStatus" property="status" jdbcType="INTEGER" />
+  	<result column="FTranType" property="tranType" jdbcType="INTEGER" />
+  </resultMap>
+ 
+  <select id="getOrderById" resultMap="poOrderResult" parameterClass="java.util.Map" > 
+    SELECT  po.FInterID, po.FDate, po.FBillNo, po.FTranType, po.FStatus, 
+		po.FDeptID, dep.FName as departName,
+		po.FEmpId as requestUserId, rqr.FName as requsterUserName,
+		po.FBillerID, blr.FName as billerName,
+		FSupplyID, sp.FName as supplierName,
+		po.FCheckDate, po.FCheckerID, ckr.FName as checkerName,
+		po.FSelTranType, FTotalCostFor, 
+		po.FChildren, po.FCancellation, po.FClosed
+	FROM POOrder po left join sale_bill_status sb on po.FInterID = sb.bill_id and sb.relation_type=2
+		left join SEOrder so on sb.order_id = so.FInterID 
+		left join T_Item dep on po.FDeptID = dep.FItemId
+		inner join T_user blr on po.FBillerID = blr.FUserId 
+		left join T_user ckr on po.FCheckerId = ckr.FUserId
+		left join T_emp rqr on po.FEmpId = rqr.FItemId
+		left join t_Supplier sp on po.FSupplyID = sp.FItemID
+		
+    WHERE po.FInterID = #orderId:INTEGER# 
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getEntryListById" resultMap="poOrderEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT	pe.FInterId, FEntryId, 
+		pe.FItemId, ict.FNumber as productNumber, ict.FName as productName, ict.FModel as pruductModel,
+		pe.FQty, pe.FCommitQty, pe.FPrice, 
+		pe.FAuxQty, pe.FAuxCommitQty, pe.FAuxPrice,pe.FAllAmount, 
+		pe.FPlanMode, plm.FName as planMode,
+		pe.FUnitId, unt.FName as unitName,
+		FEntrySelfP0247 as requestAmount, cus.FName as customerName,
+		FEntrySelfP0248 as requestUserId, rqr.FName as requestUserName,
+		FSourceBillNo, FSourceInterId, FSourceEntryID, FSourceTranType, ttp.FName as tranTypeName,
+		ven.FQty as inventory_amount
+	FROM	POOrderEntry pe inner join T_ICItem ict on pe.FitemId = ict.FItemID
+		inner join t_measureUnit unt on pe.FUnitId = unt.FMeasureUnitId
+		left join t_SubMessage AS plm ON pe.FPlanMode = plm.FInterID
+		left join v_ICTransType AS ttp ON pe.FSourceTranType = ttp.FID
+		left join T_emp rqr on pe.FEntrySelfP0248 = rqr.FItemId
+		left join t_item cus on pe.FEntrySelfP0249 = cus.FItemId
+		left join icinventory ven on pe.FitemId = ven.FitemId
+	WHERE pe.FInterId = #orderId:INTEGER#
+  </select>
+  
+  <select id="getStockInBillListById" resultMap="k3BillStatusResult" parameterClass="java.lang.Integer" > 
+  	SELECT 	distinct poi.FInterID, poi.FBillNo,poi.FStatus, poi.FTranType
+  	FROM	POInstock poi inner join POInStockEntry poie on poi.FInterID = poie.FInterID
+  	WHERE 	poi.FTranType=72 and poie.FSourceTranType=71 and poie.FSourceInterId=#orderId:INTEGER#
+  </select>
+  
+  <select id="getOrderList" resultMap="poOrderResult" parameterClass="com.sales.model.TPOOrder" > 
+    SELECT TOP $pageSize$ po.FInterID, po.FDate, po.FBillNo, po.FTranType, po.FStatus, 
+		po.FDeptID, dep.FName as departName,
+		po.FEmpId as requestUserId, rqr.FName as requsterUserName,
+		po.FBillerID, blr.FName as billerName,
+		FSupplyID, sp.FName as supplierName,
+		po.FCheckDate, po.FCheckerID, ckr.FName as checkerName,
+		po.FSelTranType, FTotalCostFor, 
+		po.FChildren, po.FCancellation, po.FClosed
+	FROM POOrder po left join sale_bill_status sb on po.FInterID = sb.bill_id and sb.relation_type=2
+		left join SEOrder so on sb.order_id = so.FInterID 
+		left join T_Item dep on po.FDeptID = dep.FItemId
+		inner join T_user blr on po.FBillerID = blr.FUserId 
+		left join T_user ckr on po.FCheckerId = ckr.FUserId
+		left join T_emp rqr on po.FEmpId = rqr.FItemId
+		left join t_Supplier sp on po.FSupplyID = sp.FItemID
+    WHERE po.FInterID NOT IN 
+      (SELECT TOP $startNumber$ po.FInterID
+		FROM POOrder po left join sale_bill_status sb on po.FInterID = sb.bill_id and sb.relation_type=2
+			left join SEOrder so on sb.order_id = so.FInterID 		
+		WHERE 1=1 
+		<isNotNull property="requestUserId" prepend="and">
+		    po.FEmpId = #requestUserId#
+		</isNotNull> 
+		
+	    <isNotNull property="startTime" prepend="and">
+		    po.FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    po.FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull>  
+		<isNotNull property="customerIds" prepend="and">
+		    so.FCustID in $customerIds$
+		</isNotNull>
+		order by po.FDate desc
+	   )  
+	<isNotNull property="requestUserId" prepend="and">
+	    po.FEmpId = #requestUserId#
+	</isNotNull> 
+	
+    <isNotNull property="startTime" prepend="and">
+	    po.FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    po.FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+	order by po.FDate desc
+  </select>
+
+  <select id="getOrdersCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TPOOrder" > 
+    SELECT count(*)
+    FROM POOrder po left join sale_bill_status sb on po.FInterID = sb.bill_id and sb.relation_type=2
+			left join SEOrder so on sb.order_id = so.FInterID
+	WHERE 1=1
+	<isNotNull property="requestUserId" prepend="and">
+	    po.FEmpId = #requestUserId#
+	</isNotNull> 
+	
+    <isNotNull property="startTime" prepend="and">
+	    po.FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    po.FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull>  
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <!-- 根据订单id获取所有的采购订单列表 -->
+  <select id="getOrderListByIds" resultMap="poOrderResult" parameterClass="java.util.Map" > 
+    SELECT  po.FInterID, po.FDate, po.FBillNo, po.FTranType, po.FStatus, 
+		po.FDeptID, dep.FName as departName,
+		po.FEmpId as requestUserId, rqr.FName as requsterUserName,
+		po.FBillerID, blr.FName as billerName,
+		FSupplyID, sp.FName as supplierName,
+		po.FCheckDate, po.FCheckerID, ckr.FName as checkerName,
+		po.FSelTranType, FTotalCostFor, 
+		po.FChildren, po.FCancellation, po.FClosed
+	FROM POOrder po left join sale_bill_status sb on po.FInterID = sb.bill_id and sb.relation_type=2
+		left join SEOrder so on sb.order_id = so.FInterID 
+		left join T_Item dep on po.FDeptID = dep.FItemId
+		inner join T_user blr on po.FBillerID = blr.FUserId 
+		left join T_user ckr on po.FCheckerId = ckr.FUserId
+		left join T_emp rqr on po.FEmpId = rqr.FItemId
+		left join t_Supplier sp on po.FSupplyID = sp.FItemID
+    WHERE po.FInterID in #billIds#
+    <isNotNull property="customerIds" prepend="and">
+		    so.FCustID in #customerIds#
+	</isNotNull>
+  </select>
+  
+</sqlMap>

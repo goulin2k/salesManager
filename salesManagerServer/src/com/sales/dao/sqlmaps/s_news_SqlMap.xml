@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_news" >
+  <resultMap id="sNewsResult" class="com.sales.model.SNews" > 
+    <result column="news_id" property="newsId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" /> 
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" /> 
+    <result column="user_name" property="userName" jdbcType="VARCHAR" /> 
+    <result column="add_time" property="addTime" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" /> 
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" /> 
+  </resultMap> 
+  
+  <delete id="deleteNews" parameterClass="java.lang.Integer" > 
+    delete from s_news
+    where news_id = #newsId:INTEGER#
+  </delete>
+  
+  <insert id="insertNews" parameterClass="com.sales.model.SNews" > 
+    insert into s_news (title, content, user_id, add_time, status, type, img_url)
+    values (#title:VARCHAR#, #content:VARCHAR#, #userId:INTEGER#, #addTime:DATE#, #status:INTEGER#, #type:INTEGER#, #imgUrl:VARCHAR#)
+  </insert>
+  
+  <update id="updateNewsById" parameterClass="com.sales.model.SNews" > 
+    update s_news
+    set title = #title:VARCHAR#, 
+      content = #content:VARCHAR#,
+      user_id = #userId:INTEGER#,  
+      status = #status:INTEGER#
+      <isNotNull prepend="," property="imgUrl" >
+        img_url = #imgUrl:VARCHAR#
+      </isNotNull>
+    where news_id = #newsId:INTEGER#
+  </update> 
+  
+  <select id="getNewsById" resultMap="sNewsResult" parameterClass="java.lang.Integer" > 
+    select n.news_id, n.title, n.content, n.user_id, u.user_name, n.add_time, n.status, n.type, n.img_url
+    from s_news n, s_user u
+    where news_id = #newsId:INTEGER# and n.user_id = u.user_id 
+  </select>
+  
+  <select id="getNewsCount" resultClass="java.lang.Integer"  parameterClass="java.util.Map">
+      select count(*) from s_news
+	  <dynamic prepend="where " >  
+	    <isNotNull property="title" prepend="and">
+		    title like '%$title$%'
+		</isNotNull>
+		<isNotNull property="status" prepend="and">
+		    status = #status#
+		</isNotNull>
+		<isNotNull property="type" prepend="and">
+		    type = #type#
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <select id="getNewsList" resultMap="sNewsResult" parameterClass="java.util.Map" > 
+    select n.news_id, n.title, n.content, n.user_id, u.user_name, n.add_time, n.status, n.type, n.img_url
+    from s_news n, s_user u
+    where n.user_id = u.user_id
+    <isNotNull property="title" prepend="and">
+	    title like '%$title$%'
+	</isNotNull>
+	<isNotNull property="status" prepend="and">
+	    n.status = #status#
+	</isNotNull>
+	<isNotNull property="type" prepend="and">
+	    n.type = #type#
+	</isNotNull>
+	ORDER BY n.add_time DESC
+	limit #startNumber#, #pageSize#
+  </select>
+</sqlMap>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_out_stock" >
+
+  <resultMap id="outStockResult" class="com.sales.model.TOutStock" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />
+    <result column="FSalType" property="fSalType" jdbcType="INTEGER" />
+    <result column="saleTypeName" property="saleTypeName" jdbcType="VARCHAR" />     
+    <result column="FCustID" property="fCustID" jdbcType="INTEGER" />
+    <result column="customerName" property="customerName" jdbcType="VARCHAR" />
+    <result column="FStockID" property="fStockID" jdbcType="INTEGER" />
+    <result column="stockName" property="stockName" jdbcType="VARCHAR" />  
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FCheckerID" property="fCheckerID" jdbcType="INTEGER" />
+    <result column="checkerName" property="checkerName" jdbcType="VARCHAR" /> 
+    <result column="FCheckDate" property="fCheckDate" jdbcType="DATE" /> 
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billerName" property="billerName" jdbcType="VARCHAR" />
+    <result column="FManagerID" property="fManagerID" jdbcType="INTEGER" />
+    <result column="managerName" property="managerName" jdbcType="VARCHAR" />
+    <result column="FClosed" property="fClosed" jdbcType="INTEGER" />
+    <result column="FInvoiceClosed" property="fInvoiceClosed" jdbcType="INTEGER" /> 
+    <result column="FTranStatus" property="fTranStatus" jdbcType="INTEGER" /> 
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" /> 
+    <result column="FCancellation" property="fCancellation" jdbcType="VARCHAR" />
+    <result column="FSelTranType" property="fSelTranType" jdbcType="INTEGER" />
+    <result column="FPOOrdBillNo" property="fPOOrdBillNo" jdbcType="VARCHAR" />
+    <result column="FHeadSelfS0236" property="fHeadSelfS0236" jdbcType="VARCHAR" />
+    <result column="FHeadSelfS0237" property="fHeadSelfS0237" jdbcType="VARCHAR" />
+    <result column="FInterID" property="outStockEntryList" select="t_out_stock.getOutStockEntryListByOutStockId" />
+  </resultMap> 
+
+  <resultMap id="outStockEntryResult" class="com.sales.model.TOutStockEntry" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" /> 
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productNumber" property="productNumber" jdbcType="VARCHAR" /> 
+    <result column="productModel" property="productModel" jdbcType="VARCHAR" /> 
+    <result column="FQty" property="fQty" jdbcType="VARCHAR" />
+    <result column="FPrice" property="fPrice" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" /> 
+    <result column="FOrderBillNo" property="fOrderBillNo" jdbcType="VARCHAR" />  
+    <result column="FOrderInterID" property="fOrderInterID" jdbcType="INTEGER" /> 
+    <result column="FOrderEntryID" property="fOrderEntryID" jdbcType="INTEGER" />
+    <result column="FSourceTranType" property="fSourceTranType" jdbcType="INTEGER" />
+    <result column="tranTypeName" property="tranTypeName" jdbcType="VARCHAR" /> 
+    <result column="FSourceInterId" property="fSourceInterId" jdbcType="INTEGER" />
+    <result column="FSourceBillNo" property="fSourceBillNo" jdbcType="VARCHAR" /> 
+  </resultMap>
+
+  <select id="getOutStockById" resultMap="outStockResult" parameterClass="java.util.Map" > 
+    SELECT so.FInterId, so.FBillNo, FDate, so.FNote,
+		FSalType, sbm.FName as SaleTypeName,
+		FCustID, cs.FName as customerName,
+		FStockID, stk.FName as stockName,		 
+		so.FEmpID, emp.FName as employeeName,   
+		so.FCheckerID, usr.FName as checkerName, FCheckDate,	                                                                   
+		FBillerID, blr.FName as billerName, 
+		FManagerID, mgr.FName as managerName, 
+		FClosed, FInvoiceClosed, 
+		FTranStatus, so.FStatus, FCancellation, 
+		FSelTranType, 
+		FPOOrdBillNo, 
+		'' as FHeadSelfS0236, '' as FHeadSelfS0237   
+	FROM SEOutStock so 
+		left join t_SubMessage sbm on so.FSalType = sbm.FInterID 
+		left join t_organization cs on so.FCustID = cs.FItemId
+		left join t_Stock stk ON so.FStockID = stk.FItemID
+		left join t_emp emp ON so.FEmpID = emp.FItemID
+		left join t_user usr ON so.FCheckerID = usr.FUserId
+		left join t_user blr ON so.FBillerID = blr.FUserId
+		left join t_user mgr ON so.FManagerID = mgr.FUserId
+	WHERE so.FInterId = #outStockId:INTEGER# AND FTranType = 83
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getOutStockEntryListByOutStockId" resultMap="outStockEntryResult" parameterClass="java.lang.Integer" > 
+	SELECT soe.FInterID, soe.FEntryID, FDate, soe.FNote,
+		soe.FItemId, ict.FName as productName, ict.FNumber as productNumber, ict.FModel as productModel,
+		FQty, FPrice, soe.FUnitID, mut.FName as unitName, FAmount, 
+		FOrderBillNo, FOrderInterID, FOrderEntryID,
+		FSourceTranType, ttp.FName as tranTypeName, FSourceInterId, FSourceBillNo
+	FROM SEOutStockEntry soe inner join t_ICItem ict on soe.FItemId = ict.FItemId
+		left join t_MeasureUnit mut on soe.FUnitID = mut.FMeasureUnitId
+		left join v_ICTransType ttp ON soe.FSourceTranType = ttp.FID
+	WHERE soe.FInterId= #outStockId:INTEGER# 
+  </select>
+  
+  <select id="getOutStockList" resultMap="outStockResult" parameterClass="com.sales.model.TOutStock" > 
+    SELECT TOP $pageSize$ so.FInterId, so.FBillNo, FDate, so.FNote,
+		FSalType, sbm.FName as SaleTypeName,
+		FCustID, cs.FName as customerName,
+		FStockID, stk.FName as stockName,		 
+		so.FEmpID, emp.FName as employeeName,   
+		so.FCheckerID, usr.FName as checkerName, FCheckDate,	                                                                   
+		FBillerID, blr.FName as billerName, 
+		FManagerID, mgr.FName as managerName, 
+		FClosed, FInvoiceClosed, 
+		FTranStatus, so.FStatus, FCancellation, 
+		FSelTranType, 
+		FPOOrdBillNo, 
+		'' as FHeadSelfS0236, '' as FHeadSelfS0237   
+	FROM SEOutStock so 
+		left join t_SubMessage sbm on so.FSalType = sbm.FInterID 
+		left join t_organization cs on so.FCustID = cs.FItemId
+		left join t_Stock stk ON so.FStockID = stk.FItemID
+		left join t_emp emp ON so.FEmpID = emp.FItemID
+		left join t_user usr ON so.FCheckerID = usr.FUserId
+		left join t_user blr ON so.FBillerID = blr.FUserId
+		left join t_user mgr ON so.FManagerID = mgr.FUserId 
+    WHERE FTranType = 83 AND so.FInterId NOT IN 
+      (SELECT TOP $startNumber$ so.FInterId
+		FROM SEOutStock so 
+			left join t_SubMessage sbm on so.FSalType = sbm.FInterID 
+			left join t_organization cs on so.FCustID = cs.FItemId
+			left join t_Stock stk ON so.FStockID = stk.FItemID
+			left join t_emp emp ON so.FEmpID = emp.FItemID
+			left join t_user usr ON so.FCheckerID = usr.FUserId
+			left join t_user blr ON so.FBillerID = blr.FUserId
+			left join t_user mgr ON so.FManagerID = mgr.FUserId 
+	    WHERE FTranType = 83
+		<isNotNull property="fCustID" prepend="and">
+		    FCustID = #fCustID#
+		</isNotNull> 
+		<isNotNull property="fEmpID" prepend="and">
+		    so.FEmpID = #fEmpID#
+		</isNotNull> 
+		<isNotNull property="fStatus" prepend="and">
+		    so.FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    FCustID in $customerIds$
+		</isNotNull>
+		order by FDate desc
+	   ) 
+	<isNotNull property="fCustID" prepend="and">
+	    FCustID = #fCustID#
+	</isNotNull> 
+	<isNotNull property="fEmpID" prepend="and">
+	    so.FEmpID = #fEmpID#
+	</isNotNull> 
+	<isNotNull property="fStatus" prepend="and">
+	    so.FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+	order by FDate desc
+  </select>
+
+  <select id="getOutStockCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TOutStock" > 
+    SELECT count(*)
+    FROM SEOutStock so 
+		left join t_SubMessage sbm on so.FSalType = sbm.FInterID 
+		left join t_organization cs on so.FCustID = cs.FItemId
+		left join t_Stock stk ON so.FStockID = stk.FItemID
+		left join t_emp emp ON so.FEmpID = emp.FItemID
+		left join t_user usr ON so.FCheckerID = usr.FUserId
+		left join t_user blr ON so.FBillerID = blr.FUserId
+		left join t_user mgr ON so.FManagerID = mgr.FUserId 
+    WHERE FTranType = 83
+	<isNotNull property="fCustID" prepend="and">
+	    FCustID = #fCustID#
+	</isNotNull> 
+	<isNotNull property="fEmpID" prepend="and">
+	    so.FEmpID = #fEmpID#
+	</isNotNull> 
+	<isNotNull property="fStatus" prepend="and">
+	    so.FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getOutStockAllList" resultMap="outStockResult" parameterClass="java.lang.String" > 
+    SELECT so.FInterId, so.FBillNo, FDate, so.FNote,
+		FSalType, sbm.FName as SaleTypeName,
+		FCustID, cs.FName as customerName,
+		FStockID, stk.FName as stockName,		
+		so.FEmpID, emp.FName as employeeName,   
+		so.FCheckerID, usr.FName as checkerName, FCheckDate,	                                                                   
+		FBillerID, blr.FName as billerName, 
+		FManagerID, mgr.FName as managerName, 
+		FClosed, FInvoiceClosed, 
+		FTranStatus, so.FStatus, FCancellation, 
+		FSelTranType, 
+		FPOOrdBillNo, 
+		'' as FHeadSelfS0236, '' as FHeadSelfS0237 
+	FROM SEOutStock so 
+			left join t_SubMessage sbm on so.FSalType = sbm.FInterID 
+			left join t_organization cs on so.FCustID = cs.FItemId
+			left join t_Stock stk ON so.FStockID = stk.FItemID
+			left join t_emp emp ON so.FEmpID = emp.FItemID
+			left join t_user usr ON so.FCheckerID = usr.FUserId
+			left join t_user blr ON so.FBillerID = blr.FUserId
+			left join t_user mgr ON so.FManagerID = mgr.FUserId
+	WHERE FTranType = 83 AND so.FInterId IN $billIds$
+  </select>
+  
+</sqlMap>

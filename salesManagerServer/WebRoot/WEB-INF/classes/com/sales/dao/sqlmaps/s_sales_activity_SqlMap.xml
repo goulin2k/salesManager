@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_activity" >
+
+	<!-- 销售活动字段映射 -->
+  <resultMap id="sSalesActivityResult" class="com.sales.model.SSalesActivity" >
+    <result column="activity_id" property="activityId" jdbcType="INTEGER" />
+    <result column="topical" property="topical" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="INTEGER" />
+    <result column="project_topical" property="projectTopical" jdbcType="VARCHAR" />
+    <result column="enumeration_id" property="enumerationId" jdbcType="INTEGER" /> 
+    <result column="enumeration_name" property="enumerationName" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="activity_date" property="activityDate" jdbcType="TIMESTAMP" />
+    <result column="response_user_id" property="responseUserId" jdbcType="INTEGER" />
+    <result column="response_user_name" property="responseUserName" jdbcType="VARCHAR" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="completion_rate" property="completionRate" jdbcType="VARCHAR" />
+    <result column="visit_person" property="visitPerson" jdbcType="VARCHAR" />
+    <result column="coordination_visit_person" property="coordinationVisitPerson" jdbcType="VARCHAR" />
+    <result column="customer_project_id" property="customerProjectId" jdbcType="INTEGER" /> 
+    <result column="customer_project_name" property="customerProjectName" jdbcType="VARCHAR" />
+    
+    <!-- 地理位置相关信息字段 -->
+    <result column="loc_latitude" property="locLatitude" jdbcType="VARCHAR" />
+    <result column="loc_longitude" property="locLongitude" jdbcType="VARCHAR" />
+    <result column="loc_address" property="locAddress" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getActivityByProjectId" resultMap="sSalesActivityResult" parameterClass="java.lang.Integer" > 
+    select a.activity_id, a.topical, a.project_id, "" as project_topical, a.customer_id, c.FName as customer_name, a.activity_date, a.response_user_id,
+      u.user_name as response_user_name, a.comment, a.completion_rate, a.visit_person, a.coordination_visit_person, a.enumeration_id, e.enumeration_name,
+      a.customer_project_id, s.name as customer_project_name, loc_latitude, loc_longitude, loc_address
+    from s_user u, s_enumeration e, s_sales_activity a left join t_customer c on a.customer_id = c.customer_id
+    	left join s_customer_project s on a.customer_project_id = s.project_id
+    where a.project_id = #projectId:INTEGER# and a.response_user_id = u.user_id and e.enumeration_id = a.enumeration_id
+    order by a.activity_date desc
+  </select>
+  
+  <select id="getActivityById" resultMap="sSalesActivityResult" parameterClass="java.util.HashMap" > 
+    select a.activity_id, a.topical, a.project_id, p.topical as project_topical, a.customer_id, c.FName as customer_name, a.activity_date, a.response_user_id, 
+    u.user_name as response_user_name, a.comment, a.completion_rate, a.visit_person, a.coordination_visit_person, a.enumeration_id, e.enumeration_name,
+    a.customer_project_id, s.name as customer_project_name, loc_latitude, loc_longitude, loc_address
+    from s_user u, s_enumeration e, s_sales_activity a left join s_sales_project p on a.project_id = p.project_id 
+    left join t_customer c on a.customer_id = c.customer_id left join s_customer_project s on a.customer_project_id = s.project_id
+    where a.activity_id = #activityId:INTEGER# and a.response_user_id = u.user_id and e.enumeration_id = a.enumeration_id 
+	<isNotNull property="childUserIds" prepend="and">
+	    a.response_user_id in $childUserIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getActivityList" resultMap="sSalesActivityResult" parameterClass="java.util.Map" > 
+    select a.activity_id, a.topical, a.project_id, p.topical as project_topical, a.customer_id, c.FName as customer_name, a.activity_date, 
+    a.response_user_id, u.user_name as response_user_name, a.comment, a.completion_rate, a.visit_person, a.coordination_visit_person, 
+    a.enumeration_id, e.enumeration_name, a.customer_project_id, s.name as customer_project_name, loc_latitude, loc_longitude, loc_address
+    from s_user u, s_enumeration e, s_sales_activity a 
+    	left join s_sales_project p on a.project_id = p.project_id 
+    	left join t_customer c on a.customer_id = c.customer_id 
+    	left join s_customer_project s on a.customer_project_id = s.project_id
+ 
+    where a.response_user_id = u.user_id and e.enumeration_id = a.enumeration_id	 
+	<isNotNull property="projectId" prepend="and">
+	    a.project_id = #projectId#
+	</isNotNull>
+	<isNotNull property="enumerationId" prepend="and">
+	    a.enumeration_id = #enumerationId#
+	</isNotNull>
+	<isNotNull property="customerId" prepend="and">
+	    a.customer_id = #customerId#
+	</isNotNull>
+	<isNotNull property="responseUserId" prepend="and">
+	    a.response_user_id = #responseUserId#
+	</isNotNull>
+	<isNotNull property="topical" prepend="and">
+	    a.topical like '%$topical$%'
+	</isNotNull>
+	<isNotNull property="responseUserName" prepend="and">
+	    u.user_name like '%$responseUserName$%'
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    a.activity_date 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    a.activity_date 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="childUserIds" prepend="and">
+	    a.response_user_id in $childUserIds$
+	</isNotNull>
+	order by a.activity_date desc 
+	limit #startNumber#, #pageSize#
+  </select>
+    
+  <select id="getActivityCount" resultClass="java.lang.Integer" parameterClass="java.util.Map" > 
+    select count(*)
+    from s_enumeration e, s_sales_activity a 
+    	left join s_sales_project p on a.project_id = p.project_id  
+    	left join s_user u on a.response_user_id = u.user_id
+    where e.enumeration_id = a.enumeration_id
+    <isNotNull property="projectId" prepend="and">
+	    a.project_id = #projectId#
+	</isNotNull>
+	<isNotNull property="enumerationId" prepend="and">
+	    a.enumeration_id = #enumerationId#
+	</isNotNull>
+	<isNotNull property="customerId" prepend="and">
+	    a.customer_id = #customerId#
+	</isNotNull>
+	<isNotNull property="responseUserId" prepend="and">
+	    a.response_user_id = #responseUserId#
+	</isNotNull>
+	<isNotNull property="topical" prepend="and">
+	    a.topical like '%$topical$%'
+	</isNotNull>
+	<isNotNull property="responseUserName" prepend="and">
+	    u.user_name like '%$responseUserName$%'
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    a.activity_date 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    a.activity_date 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull>
+	<isNotNull property="childUserIds" prepend="and">
+	    a.response_user_id in $childUserIds$
+	</isNotNull>
+  </select>
+  
+  <delete id="deleteActivity" parameterClass="java.lang.Integer" > 
+    delete from s_sales_activity
+    where activity_id = #activityId:INTEGER#
+  </delete>
+  
+  <insert id="insertActivity" parameterClass="com.sales.model.SSalesActivity" > 
+    insert into s_sales_activity (activity_id, topical, project_id, customer_id, activity_date,
+      response_user_id, comment, completion_rate, visit_person, coordination_visit_person, enumeration_id, 
+      customer_project_id, loc_latitude, loc_longitude, loc_address)
+    values (#activityId:INTEGER#, #topical:VARCHAR#, #projectId:INTEGER#, #customerId:INTEGER#,
+      #activityDate:TIMESTAMP#, #responseUserId:INTEGER#, #comment:VARCHAR#, #completionRate:VARCHAR#, 
+      #visitPerson:VARCHAR#, #coordinationVisitPerson:VARCHAR#, #enumerationId:INTEGER#, #customerProjectId:INTEGER#,
+      #locLatitude:VARCHAR#, #locLongitude:VARCHAR#, #locAddress:VARCHAR#)
+    <selectKey resultClass="int" keyProperty="activityId">
+	    select LAST_INSERT_ID() as activityId
+    </selectKey>
+  </insert>
+   
+  <update id="updateActivity" parameterClass="com.sales.model.SSalesActivity" > 
+    update s_sales_activity
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="topical" >
+        topical = #topical:VARCHAR#
+      </isNotNull> 
+      <isNotNull prepend="," property="enumerationId" >
+        enumeration_id = #enumerationId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="customerId" >
+        customer_id = #customerId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="activityDate" >
+        activity_date = #activityDate:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="responseUserId" >
+        response_user_id = #responseUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="comment" >
+        comment = #comment:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="completionRate" >
+        completion_rate = #completionRate:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="visitPerson" >
+        visit_person = #visitPerson:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="coordinationVisitPerson" >
+        coordination_visit_person = #coordinationVisitPerson:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="customerProjectId" >
+        customer_project_id = #customerProjectId:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where activity_id = #activityId:INTEGER#
+  </update>
+  
+  <select id="getActivityByCustomerId" resultMap="sSalesActivityResult" parameterClass="java.lang.Integer" > 
+    select a.activity_id, a.topical, a.project_id, t.topical as project_topical, a.customer_id, c.FName as customer_name, a.activity_date, a.response_user_id,
+      u.user_name as response_user_name, a.comment, a.completion_rate, a.visit_person, a.coordination_visit_person, a.enumeration_id, e.enumeration_name,
+      a.customer_project_id, s.name as customer_project_name, loc_latitude, loc_longitude, loc_address
+    from s_user u, s_enumeration e, t_customer c, s_sales_activity a left join s_sales_project t on a.project_id = t.project_id 
+    	left join s_customer_project s on a.customer_project_id = s.project_id
+    where a.customer_id = #customerId:INTEGER# and a.customer_id = c.customer_id and a.response_user_id = u.user_id and e.enumeration_id = a.enumeration_id
+    order by a.activity_date desc
+  </select>
+  
+  <select id="getActivityByCustomerProId" resultMap="sSalesActivityResult" parameterClass="java.lang.Integer" > 
+    select a.activity_id, a.topical, a.project_id, t.topical as project_topical, a.customer_id, c.FName as customer_name, a.activity_date, a.response_user_id,
+      u.user_name as response_user_name, a.comment, a.completion_rate, a.visit_person, a.coordination_visit_person, a.enumeration_id, e.enumeration_name,
+      a.customer_project_id, s.name as customer_project_name, loc_latitude, loc_longitude, loc_address
+    from s_user u, s_enumeration e, t_customer c, s_sales_activity a left join s_sales_project t on a.project_id = t.project_id 
+    	left join s_customer_project s on a.customer_project_id = s.project_id
+    where a.customer_project_id = #customerProjectId:INTEGER# and a.customer_id = c.customer_id and a.response_user_id = u.user_id and e.enumeration_id = a.enumeration_id
+  </select>
+  
+</sqlMap>

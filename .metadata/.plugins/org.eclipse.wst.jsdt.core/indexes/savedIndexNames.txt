@@ -1,0 +1,6 @@
+INDEX VERSION 1.122+/Users/apple/Workspaces/sm/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+250722179.index
+3794685108.index
+121238604.index
+3642885667.index
+688732001.index

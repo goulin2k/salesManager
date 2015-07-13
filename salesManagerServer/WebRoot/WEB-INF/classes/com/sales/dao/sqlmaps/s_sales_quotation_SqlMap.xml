@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="s_sales_quotation" >
+
+  <resultMap id="quotationResult" class="com.sales.model.SSalesQuotation" > 
+    <result column="quotation_id" property="quotationId" jdbcType="INTEGER" />
+    <result column="quotation_code" property="quotationCode" jdbcType="VARCHAR" />
+    <result column="quotation_user_id" property="quotationUserId" jdbcType="INTEGER" />
+    <result column="quotation_user_name" property="quotationUserName" jdbcType="VARCHAR" />
+    <result column="purchase_user_id" property="purchaseUserId" jdbcType="INTEGER" />
+    <result column="purchase_user_name" property="purchaseUserName" jdbcType="VARCHAR" />
+    <result column="quotation_time" property="quotationTime" jdbcType="Timestamp" />
+    <result column="reply_time" property="replyTime" jdbcType="Timestamp" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="issued" property="issued" jdbcType="VARCHAR" /> 
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="quotation_id" property="quotationProductList" select="s_sales_quotation_product.getQuotationProductListByQuotationId" />
+    <result column="orfq_id" property="orfqId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="quotationViewResult" class="com.sales.model.SSalesQuotationView" > 
+    <result column="quotation_id" property="quotationId" jdbcType="INTEGER" />
+    <result column="quotation_code" property="quotationCode" jdbcType="VARCHAR" />
+    <result column="quotation_user_id" property="quotationUserId" jdbcType="INTEGER" />
+    <result column="quotation_user_name" property="quotationUserName" jdbcType="VARCHAR" />
+    <result column="purchase_user_id" property="purchaseUserId" jdbcType="INTEGER" />
+    <result column="purchase_user_name" property="purchaseUserName" jdbcType="VARCHAR" />
+    <result column="quotation_time" property="quotationTime" jdbcType="Timestamp" />
+    <result column="reply_time" property="replyTime" jdbcType="Timestamp" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="comment" property="comment" jdbcType="VARCHAR" />
+    <result column="issued" property="issued" jdbcType="VARCHAR" /> 
+    <result column="customer_id" property="customerId" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="quotation_id" property="quotationProductList" select="s_sales_quotation_product.getQuotationProductListByQuotationId" />
+    <result column="orfq_id" property="orfqId" jdbcType="INTEGER" />
+    
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_model" property="productModel" jdbcType="VARCHAR" />
+    <result column="pack_model" property="packModel" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="getQuotationById" resultMap="quotationResult" parameterClass="java.util.Map" >
+    select q.quotation_id, q.quotation_code, q.quotation_user_id, u1.user_name as quotation_user_name,
+    	q.purchase_user_id, u2.user_name as purchase_user_name, q.quotation_time, q.reply_time, q.status, 
+    	q.comment, q.issued, q.customer_id, t.fname as customer_name, po.FInterID as orfq_id
+    from s_sales_quotation q left join s_user u1 on q.quotation_user_id = u1.user_id
+    	 left join s_user u2 on q.purchase_user_id = u2.user_id
+    	 left join t_customer t on q.customer_id = t.customer_id
+    	 left join porfq po on q.quotation_code = po.quotation_code
+    where q.quotation_id = #quotationId:INTEGER#    
+	<isNotNull property="childUserIds" prepend="and">
+	    q.quotation_user_id in $childUserIds$
+	</isNotNull>
+	<isNotNull property="purchaseUserId" prepend="and">
+	    q.purchase_user_id = #purchaseUserId:INTEGER#
+	</isNotNull>
+  </select>
+  
+  <select id="getQuotationByIdNoFilter" resultMap="quotationResult" parameterClass="java.lang.Integer" >
+    select q.quotation_id, q.quotation_code, q.quotation_user_id, u1.user_name as quotation_user_name,
+    	q.purchase_user_id, u2.user_name as purchase_user_name, q.quotation_time, q.reply_time, q.status, 
+    	q.comment, q.issued, q.customer_id, t.fname as customer_name, po.FInterID as orfq_id
+    from s_sales_quotation q left join s_user u1 on q.quotation_user_id = u1.user_id
+    	 left join s_user u2 on q.purchase_user_id = u2.user_id
+    	 left join t_customer t on q.customer_id = t.customer_id
+    	 left join porfq po on q.quotation_code = po.quotation_code
+    where q.quotation_id = #quotationId:INTEGER#     
+  </select>
+  
+  <insert id="insertQuotation" parameterClass="com.sales.model.SSalesQuotation" > 
+    insert into s_sales_quotation (quotation_code, quotation_user_id,
+      purchase_user_id, quotation_time, reply_time, status, comment, issued, customer_id)
+    values (#quotationCode:VARCHAR#, #quotationUserId:INTEGER#,
+      #purchaseUserId:INTEGER#, SYSDATE(), #replyTime:DATE#, #status:INTEGER#,
+      #comment:VARCHAR#, #issued:VARCHAR#, #customerId:INTEGER#)
+      <selectKey resultClass="int" keyProperty="quotationId">
+		select LAST_INSERT_ID() as quotationId
+	  </selectKey>
+  </insert>
+  
+  <update id="updateQuotation" parameterClass="com.sales.model.SSalesQuotation" > 
+    update s_sales_quotation
+    <dynamic prepend="set" >  
+      <isNotNull prepend="," property="purchaseUserId" >
+        purchase_user_id = #purchaseUserId:INTEGER#
+      </isNotNull> 
+      <isNotNull prepend="," property="replyTime" >
+        reply_time = SYSDATE()
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        status = #status:INTEGER#
+      </isNotNull> 
+      <isNotNull prepend="," property="comment" >
+        comment = #comment:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where quotation_id = #quotationId:INTEGER#
+  </update>
+  
+  <select id="getQuotationList" resultMap="quotationViewResult" parameterClass="java.util.HashMap" >
+    SELECT q.quotation_id, q.quotation_code, q.quotation_user_id, u1.user_name AS quotation_user_name,
+    	q.purchase_user_id, u2.user_name AS purchase_user_name, q.quotation_time, q.reply_time, q.status, 
+    	q.comment, q.issued, q.customer_id, t.fname AS customer_name, po.FInterID AS orfq_id,
+    	qp.product_name, qp.product_model, qp.pack_model, qp.num, qp.price
+	FROM s_sales_quotation q 
+	   INNER JOIN s_sales_quotation_product qp ON q.quotation_id = qp.quotation_id
+       LEFT JOIN s_user u1 ON q.quotation_user_id = u1.user_id
+       LEFT JOIN s_user u2 ON q.purchase_user_id = u2.user_id 
+       LEFT JOIN t_customer t ON q.customer_id = t.customer_id
+       LEFT JOIN porfq po ON q.quotation_code = po.quotation_code
+	   INNER JOIN (
+		    select q.quotation_id
+		    from s_sales_quotation q left join s_user u1 on q.quotation_user_id = u1.user_id
+		    	left join s_user u2 on q.purchase_user_id = u2.user_id 
+		    	left join t_customer t on q.customer_id = t.customer_id
+		    	left join porfq po on q.quotation_code = po.quotation_code
+		    <isNotNull property="productCode">
+			    join s_sales_quotation_product p on q.quotation_id = p.quotation_id and p.product_code = #productCode:VARCHAR#
+			</isNotNull>
+		    <isNotNull property="quotationUserName">
+			    join s_user u3 on q.quotation_user_id = u3.user_id and u3.user_name like '%$quotationUserName$%'
+			</isNotNull>
+		    <dynamic prepend="where" >  
+			    <isNotNull property="quotationUserId" prepend="and">
+				    q.quotation_user_id = #quotationUserId:INTEGER#
+				</isNotNull>
+				<isNotNull property="purchaseUserId" prepend="and">
+				    q.purchase_user_id = #purchaseUserId:INTEGER#
+				</isNotNull>
+				<isNotNull property="status" prepend="and">
+				    q.status = #status:INTEGER#
+				</isNotNull>
+			    <isNotNull property="startTime" prepend="and">
+				    q.quotation_time 
+				    <![CDATA[
+				     >= 
+				    ]]>
+				    #startTime#
+			    </isNotNull>
+			    <isNotNull property="endTime" prepend="and">
+				    q.quotation_time 
+				    <![CDATA[
+				     <= 
+				    ]]>
+				    #endTime#
+			    </isNotNull> 
+				<isNotNull property="customerId" prepend="and">
+				    q.customer_id = #customerId#
+				</isNotNull>
+				<isNotNull property="childUserIds" prepend="and">
+				    q.quotation_user_id in $childUserIds$
+				</isNotNull>
+		    </dynamic>
+			order by q.quotation_time desc
+			limit #startNumber#, #pageSize#
+		) AS pager ON q.quotation_id = pager.quotation_id
+  </select>
+  
+  <select id="getQuotationCount" resultClass="java.lang.Integer" parameterClass="java.util.HashMap" >
+    select count(*)
+    from s_sales_quotation q 
+    <isNotNull property="productCode">
+	    join s_sales_quotation_product p on q.quotation_id = p.quotation_id and p.product_code = #productCode:VARCHAR#
+	</isNotNull>
+    <isNotNull property="quotationUserName">
+	    join s_user u3 on q.quotation_user_id = u3.user_id and u3.user_name like '%$quotationUserName$%'
+	</isNotNull>
+    <dynamic prepend="where" >  
+	    <isNotNull property="quotationUserId" prepend="and">
+		    q.quotation_user_id = #quotationUserId:INTEGER#
+		</isNotNull>
+		<isNotNull property="purchaseUserId" prepend="and">
+		    q.purchase_user_id = #purchaseUserId:INTEGER#
+		</isNotNull>
+		<isNotNull property="status" prepend="and">
+		    q.status = #status:INTEGER#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    q.quotation_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    q.quotation_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerId" prepend="and">
+		    q.customer_id = #customerId#
+		</isNotNull>
+		<isNotNull property="childUserIds" prepend="and">
+		    q.quotation_user_id in $childUserIds$
+		</isNotNull>
+	</dynamic>
+  </select>
+  
+  <delete id="abatorgenerated_deleteByPrimaryKey" parameterClass="com.sales.model.SSalesQuotation" >
+    <!--
+      WARNING - This element is automatically generated by Abator for iBATIS, do not modify.
+      This element was generated on Tue Apr 23 17:36:31 CST 2013.
+    -->
+    delete from s_sales_quotation
+    where quotation_id = #quotationId:INTEGER#
+  </delete>
+   
+  <select id="getMaxCode" resultClass="java.lang.String"> 
+    select max(quotation_code) from s_sales_quotation where DATE_FORMAT(quotation_time, '%Y-%m-%d')  = curdate()
+  </select>
+   
+  <select id="getAllQuotationList" resultMap="quotationResult" parameterClass="java.util.HashMap" >
+    select q.quotation_id, q.quotation_code, q.quotation_user_id, u1.user_name as quotation_user_name,
+    	q.purchase_user_id, u2.user_name as purchase_user_name, q.quotation_time, q.reply_time, q.status, 
+    	q.comment, q.issued, q.customer_id, t.fname as customer_name, po.FInterID as orfq_id
+    from s_sales_quotation q left join s_user u1 on q.quotation_user_id = u1.user_id
+    	left join s_user u2 on q.purchase_user_id = u2.user_id 
+    	left join t_customer t on q.customer_id = t.customer_id
+    	left join porfq po on q.quotation_code = po.quotation_code
+    <isNotNull property="productCode">
+	    join s_sales_quotation_product p on q.quotation_id = p.quotation_id and p.product_code = #productCode:VARCHAR#
+	</isNotNull>
+    <isNotNull property="quotationUserName">
+	    join s_user u3 on q.quotation_user_id = u3.user_id and u3.user_name like '%$quotationUserName$%'
+	</isNotNull>
+    <dynamic prepend="where" >  
+	    <isNotNull property="quotationUserId" prepend="and">
+		    q.quotation_user_id = #quotationUserId:INTEGER#
+		</isNotNull>
+		<isNotNull property="purchaseUserId" prepend="and">
+		    q.purchase_user_id = #purchaseUserId:INTEGER#
+		</isNotNull>
+		<isNotNull property="status" prepend="and">
+		    q.status = #status:INTEGER#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    q.quotation_time 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    q.quotation_time 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerId" prepend="and">
+		    q.customer_id = #customerId#
+		</isNotNull>
+		<isNotNull property="childUserIds" prepend="and">
+		    q.quotation_user_id in $childUserIds$
+		</isNotNull>
+    </dynamic>
+	order by q.quotation_time desc
+  </select>
+  
+  <select id="getQuotationByCodeNoFilter" resultMap="quotationResult" parameterClass="java.lang.String" >
+    select q.quotation_id, q.quotation_code, q.quotation_user_id, u1.user_name as quotation_user_name,
+    	q.purchase_user_id, u2.user_name as purchase_user_name, q.quotation_time, q.reply_time, q.status, 
+    	q.comment, q.issued, q.customer_id, t.fname as customer_name, po.FInterID as orfq_id
+    from s_sales_quotation q left join s_user u1 on q.quotation_user_id = u1.user_id
+    	 left join s_user u2 on q.purchase_user_id = u2.user_id
+    	 left join t_customer t on q.customer_id = t.customer_id
+    	 left join porfq po on q.quotation_code = po.quotation_code
+    where q.quotation_code = #quotationCode:VARCHAR#     
+  </select>
+   
+</sqlMap>

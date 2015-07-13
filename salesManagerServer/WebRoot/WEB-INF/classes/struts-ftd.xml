@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+<package name="suser" extends="base">
+ <!-- 用户登录 -->
+		<action name="login" class="loginAction" method="{1}">
+		<result name="validateCode">/jsp/user/validateCode.jsp</result>
+		  <result name="workbench">/jsp/workbench/workbenchIndex.jsp</result>
+		<!--<result name="workbench" type="redirectAction">
+				<param name="actionName">workbench!workbenchIndex</param>
+		</result>-->
+		<result name="fail">/jsp/user/login.jsp</result>
+		<result name="userList">/jsp/user/userList.jsp</result>
+		<result name="userLogout">/jsp/user/login.jsp</result>
+		</action>
+<!-- 用户管理 -->
+		<action name="sUser" class="sUserAction" method="{1}">
+			<result name="userList">/jsp/user/userList.jsp</result>
+			<result name="addUserInit">/jsp/user/addUser.jsp</result>
+			<result name="updateUserInit">/jsp/user/updateUser.jsp</result>
+			<result name="addUser" type="redirectAction">
+				<param name="actionName">sUser!userList</param>
+			</result>
+			<result name="deleteUser" type="redirectAction">
+				<param name="actionName">sUser!userList</param>
+			</result>
+			<result name="updateUser" type="redirectAction">
+				<param name="actionName">sUser!userList</param>
+			</result>
+			<result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+			<result name="jsonUserAll" type="json">/jsp/user/userList.jsp</result>
+			<result name="userSetInit">/jsp/user/userSet.jsp</result>
+			<result name="userOpenWindowList">/jsp/openwindow/userList.jsp</result>
+			<result name="k3UserOpenWindowList">/jsp/openwindow/k3UserList.jsp</result>
+			<result name="attentionUserList">/jsp/openwindow/userList.jsp</result>
+		</action>	
+<!-- 工作台 -->
+		<action name="workbench" class="workbenchAction" method="{1}">
+			<result name="workbenchIndex">/jsp/workbench/workbenchIndex.jsp</result>
+			<result name="changeList" type="json">/jsp/workbench/workbenchIndex.jsp</result>
+			<result name="setWorkbenchInit">/jsp/workbench/setWorkbench.jsp</result>
+		</action>
+		
+<!-- 权限 -->
+		<action name="role" class="roleAction" method="{1}">
+		<result name="roleList">/jsp/role/roleList.jsp</result>
+		<result name="addRoleInit">/jsp/role/addRole.jsp</result>
+		<result name="getRoleAction">/jsp/role/roleAction.jsp</result>
+		</action>
+<!-- 消息中心 -->
+		<action name="info" class="infoAction" method="{1}">
+			<result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+			<result name="infoList">/jsp/user/infoList.jsp</result>
+			<result name="queryInfo">/jsp/user/queryInfo.jsp</result>
+		</action>
+<!-- 数据字典 -->
+		<action name="enumeration" class="enumerationAction" method="{1}">
+		<result name="getEnumList">/jsp/user/enumeration.jsp</result>
+		</action>
+<!-- 客户 -->
+		<action name="customer" class="customerAction" method="{1}">
+		<result name="selectCustomerList">/jsp/customer/customerList.jsp</result>
+		<result name="getCustomerInfoById">/jsp/customer/queryCustomer.jsp</result>
+		<result name="selectCustomerLinkmanList">/jsp/customer/customerLinkmanList.jsp</result>
+		<result name="selectCOUList">/jsp/customer/selectCOUList.jsp</result>
+		<result name="selectAlarmCustomerList">/jsp/customer/alarmCustomerList.jsp</result>
+		<result name="customerOpenWindow">/jsp/openwindow/customerList.jsp</result>
+		<result name="customerDistributionOpenWindow">/jsp/openwindow/customerList.jsp</result>
+		<result name="addCustomerUserInit">/jsp/customer/addCustomerUser.jsp</result>
+		<result name="addCOUserInit">/jsp/customer/addCOUser.jsp</result>
+		<result name="addCOUserIndex">/jsp/customer/addCOUserIndex.jsp</result>
+		<result name="selectCustomerUserList">/jsp/customer/customerUserList.jsp</result>
+		<result name="updateCustomerFinEvaluationInit">/jsp/customer/customerFinEvaluation.jsp</result>
+		<result name="updateCustomerLevelInit">/jsp/customer/updateCustomerLevel.jsp</result>
+		<result name="selectSalerList">/jsp/customer/salerList.jsp</result>
+		<result name="selectHistoryCOUList">/jsp/customer/selectHistoryCOUList.jsp</result>
+		<result name="updateCOUserIndex">/jsp/customer/updateCOUser.jsp</result>
+		
+		</action>
+<!-- 客户联系人 -->	
+		<action name="customerLinkman" class="customerLinkmanAction" method="{1}">
+		<result name="addLinkmanInit">/jsp/customer/addCustomerLinkman.jsp</result>
+		<result name="updateLinkmanInit">/jsp/customer/updateCustomerLinkman.jsp</result>
+		<result name="selectCustomerLinkmanList">/jsp/customer/customerLinkmanList.jsp</result>
+		<result name="addLinkmanFromCu">/jsp/customer/addCustomerLinkmanFromCu.jsp</result>
+		<result name="addLinkmanFC" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+		</result>
+		<result name="updateLinkman" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+		</result>
+		<result name="deleteLinkman" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+		</result>
+		</action>
+<!-- 客户项目 -->	
+		<action name="customerProject" class="customerProjectAction" method="{1}">
+		<result name="addCustomerProjectInit">/jsp/customer/addCustomerProject.jsp</result>	
+		<result name="updateCustomerProjectInit">/jsp/customer/updateCustomerProject.jsp</result>
+		<result name="selectCustomerProjectList">/jsp/customer/customerProjectList.jsp</result>
+		<result name="addCustomerProjectFromCu">/jsp/customer/addCustomerProjectFromCu.jsp</result>
+		<result name="addCustomerProject" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+		</result>
+		<result name="deleteCustomerProject" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+		</result>
+		</action>	
+		
+		<!-- 报表统计 -->	
+		<action name="report" class="reportAction" method="{1}">
+			<result name="salesProcessReport">/jsp/report/salesProcessReport.jsp</result>	
+			<result name="salesInquiryReport">/jsp/report/salesInquiryReport.jsp</result>
+			<result name="orderDaily">/jsp/report/salesOrderDaily.jsp</result>
+			<result name="orderWeekly">/jsp/report/salesOrderWeekly.jsp</result>
+			<result name="orderMonthly">/jsp/report/salesOrderMonthly.jsp</result>
+			<result name="recieveMonthly">/jsp/report/salesRecieveMonthly.jsp</result>
+		</action>
+		
+		<!-- 客户潜力产品 -->	
+		<action name="pproduct" class="pProductAction" method="{1}">
+			<result name="view">/jsp/customer/customerPotentialProdct.jsp</result>	
+			<result name="saved" type="redirectAction">
+				<param name="actionName">customer!getCustomerInfoById</param>
+				<param name="customerId">${customerId}</param>
+			</result>
+		</action>
+</package>
+    
+</struts>    

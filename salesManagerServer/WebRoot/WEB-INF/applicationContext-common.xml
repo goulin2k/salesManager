@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd ">
+
+ <!-- 配置事务特性 -->
+    
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="transactionManagerSql" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="sqlDataSource" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	<tx:annotation-driven transaction-manager="transactionManagerSql" proxy-target-class="true"/>
+    
+    <!-- DB链接定义区间 START -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	<!-- DB链接定义区间 START -->
+
+   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!--maxActive: 最大连接数量-->    
+        <property name="maxActive" value="50"/>  
+        <!--minIdle: 最小空闲连接-->    
+        <property name="minIdle" value="5"/>  
+        <!--maxIdle: 最大空闲连接-->    
+        <property name="maxIdle" value="10"/>  
+        <!--initialSize: 初始化连接-->    
+        <property name="initialSize" value="5"/>  
+        <!-- 连接被泄露时是否打印 -->  
+        <property name="logAbandoned" value="true"/>  
+        <!--removeAbandoned: 是否自动回收超时连接-->    
+        <property name="removeAbandoned"  value="true"/>  
+        <!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->    
+        <property name="removeAbandonedTimeout" value="10"/>  
+        <!--maxWait: 超时等待时间以毫秒为单位 1000等于60秒-->  
+        <property name="maxWait" value="1000"/>  
+        <!-- 在空闲连接回收器线程运行期间休眠的时间值,以毫秒为单位. -->  
+        <property name="timeBetweenEvictionRunsMillis" value="10000"/>  
+        <!--  在每次空闲连接回收器线程(如果有)运行时检查的连接数量 -->  
+        <property name="numTestsPerEvictionRun" value="10"/>  
+        <!-- 1000 * 60 * 30  连接在池中保持空闲而不被空闲连接回收器线程-->  
+        
+    	<property name="validationQuery" value="SELECT NOW() FROM DUAL"/>  
+    </bean>
+    
+     <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+       <property name="configLocation"><value>classpath:sql-map-config.xml</value></property>
+       <property name="dataSource" ref="dataSource" />
+    </bean>
+ 
+    <bean id="sqlDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" destroy-method="close">
+        <property name="driverClassName" >
+        	<value>${jdbc.sqldriverClassName}</value>
+        </property>
+        <property name="url" >
+            <value>${jdbc.sqlurl}</value> 
+        </property>
+        <property name="username" >
+        	<value>${jdbc.sqlusername}</value>
+        </property>
+        <property name="password" >
+        	<value>${jdbc.sqlpassword}</value> 
+        </property>
+    </bean>
+    
+     <bean id="sqlServerMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+       <property name="configLocation"><value>classpath:sql-server-map-config.xml</value></property>
+       <property name="dataSource" ref="sqlDataSource" />
+    </bean>
+    
+    <bean class="com.sales.common.MyApplicationContextUtil"></bean>
+</beans>

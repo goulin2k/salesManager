@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+    <package name="userinfo" extends="base">
+
+	      <action name="user" class="userAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="userList">/jsp/userList.jsp</result>
+	        <result  name="add">/jsp/addUser.jsp</result>
+	        <result name="list" type="redirect">user</result>
+	        <result  name="show">/jsp/showUser.jsp</result>
+	        <result  name="userPageList">/jsp/userPageList.jsp</result>
+	        <result  name="smdemo">/jsp/demo.jsp</result>
+	      </action>
+	      
+	      <action name="log" class="logAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="logList">/jsp/user/logList.jsp</result>
+	        
+	      </action>
+	      
+	      <action name="parameter" class="parameterAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="parameterList">/jsp/user/paramList.jsp</result>
+	        <result  name="parameterEdit">/jsp/user/paramEdit.jsp</result>
+	        <result name="list" type="redirect">parameter!paramList</result>
+	      </action>
+	      
+	      <action name="performance" class="performanceAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="planList">/jsp/performance/planList.jsp</result>
+	        <result  name="itemList">/jsp/performance/itemList.jsp</result>
+	        <result  name="itemEdit">/jsp/performance/itemEdit.jsp</result>
+	        <result name="toItemList" type="redirect">performance!itemList</result>
+	        <result  name="planEdit">/jsp/performance/planEdit.jsp</result>
+	        <result name="toPlanList" type="redirect">performance!planList</result>
+	        <result  name="planDetail">/jsp/performance/planDetail.jsp</result>
+	        <result  name="itemDetail">/jsp/performance/itemDetail.jsp</result>
+	      </action>
+	      
+	      <action name="userPerformance" class="userPerformanceAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="userPlanList">/jsp/performance/userPlanList.jsp</result>
+	        <result  name="userPlanEdit">/jsp/performance/userPlanEdit.jsp</result>
+	        <result name="toUserPlanList" type="redirect">userPerformance!planList</result>
+	        <result  name="userPlanDetail">/jsp/performance/userPlanDetail.jsp</result>
+	        <result  name="userPlanScoreList">/jsp/performance/userPlanScoreList.jsp</result>
+	        <result  name="userPlanScore">/jsp/performance/userPlanScore.jsp</result>
+	        <result name="toUserPlanScoreList" type="redirect">userPerformance!planScoreList</result>
+	        <result  name="myScoreList">/jsp/performance/myScoreList.jsp</result>
+	        <result  name="myScoreDetail">/jsp/performance/myScoreDetail.jsp</result>
+	        <result  name="userItemScoreList">/jsp/performance/userItemScoreList.jsp</result>
+	        <result  name="userItemScore">/jsp/performance/userItemScore.jsp</result>
+	        <result name="toUserItemScoreList" type="redirect">userPerformance!itemScoreList</result>
+	      </action>
+	      
+	      <!-- 工作日历相关的Action -->
+	      <action name="workCalendar" class="workCalendaAction" method="{1}">
+	        <result name="getProjectsList" type="json">/jsp/oa/calendar.jsp</result>
+	        <result  name="view">/jsp/oa/calendar.jsp</result>
+	      </action>
+	      
+	      <action name="leave" class="leaveAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="leaveList">/jsp/receiptprocess/leaveList.jsp</result>
+	        <result  name="leaveEdit">/jsp/receiptprocess/leaveEdit.jsp</result>
+	        <result name="toLeaveList" type="redirect">leave!leaveList</result>
+	        <result  name="leaveReSubmit">/jsp/receiptprocess/leaveReSubmit.jsp</result>
+	        <result  name="leaveDetail">/jsp/receiptprocess/leaveDetail.jsp</result>
+	      </action>
+	      
+	      <action name="process" class="processAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="processList">/jsp/receiptprocess/processList.jsp</result>
+	        <result  name="toApprovalLeave">/jsp/receiptprocess/approvalLeave.jsp</result>
+	        <result name="toProcessList" type="redirect">process!processList</result>
+	        <result  name="toApprovalEa">/jsp/receiptprocess/approvalEa.jsp</result>
+	        <result  name="toApprovalEr">/jsp/receiptprocess/approvalEr.jsp</result>
+	        <result  name="toApprovalOt">/jsp/receiptprocess/approvalOt.jsp</result>
+	        <result  name="toApprovalTrip">/jsp/receiptprocess/approvalTrip.jsp</result>
+	        <result  name="toApprovalCarApp">/jsp/receiptprocess/approvalCa.jsp</result>
+	        <result  name="toApprovalCarRei">/jsp/receiptprocess/approvalCr.jsp</result>
+	        <result  name="leaveDetail">/jsp/receiptprocess/leaveDetail.jsp</result>
+	        <result name="erDetail">/jsp/receiptprocess/expenseReimbursementDetail.jsp</result>
+	        <result name="eaDetail">/jsp/receiptprocess/expenseApplicationDetail.jsp</result>
+	        <result  name="overtimeDetail">/jsp/receiptprocess/overtimeDetail.jsp</result>
+	        <result  name="tripDetail">/jsp/receiptprocess/tripApplicationDetail.jsp</result>
+	        <result name="caDetail">/jsp/receiptprocess/carApplicationDetail.jsp</result>
+	        <result name="crDetail">/jsp/receiptprocess/carReimbursementDetail.jsp</result>
+	      </action>
+	      
+	      <action name="expense" class="expenseAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="eaList">/jsp/receiptprocess/expenseApplicationList.jsp</result>
+	        <result name="expenseApplicationEdit">/jsp/receiptprocess/expenseApplicationEdit.jsp</result>
+	        <result name="toEaList" type="redirect">expense!eaList</result>
+	        <result name="eaDetail">/jsp/receiptprocess/expenseApplicationDetail.jsp</result>
+	        <result  name="eaReSubmit">/jsp/receiptprocess/expenseApplicationResubmit.jsp</result>
+	        
+	        <result name="erList">/jsp/receiptprocess/expenseReimbursementList.jsp</result>
+	        <result name="expenseReimbursementEdit">/jsp/receiptprocess/expenseReimbursementEdit.jsp</result>
+	        <result name="toErList" type="redirect">expense!erList</result>
+	        <result name="erDetail">/jsp/receiptprocess/expenseReimbursementDetail.jsp</result>
+	        <result  name="erReSubmit">/jsp/receiptprocess/expenseReimbursementResubmit.jsp</result>
+	      </action>
+	      
+	      <action name="overtime" class="overtimeAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="overtimeList">/jsp/receiptprocess/overtimeList.jsp</result>
+	        <result  name="overtimeEdit">/jsp/receiptprocess/overtimeEdit.jsp</result>
+	        <result name="toOvertimeList" type="redirect">overtime!otList</result>
+	        <result  name="overtimeReSubmit">/jsp/receiptprocess/overtimeReSubmit.jsp</result>
+	        <result  name="overtimeDetail">/jsp/receiptprocess/overtimeDetail.jsp</result>
+	      </action>
+	      
+	      <action name="trip" class="tripAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result  name="tripList">/jsp/receiptprocess/tripApplicationList.jsp</result>
+	        <result  name="tripEdit">/jsp/receiptprocess/tripApplicationEdit.jsp</result>
+	        <result name="toTripList" type="redirect">trip!tripList</result>
+	        <result  name="tripReSubmit">/jsp/receiptprocess/tripApplicationResubmit.jsp</result>
+	        <result  name="tripDetail">/jsp/receiptprocess/tripApplicationDetail.jsp</result>
+	      </action>
+	      
+	      <action name="car" class="carAction" method="{1}">
+	        <result name="jsonResult" type="json">
+				<param name="includeProperties">json.*</param>
+			</result>
+	        <result name="caList">/jsp/receiptprocess/carApplicationList.jsp</result>
+	        <result name="caEdit">/jsp/receiptprocess/carApplicationEdit.jsp</result>
+	        <result name="toCaList" type="redirect">car!caList</result>
+	        <result name="caDetail">/jsp/receiptprocess/carApplicationDetail.jsp</result>
+	        <result  name="caReSubmit">/jsp/receiptprocess/carApplicationResubmit.jsp</result>
+	        
+	        <result name="crList">/jsp/receiptprocess/carReimbursementList.jsp</result>
+	        <result name="crEdit">/jsp/receiptprocess/carReimbursementEdit.jsp</result>
+	        <result name="toCrList" type="redirect">car!crList</result>
+	        <result name="crDetail">/jsp/receiptprocess/carReimbursementDetail.jsp</result>
+	        <result  name="crReSubmit">/jsp/receiptprocess/carReimbursementResubmit.jsp</result>
+	      </action>
+   </package>
+</struts>    

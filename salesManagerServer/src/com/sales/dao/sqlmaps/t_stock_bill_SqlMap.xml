@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="t_stock_bill" >
+
+  <resultMap id="stockBillResult" class="com.sales.model.TStockBill" > 
+    <result column="FInterID" property="fInterID" jdbcType="INTEGER" />
+    <result column="FNote" property="fNote" jdbcType="VARCHAR" />
+    <result column="FDate" property="fDate" jdbcType="DATE" />
+    <result column="FBillNo" property="fBillNo" jdbcType="VARCHAR" />
+    <result column="FDeptID" property="fDeptID" jdbcType="INTEGER" />
+    <result column="departmentName" property="departmentName" jdbcType="VARCHAR" />  
+    <result column="FEmpID" property="fEmpID" jdbcType="INTEGER" />
+    <result column="employeeName" property="employeeName" jdbcType="VARCHAR" />
+    <result column="FBillerID" property="fBillerID" jdbcType="INTEGER" />
+    <result column="billerName" property="billerName" jdbcType="VARCHAR" />  
+    <result column="FStatus" property="fStatus" jdbcType="INTEGER" /> 
+    <result column="FSelTranType" property="fSelTranType" jdbcType="INTEGER" />
+    <result column="sourceTranType" property="sourceTranType" jdbcType="VARCHAR" />  
+    <result column="FInterID" property="stockBillEntryList" select="t_stock_bill.getStockBillEntryListBystockBillId" />
+  </resultMap> 
+
+  <resultMap id="stockBillEntryResult" class="com.sales.model.TStockBillEntry" > 
+    <result column="FEntryID" property="fEntryID" jdbcType="INTEGER" />
+    <result column="FInterId" property="fInterId" jdbcType="INTEGER" /> 
+    <result column="FItemID" property="fItemID" jdbcType="INTEGER" />
+    <result column="productName" property="productName" jdbcType="VARCHAR" />
+    <result column="productNumber" property="productNumber" jdbcType="VARCHAR" /> 
+    <result column="productMode" property="productMode" jdbcType="VARCHAR" /> 
+    <result column="FUnitID" property="fUnitID" jdbcType="INTEGER" />
+    <result column="unitName" property="unitName" jdbcType="VARCHAR" />
+    <result column="FQty" property="fQty" jdbcType="VARCHAR" />
+    <result column="FAmount" property="fAmount" jdbcType="VARCHAR" /> 
+    <result column="FBatchNo" property="fBatchNo" jdbcType="VARCHAR" /> 
+    <result column="FSourceTranType" property="fSourceTranType" jdbcType="INTEGER" />  
+    <result column="sourceTranType" property="sourceTranType" jdbcType="VARCHAR" /> 
+    <result column="FSourceInterId" property="fSourceInterId" jdbcType="INTEGER" />
+    <result column="FSourceBillNo" property="fSourceBillNo" jdbcType="VARCHAR" /> 
+  </resultMap>
+
+  <select id="getStockBillById" resultMap="stockBillResult" parameterClass="java.util.Map" > 
+    SELECT distinct sbi.FInterID, sbi.FNote, sbi.FDate, sbi.FBillNo, 
+		sbi.FDeptID, dep.FName as departmentName,
+		sbi.FEmpID, emp.FName as employeeName,
+		sbi.FBillerID, blr.FName as billerName,
+		sbi.FStatus, sbi.FSelTranType, tt.FName as sourceTranType
+	FROM SEOrder so, sale_bill_status sb, ICStockBill sbi left join T_Item dep on sbi.FDeptID = dep.FItemId
+		left join T_Item emp on sbi.FEmpID = emp.FItemId
+		left join T_User blr on sbi.FBillerID = blr.FUserId
+		left join v_ICTransType tt ON sbi.FSelTranType = tt.FID 
+    WHERE sbi.FInterID = #stockBillId:INTEGER# and sbi.FTranType = 1 AND sb.order_id = so.FInterID AND sb.bill_id = sbi.FInterID
+    	AND sb.relation_type = 3
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+  </select>
+  
+  <select id="getStockBillEntryListBystockBillId" resultMap="stockBillEntryResult" parameterClass="java.lang.Integer" > 
+    SELECT sb.FInterID, sbe.FEntryId,
+		sbe.FItemID , ict.FName as productName, ict.FNumber as productNumber, ict.FModel as productMode, 
+		sbe.FUnitID, unt.FName as unitName,
+		FQty, FAmount, FBatchNo,
+		FSourceTranType, tt.FName as sourceTranType, FSourceInterId, FSourceBillNo
+	FROM ICStockBill sb inner join ICStockBillEntry sbe on sb.FInterId = sbe.FInterID
+		inner join T_ICItem ict on sbe.FItemID = ict.FItemID
+		inner join T_measureUnit unt on sbe.FUnitId = unt.FMeasureUnitId
+		left join v_ICTransType tt ON sbe.FSourceTranType = tt.FID 
+	WHERE sb.FInterID = #stockBillId:INTEGER# and sb.FTranType = 1
+  </select>
+  
+  <select id="getStockBillList" resultMap="stockBillResult" parameterClass="com.sales.model.TStockBill" > 
+    SELECT TOP $pageSize$ sbi.FInterID, sbi.FNote, sbi.FDate, sbi.FBillNo, 
+		sbi.FDeptID, dep.FName as departmentName,
+		sbi.FEmpID, emp.FName as employeeName,
+		sbi.FBillerID, blr.FName as billerName,
+		sbi.FStatus, sbi.FSelTranType, tt.FName as sourceTranType
+	FROM SEOrder so, sale_bill_status sb, ICStockBill sbi left join T_Item dep on sbi.FDeptID = dep.FItemId
+		left join T_Item emp on sbi.FEmpID = emp.FItemId
+		left join T_User blr on sbi.FBillerID = blr.FUserId
+		left join v_ICTransType tt ON sbi.FSelTranType = tt.FID
+    WHERE sbi.FTranType = 1 AND sb.order_id = so.FInterID AND sb.bill_id = sbi.FInterID
+    	AND sb.relation_type = 3 and sbi.FInterID NOT IN 
+      (SELECT TOP $startNumber$ sbi.FInterID 
+		FROM SEOrder so, sale_bill_status sb, ICStockBill sbi left join T_Item dep on sbi.FDeptID = dep.FItemId
+		left join T_Item emp on sbi.FEmpID = emp.FItemId
+		left join T_User blr on sbi.FBillerID = blr.FUserId
+		left join v_ICTransType tt ON sbi.FSelTranType = tt.FID
+		WHERE sbi.FTranType = 1 AND sb.order_id = so.FInterID AND sb.bill_id = sbi.FInterID
+    	AND sb.relation_type = 3
+		<isNotNull property="fEmpID" prepend="and">
+		    sbi.FEmpID = #fEmpID#
+		</isNotNull>
+		<isNotNull property="fStatus" prepend="and">
+		    sbi.FStatus = #fStatus#
+		</isNotNull>
+	    <isNotNull property="startTime" prepend="and">
+		    sbi.FDate 
+		    <![CDATA[
+		     >= 
+		    ]]>
+		    #startTime#
+	    </isNotNull>
+	    <isNotNull property="endTime" prepend="and">
+		    sbi.FDate 
+		    <![CDATA[
+		     <= 
+		    ]]>
+		    #endTime#
+	    </isNotNull> 
+		<isNotNull property="customerIds" prepend="and">
+		    so.FCustID in $customerIds$
+		</isNotNull>
+    	order by sbi.FDate desc
+	   )   
+	<isNotNull property="fEmpID" prepend="and">
+	    sbi.FEmpID = #fEmpID#
+	</isNotNull>
+	<isNotNull property="fStatus" prepend="and">
+	    sbi.FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    sbi.FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    sbi.FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+    order by sbi.FDate desc
+  </select>
+
+  <select id="getStockBillCount" resultClass="java.lang.Integer" parameterClass="com.sales.model.TStockBill" > 
+    SELECT count(*)
+    FROM SEOrder so, sale_bill_status sb, ICStockBill sbi left join T_Item dep on sbi.FDeptID = dep.FItemId
+		left join T_Item emp on sbi.FEmpID = emp.FItemId
+		left join T_User blr on sbi.FBillerID = blr.FUserId
+		left join v_ICTransType tt ON sbi.FSelTranType = tt.FID
+    WHERE sbi.FTranType = 1 AND sb.order_id = so.FInterID AND sb.bill_id = sbi.FInterID
+    	AND sb.relation_type = 3
+	<isNotNull property="fEmpID" prepend="and">
+	    sbi.FEmpID = #fEmpID#
+	</isNotNull>
+	<isNotNull property="fStatus" prepend="and">
+	    sbi.FStatus = #fStatus#
+	</isNotNull>
+    <isNotNull property="startTime" prepend="and">
+	    sbi.FDate 
+	    <![CDATA[
+	     >= 
+	    ]]>
+	    #startTime#
+    </isNotNull>
+    <isNotNull property="endTime" prepend="and">
+	    sbi.FDate 
+	    <![CDATA[
+	     <= 
+	    ]]>
+	    #endTime#
+    </isNotNull> 
+	<isNotNull property="customerIds" prepend="and">
+	    so.FCustID in $customerIds$
+	</isNotNull>
+  </select>
+
+  <select id="getStockBillAllList" resultMap="stockBillResult" parameterClass="java.lang.String" > 
+    SELECT sbi.FInterID, FNote, FDate, FBillNo, 
+		FDeptID, dep.FName as departmentName,
+		sbi.FEmpID, emp.FName as employeeName,
+		FBillerID, blr.FName as billerName,
+		sbi.FStatus, sbi.FSelTranType, tt.FName as sourceTranType
+	FROM ICStockBill sbi left join T_Item dep on sbi.FDeptID = dep.FItemId
+		left join T_Item emp on sbi.FEmpID = emp.FItemId
+		left join T_User blr on sbi.FBillerID = blr.FUserId
+		left join v_ICTransType tt ON sbi.FSelTranType = tt.FID 
+    WHERE sbi.FInterID in $billIds$ and sbi.FTranType = 1
+  </select>
+  
+</sqlMap>

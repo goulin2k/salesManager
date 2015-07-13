@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta http-equiv=”Access-Control-Allow-Origin” content=”*”>
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        <link rel="shortcut icon" href="../favicon.ico">
+		<!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700"> -->
+		<link rel="stylesheet" href="jqmobile/css/themes/default/jquery.mobile-1.4.5.min.css">
+		<!--<link rel="stylesheet" href="_assets/css/jqm-demos.css"> -->
+		
+		<script src="js/jquery.js"></script>
+		<script src="js/login.js"></script>
+		<script src="jqmobile/jquery.mobile-1.4.5.min.js"></script>
+        
+        <title>凯扬工业——客户管理</title>
+    </head>
+    <style>
+    	body {
+		  font-size: 20px; // You can even use !important 
+		}
+    </style>
+    <body>
+    	
+    	<!-- Start of LOGIN page -->
+		<div data-role="page" id="login">
+			<div data-role="header">
+				<!-- <a href="#setting" data-icon="gear" class="ui-shadow ui-corner-all ui-btn-right ui-btn-icon-notext">设置</a>
+				-->
+				<h1>客户管理系统</h1>
+			</div><!-- /header -->
+
+			<div role="main" class="ui-content">
+				<form id="loginForm" class="fieldcontain">
+					<h2>系统登录</h2>
+
+					<label for="username">用户名:</label>
+					<input type="text" name="username" id="username" value="" data-clear-btn="true" data-mini="true">
+
+					<label for="password">密码:</label>
+					<input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
+					<label id="notification"></label>
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+							<a href="#" id="submit" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">登录</a></div>
+						<div class="ui-block-b">
+							<a href="#setting" id="setting" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">设置</a></div>
+					</div>
+        		</form>
+        		
+			</div><!-- /content -->
+
+			<div data-role="footer">
+				<h4>成都凯扬工业材料技术有限公司</h4>
+			</div><!-- /footer -->
+		</div><!-- /page -->
+		
+		<div data-role="page" id="setting">
+			<div data-role="header">
+				<a href="#login" class="ui-btn ui-shadow ui-corner-all ui-icon-home ui-btn-icon-notext"></a>
+				<h1>登录设置</h1>
+			</div><!-- /header -->
+
+			<div role="main" class="ui-content">
+				<form id="loginForm" class="fieldcontain">
+					<label for="server">服务地址:</label>
+					<input type="text" name="server" id="server" value="cdgoulin.wicp.net" data-clear-btn="true" data-mini="true">
+
+					<label for="port">端口号:</label>
+					<input type="text" name="port" id="port" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
+					<h3 id="notification"></h3>
+					<div class="ui-grid-a">
+						<div class="ui-block-a">
+							<a href="#login" id="cancelSet" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">取消</a></div>
+						<div class="ui-block-b">
+							<a href="#" id="saveSet" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">保存</a></div>
+					</div>
+        		</form>
+			</div><!-- /content -->
+
+			<div data-role="footer">
+				<h4>成都凯扬工业材料技术有限公司</h4>
+			</div><!-- /footer -->
+		</div>
+
+        <script type="text/javascript" src="cordova.js" charset="utf-8"></script>
+        <script type="text/javascript" src="cordova_plugins.js" charset="utf-8"></script>
+        <script type="text/javascript" charset="utf-8">
+        	//alert('loading...');
+        	server = window.localStorage.getItem('login_server_addr');
+        	port = window.localStorage.getItem('login_server_port');
+            app.initialize();
+            //navigator.notification.alert('loading...');
+            
+			$(document).ready(function() { 
+				$("#username").val(window.localStorage.getItem('login_user_name'));
+				$("#password").val(window.localStorage.getItem('login_pass_word'));
+				
+				if(!server === null) {
+					$("#server").val(server);
+				}else {
+					server = "cdgoulin.wicp.net";
+					port = 80;
+				}
+				$("#port").val(port);
+				
+				 
+				$("#submit").click(function(){
+					usr = $("#username")[0].value;
+					pwd = $("#password")[0].value;
+					
+					window.localStorage.setItem('login_user_name', usr);
+					window.localStorage.setItem('login_pass_word', pwd);
+					
+					$.mobile.loading( "show", {
+			            text: 'loading',
+			            textVisible: false,
+			            theme: $.mobile.loader.prototype.options.theme,
+			            textonly: false,
+			            html: ''
+		    		});
+					var strUrl = '';
+					if(port != 80) {					
+						strUrl = "http://" + server +":" + port + "/salesManager/appUserAction!login";
+					}else {
+						strUrl = "http://" + server + "/salesManager/appUserAction!login";
+					}
+		  			console.log(strUrl);
+					var formData = $("#loginForm").serialize();  
+					
+					$.ajax({  
+						type: "POST",  
+						url: strUrl,  
+						cache: false,  
+						data: formData,  
+						dataType:"jsonp",
+						jsonpCallback:"callback",
+						timeout: 20000,
+						success: onLoginSuccess,  
+						error: onLoginError  
+					});  
+					return false;  
+				});  
+				
+				$("#saveSet").click(function(){ 
+					server = $("#server")[0].value;
+					port = $("#port")[0].value;
+					
+					window.localStorage.setItem('login_server_addr', server);
+					window.localStorage.setItem('login_server_port', port);
+					$.mobile.navigate( "#login" );
+				});
+				
+								
+			}); 
+			
+			function hello() {
+				console.log('hello callback...');
+			}
+        </script>
+    </body>
+</html>

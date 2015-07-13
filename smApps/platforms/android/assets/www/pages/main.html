@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+
+<html>
+	<head>
+	<meta charset="utf-8">
+	<!--<meta name="viewport" 
+        	content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, 
+        	height=device-height, target-densitydpi=device-dpi" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">     
+        
+	<title>凯扬——客户管理</title>
+	<link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="../jqmobile/css/themes/default/jquery.mobile-1.4.5.min.css">
+	<!-- <link rel="stylesheet" href="../_assets/css/jqm-demos.css"> -->
+	<link rel="stylesheet" href="../css/main_pane.css"> 
+	<link rel="stylesheet" href="../css/listview-grid.css">
+	<!-- <link rel="stylesheet" href="../jqmobile/jquery.mobile.pagination/jquery.mobile.pagination.css">-->
+	
+	
+	
+	<!--<script src="../jqmobile/jquery.mobile.pagination/jquery.mobile.pagination.js"></script>-->
+	<script type="text/javascript" src="../cordova.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../cordova_plugins.js" charset="utf-8"></script>
+	
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bqIOChl4PcVz4KLgGEP3dGK1"></script>
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>
+	<script src="../js/jquery.js"></script>
+	<script src="../js/main.js"></script>
+	<script src="../jqmobile/jquery.mobile-1.4.5.min.js"></script>
+	<script>
+		app.initialize();
+		var pagesize=10;
+		var pages=1;
+		var maxpages = 10;
+		var assignPlanId = 0;
+		$.mobile.defaultPageTransition = "slide";
+		server = window.localStorage.getItem('login_server_addr');
+        port = window.localStorage.getItem('login_server_port');
+		$(document).ready(function(){
+			$("[data-role='navbar']").navbar();
+			$("[data-role='header'], [data-role='footer']").toolbar();
+			
+			loadPlanlist();
+			
+			$("#setting_userName").text(window.localStorage.getItem('setting_user_name'));
+			$("#setting_deptName").html("<strong>" + window.localStorage.getItem('setting_dept_name') + "</strong>");
+			$("#setting_position").text('工作岗位：' + window.localStorage.getItem('setting_user_post'));
+			$("#setting_mobile").text('联系电话：' + window.localStorage.getItem('setting_user_mobile'));
+			
+			$('#activitiesListPage').bind('pageshow',function(event){
+				if($("#thelist:visible").length){
+                	$('#thelist').listview('refresh');
+                }
+            });
+            
+            initPlanfilterForm();
+		});
+		
+	</script>
+	
+	<style>
+    	body {
+		  font-size: 16p; // You can even use !important 
+		}
+    </style>
+	
+</head>
+<body>
+	<!-- header -->
+    <div data-role="header" data-position="fixed" data-theme="a">
+		<a href="/index.html" data-rel="back" class="ui-btn ui-btn-left ui-alt-icon ui-nodisc-icon ui-corner-all ui-btn-icon-notext ui-icon-carat-l">Back</a>
+        <h1>客户管理系统</h1>
+        
+        <a href="#" onclick="assignDirect();" data-icon="location" class="ui-btn-right" >签到</a>
+    </div><!-- /header -->
+	
+	<!--  销售计划列表页面 -->
+	<div data-role="page" id="main" class="jqm-demos">
+		<div class="ui-content" data-role="ui-content" role="main" id="wrapper"><!-- content -->
+			<ul data-role="listview" data-theme="a" data-dividertheme="b" data-filter="false" data-filter-theme="a" 
+				data-filter-placeholder="Search messages..." id="thelist">
+							
+			</ul>
+		</div>
+		
+	</div><!-- /page -->
+	
+	
+	
+	<!--  销售活动列表页面 -->
+	<div data-role="page" id="activitiesListPage" class="jqm-demos">		
+		<ul data-role="listview" data-theme="a" data-dividertheme="b" data-filter="false" data-filter-theme="a" 
+			data-filter-placeholder="Search messages..." id="avtivitylist">
+						
+		</ul>
+	</div><!-- /page -->
+	
+	<!--  过滤条件列表页面 -->
+	<div data-role="page" id="planFilterPage" class="jqm-demos">
+		
+			<h2>计划查询过滤</h2>
+			<select name="responseUserId" id="responseUserId" data-native-menu="false">
+				<option value="0">所有员工</option>
+			</select>
+			<input type="text" id="planStart" data-role="date" data-inline="true" placeholder="计划填写时间（大于）">
+			<input type="text" id="planEnd" data-role="date" data-inline="true" placeholder="计划填写时间（小于）">
+			<input type="text" id="completStart" data-role="date" data-inline="true" placeholder="计划完成时间（大于）">
+			<input type="text" id="completEnd" data-role="date" data-inline="true" placeholder="计划完成时间（小于）">
+			<select name="orderBy" id="orderBy" data-native-menu="false">
+				<option value="start_time" selected="true">默认排序（计划填写日期）</option>
+				<option value="end_time">计划完成日期</option>
+				<option value="response_user_name">计划人</option>
+			</select>
+			<select name="orderType" id="orderType" data-role="slider" value="on">
+				<option value="asc">顺序</option>
+				<option value="desc" selected="true">倒序</option>
+			</select>
+			<button id="submit-6" onclick="submitPlanFilter();" class="ui-shadow ui-btn ui-corner-all ui-mini">查询</button>
+		
+	</div><!-- /page -->
+	
+	<!--  流程处理页面 -->
+	<div data-role="page" id="procTypeListPage">
+		<ul data-role="listview" data-count-theme="b" data-inset="true">
+			<li data-role="collapsible" data-iconpos="right" data-inset="false">
+			    <h2>新建流程</h2>
+			    <!-- <ul data-role="listview" data-theme="b">
+			        <li><a href="#" onClick="editLeaveProc();">请假单</a></li>
+			        <li><a href="#" onclick="editTripProc();">出差申请</a></li>
+			        <li><a href="#" onclick="editOvertimeProc();">加班申请</a></li>
+					<li><a href="#" onclick="editCarProc();">车辆维修申请</a></li>
+			        <li><a href="#" onclick="editCarRembProc();">车辆维修报销申请</a></li>
+					
+			    </ul>  -->
+				<form>
+			      <fieldset data-role="controlgroup" data-type="horizontal">
+			        <label>请假单<input type="checkbox" id="choose-birds-inset" onClick="editLeaveProc();"></label>
+			        <label>出差申请<input type="checkbox" id="choose-humans-inset" onclick="editTripProc();"></label>
+			        <label>加班申请<input type="checkbox" id="choose-fish-inset" onclick="editOvertimeProc();"></label>
+					<label>车辆维修申请<input type="checkbox" id="choose-ddd-inset" onclick="editCarProc();"></label>
+			        <label>车辆维修报销申请<input type="checkbox" id="choose-remb-inset" onclick="editCarRembProc();"></label>
+			      </fieldset>
+			    </form>
+			</li>
+		    <li><a href="#processList" onclick="proc_pageNum=1;proc_maxpages=0;loadProcessList(1);">
+				<img src="../_assets/img/gf.png" alt="France" class="ui-li-icon ui-corner-none">待处理流程 
+				<span class="ui-li-count" id="total_undealed">12</span></a></li>
+		    <li><a href="#processList" onclick="proc_pageNum=1;proc_maxpages=0;loadProcessList(3);">
+				<img src="../_assets/img/gb.png" alt="France" class="ui-li-icon ui-corner-none">我提交的流程 
+				<span class="ui-li-count" id="total_mysubmit">0</span></a></li>
+		    <li><a href="#processList" onclick="proc_pageNum=1;proc_maxpages=0;loadProcessList(2);">
+				<img src="../_assets/img/us.png" alt="France" class="ui-li-icon ui-corner-none">已处理流程 
+				<span class="ui-li-count" id="total_dealed">4</span></a></li>
+		    
+		</ul>
+	</div><!-- /page -->
+	
+	<!--  消息通知页面 -->
+	<div data-role="page" id="messageTypeListPage">
+		<ul data-role="listview" data-count-theme="b" data-inset="true">
+			
+		    <li><a href="#" onclick="msg_pageNum=1;msg_maxpages=0;loadSaleAuditList(1);">询价报价 
+				<span class="ui-li-count" id="msg_quote_count">12</span></a>
+		    <li><a href="#" onclick="msg_pageNum=1;msg_maxpages=0;loadSaleAuditList(2);">单据通知 
+				<span class="ui-li-count" id="msg_sales_count">0</span></a></li>
+		    <li><a href="#" onclick="msg_pageNum=1;msg_maxpages=0;loadSaleAuditList(3);">销售活动
+				<span class="ui-li-count" id="msg_plan_count">4</span></a></li>
+		    <li><a href="#" onclick="msg_pageNum=1;msg_maxpages=0;loadSaleAuditList(4);">客户通知 
+				<span class="ui-li-count" id="msg_customer_count">328</span></a></li>
+		    <li><a href="#" onclick="msg_pageNum=1;msg_maxpages=0;loadAnnouncementList();">公司公告 
+				<span class="ui-li-count">...</span></a></li>
+		</ul>
+	</div><!-- /page -->
+	
+	<!--  签到页面 -->
+	<div data-role="page" id="assignPage">
+		<form id="activityAssignForm" class="fieldcontain">
+			
+			    <a href="#"><h3 id="geo"></h3></a>
+				<input type="hidden" id="planRoleId" name="planRoleId"/>
+				<input type="hidden" id="planId" name="planId"/>
+				<input type="hidden" id="completionRate" name="completionRate" value="100%"/>
+				<input type="hidden" id="locAddress" name="locAddress"/>
+				<input type="hidden" id="locLatitude" name="locLatitude"/>
+				<input type="hidden" id="locLongitude" name="locLongitude"/>
+			  	<div id="dvActivityType" class="ui-field-contain">
+					<label name="lblTitle" for="actionType">项目活动:</label>
+					<select name="actionType" id="actionType" data-role="slider" value="on">
+						<option value="off">否</option>
+						<option value="on" selected="true">是</option>
+					</select>
+				</div>
+				<div class="ui-field-contain">
+					<label name="lblTopical" id="lblTopical" for="topical">活动内容:</label>
+					<textarea name="topical" id="topical" placeholder="填写内容(可选)" value="" rows="3"></textarea>
+				</div>
+			  	<div class="ui-field-contain">
+					<input type="button" data-theme="b" onclick="submitAssign();" value="提交">
+				</div>
+			  
+		</form>
+	</div><!-- /page -->
+	
+	<!--  单据审核列表页面 -->
+	<div data-role="page" id="saleAuditListPage">
+		<ul data-role="listview" id="saleAuditListview" data-inset="true">
+		        
+		</ul>
+	</div><!-- /page -->
+	
+	<!--  公司公告通知页面 -->
+	<div data-role="page" id="announcementListPage">
+		<ul data-role="listview" id="announcementListView" data-inset="true">		    	    
+		</ul>
+	</div>
+	
+	<!--  公告通知显示页面 -->
+	<div data-role="page" id="announcementInfoPage">
+		<h3 class="ui-bar ui-bar-a ui-corner-all" id="announcement_title"></h3>
+      	<div class="ui-body" id="announcement_content">
+		</div>
+	</div>
+	
+	<!--  通知消息单据显示页面 -->
+	<div data-role="page" id="buzInfomationPage">
+		<ul data-role="listview" data-inset="true">
+		    <li id="buzView"></li>
+		</ul>
+		<li class="ui-field-contain">
+		    <input type="button" data-theme="a" onclick="history.back(-1);" value="返回">
+		</li>	
+	</div>
+	
+	<!--  工作流程审核列表页面 -->
+	<div data-role="page" id="processList">
+		<ul data-role="listview" id="processListview" data-inset="true">
+		    <li data-role="list-divider">工作流程列表 <span class="ui-li-count">2</span></li>		    
+		</ul>
+	</div><!-- /page -->
+	
+	<!--  流程审核页面 -->
+	<div data-role="page" id="auditPopup">
+	    <form id="auditPopupForm" class="fieldcontain">	 
+			<ul data-role="listview" data-inset="true">
+				<input type="hidden" name="audit_taskId" id="audit_taskId"/>   
+				<li>    
+	            	<h3 id="audit_title"></h3>
+					<p id="audit_user">申请人:</p>
+					<p id="audit_time">申请时间：</p>
+					<p id="audit_status">流程状态：</p>
+				</li>
+				<li>
+					<h3>申请内容</h3>
+					<div id="audit_applyContent"></div>
+				</li>
+				
+	            <li class="ui-field-contain">
+					<label for="audit_action">审核意见：</label>
+					<select name="audit_action" id="audit_action" data-role="slider" value="0">
+						<option value="0" selected="true">驳回</option>
+						<option value="1" >批准</option>
+					</select>
+				</li>
+				<li class="ui-field-contain">
+					<label for="audit_content">意见备注:</label>
+					<textarea name="audit_content" id="audit_content" placeholder="填写审核意见(可选)" value="" rows="3"></textarea>
+				</li>
+			  	<li class="ui-field-contain">
+					<input type="button" data-theme="b" onclick="submitAudit();" value="提交">
+				</li>
+	        </ul>
+	    </form>
+	</div><!-- /page -->
+	
+	<!--  请假流程申请页面 -->
+	<div data-role="page" id="leaveProcEditPage">
+		<form id="leaveProcEditForm" class="fieldcontain">
+			<label id="leave_tips">提示：你的年假剩余 2 小时, 调休剩余 2 小时。</label>
+			<input type="hidden" id="leave.status" name="leave.status" value="0"/>
+			<input type="hidden" id="requestFrom" name="requestFrom" value="mobile"/>
+			<input type="hidden" id="leave_annu" name="leave_annu" value="0"/>
+			<input type="hidden" id="leave_over" name="leave_over" value="0"/>
+			<div class="ui-field-contain">
+				<label for="leave.typeId">请假类型：</label>
+				<select name="leave.typeId" id="leave_typeId">
+				    <option value="1">事假</option>
+				    <option value="2">病假</option>
+				    <option value="3">年假</option>
+					<option value="4">婚假</option>
+				    <option value="5">产假</option>
+				    <option value="6">丧假</option>
+					<option value="7">调休</option> 
+				</select>
+			</div>
+			<div class="ui-field-contain">
+				<label for="leave_leaveDays">休假小时：</label>
+				<input id="leave_leaveDays" name="leave.leaveDays" type="number" placeholder="休假小时"/>
+			</div>
+			<div class="ui-field-contain">
+				<label for="leave_startTime">开始日期：</label>
+				<input type="date" name="leave.startTime" id="leave_startTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="leave_endTime">结束日期：</label>
+				<input type="date" name="leave.endTime" id="leave_endTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="leave_comment">休假原因：</label>
+				<textarea cols="40" rows="8" name="leave.comment" id="leave_comment" placeholder="填写休假事由"></textarea>
+			</div>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="submitLeaveProc();" value="提交流程" >
+			</li>
+		</form>
+	</div><!-- /page -->
+	
+	<!--  出差流程申请页面 -->
+	<div data-role="page" id="tripProcEditPage">
+		<form id="tripProcEditForm" class="fieldcontain">
+			<input type="hidden" id="requestFrom" name="requestFrom" value="mobile"/>
+			<input type="hidden" id="tripApplication_status" name="tripApplication.status" value="0"/>
+			<div class="ui-field-contain">
+				<label for="tripApplication_tripLocation">出差地点：</label>
+				<input id="tripApplication_tripLocation" name="tripApplication.tripLocation" type="text" placeholder="填写出差城市"/>
+			</div>
+			<div class="ui-field-contain">
+				<label for="tripApplication_startTime">开始日期：</label>
+				<input type="date" name="tripApplication.startTime" id="tripApplication_startTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="tripApplication_endTime">结束日期：</label>
+				<input type="date" name="tripApplication.endTime" id="tripApplication_endTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="tripApplication_tripComment">出差事由：</label>
+				<textarea cols="40" rows="8" name="tripApplication.tripComment" id="tripApplication_tripComment" placeholder="填写休假事由"></textarea>
+			</div>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="submitTripProc();" value="提交流程" >
+			</li>
+		</form>
+	</div><!-- /page -->
+	
+	<!--  加班申请流程页面 -->
+	<div data-role="page" id="overtimeProcEditPage">
+		<form id="overtimeProcEditForm" class="fieldcontain">
+			<input type="hidden" id="requestFrom" name="requestFrom" value="mobile"/>
+			<input type="hidden" id="ot_status" name="ot.status" value="0"/>
+			
+			<div class="ui-field-contain">
+				<label for="ot_startTime">加班日期：</label>
+				<input type="date" name="ot.startTime" id="ot_startTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="ot_hours">加班时长（小时）：</label>
+				<input type="number" name="ot.hours" id="ot_hours">
+			</div>
+			<div class="ui-field-contain">
+				<label for="ot_comment">加班事由：</label>
+				<textarea cols="40" rows="8" name="ot.comment" id="ot_comment" placeholder="填写加班事由"></textarea>
+			</div>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="submitOvertimeProc();" value="提交流程" >
+			</li>
+		</form>
+	</div><!-- /page -->
+	
+	<!--  车辆维修申请流程页面 -->
+	<div data-role="page" id="carProcEditPage">
+		<form id="carProcEditForm" class="fieldcontain">
+			<input type="hidden" id="requestFrom" name="requestFrom" value="mobile"/>
+			<input type="hidden" id="car_status" name="ca.status" value="0"/>
+			
+			<div class="ui-field-contain">
+				<label for="car_plateNumber">车牌号：</label>
+				<input type="text" name="ca.plateNumber" id="car_plateNumber">
+			</div>
+			<div class="ui-field-contain">
+				<label for="car_repairTime">预计维修日期：</label>
+				<input type="date" name="ca.repairTime" id="car_repairTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="car_repairSum">预计维修费用（元）：</label>
+				<input type="number" name="ca.repairSum" id="car_repairSum">
+			</div>
+			<div class="ui-field-contain">
+				<label for="car_isInsurance">是否报保险：</label>
+				<select name="ca.isInsurance" id="car_isInsurance" data-role="slider" value="1">
+					<option value="1" selected="true">是</option>
+					<option value="0" >否</option>
+				</select>
+			</div>
+			<div class="ui-field-contain">
+				<label for="car_repairComment">维修事由：</label>
+				<textarea cols="40" rows="8" type="text" name="ca.repairComment" 
+					id="car_repairComment"  placeholder="填写车辆维修申请事由"></textarea>
+			</div>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="submitCarProc();" value="提交流程" >
+			</li>
+		</form>
+	</div><!-- /page -->
+	
+	<!--  车辆维修报销申请流程页面 -->
+	<div data-role="page" id="carRembProcEditPage">
+		<form id="carRembProcEditForm" class="fieldcontain">
+			<input type="hidden" id="requestFrom" name="requestFrom" value="mobile"/>
+			<input type="hidden" id="cr_status" name="cr.status" value="0"/>
+			
+			<div class="ui-field-contain">
+				<label for="cr_plateNumber">车牌号：</label>
+				<input type="text" name="cr.plateNumber" id="cr_plateNumber">
+			</div>
+			<div class="ui-field-contain">
+				<label for="cr_repairFactoryPhone">维修厂电话：</label>
+				<input type="text" name="cr.repairFactoryPhone" id="cr_repairFactoryPhone">
+			</div>
+			<div class="ui-field-contain">
+				<label for="cr_repairTime">维修日期：</label>
+				<input type="date" name="" id="cr_repairTime">
+			</div>
+			<div class="ui-field-contain">
+				<label for="cr_reimbursementSum">维修金额（元）：</label>
+				<input type="number" name="cr.reimbursementSum" id="cr_reimbursementSum">
+			</div>
+			<div class="ui-field-contain">
+				<label for="cr_carApplicationId">维修申请单据号</label>
+				<input type="text" name="cr.carApplicationId" id="cr_carApplicationId">
+			</div>
+			<div class="ui-field-contain">
+				<label for="cr_reimbursementComment">维修事由：</label>
+				<textarea cols="40" rows="8" type="text" name="cr.reimbursementComment" 
+					id="cr_reimbursementComment"  placeholder="填写车辆维修申请事由"></textarea>
+			</div>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="submitCarRembProc();" value="提交流程" >
+			</li>
+		</form>
+	</div><!-- /page -->
+	
+	<!--  系统设置页面 -->
+	<div data-role="page" id="settingPage">
+		<form class="fieldcontain">
+			<ul data-role="listview" data-inset="true">
+			    <li><a href="#">
+			        <img src="../_assets/img/album-bb.jpg">
+				    <h2 id="setting_userName"></h2>
+				    <p id="setting_deptName"><strong></strong></p>
+					<p id="setting_position"></p>
+					<p id="setting_mobile"></p>
+			    </a></li>
+			</ul>
+			<li class="ui-field-contain">
+			    <input type="button" data-theme="b" onclick="logout();" value="退出登录">
+			</li>			
+		</form>
+	</div><!-- /page -->
+	
+	<!-- /footer -->
+	<div data-role="footer" data-position="fixed" data-theme="a">
+		<div data-role="navbar">
+			<ul>
+				<li><a href="#main" data-prefetch="true" data-transition="none">销售计划</a></li>
+				<li><a href="#" onClick="loadProcessTypeList();" data-prefetch="true" data-transition="flip">我的流程</a></li>
+				<li><a href="#" onClick="loadMessageTypeList();" data-prefetch="true" data-transition="flip">通知消息</a></li>
+				<li><a href="#settingPage" data-prefetch="true" data-transition="slide">设置</a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><!-- /footer -->
+	
+	
+	<script src="../js/salePlan.js"></script>
+	<script src="../js/messages.js"></script>
+	<script src="../js/process.js"></script>
+	<script src="../js/logout.js"></script>
+	<script src="../js/leave.js"></script>
+	<script src="../js/trip.js"></script>
+	<script src="../js/overtime.js"></script>
+	<script src="../js/car.js"></script>
+	<script src="../js/carRemb.js"></script>
+	<script src="../js/announcement.js"></script>
+	
+</body>
+</html>
